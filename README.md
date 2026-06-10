@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./bg.png" alt="KodiWulf Repository Banner" width="100%">
+</p>
+
 # # # # # # # # # # # # # #
 # KodiWulf Repository #
 # # # # # # # # # # # # # #
