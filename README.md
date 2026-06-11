@@ -27,7 +27,7 @@ https://kodiwulf-repo.github.io/
 ```text
 https://n-e-o-w-u-l-f.github.io/kodiwulf-repo/addons.xml
 https://n-e-o-w-u-l-f.github.io/kodiwulf-repo/addons.xml.md5
-https://n-e-o-w-u-l-f.github.io/kodiwulf-repo/repository.kodiwulf/repository.kodiwulf-0.0.2.zip
+https://n-e-o-w-u-l-f.github.io/kodiwulf-repo/repository.kodiwulf/repository.kodiwulf-0.0.1.zip
 ```
 
 ## Expected add-ons
