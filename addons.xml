@@ -389,7 +389,7 @@
           </assets>
       </extension>
   </addon>
-  <addon id="repository.kodiwulf" name="Kodiwulf" version="0.1.0" provider-name="Kodiwulf">
+  <addon id="repository.kodiwulf" name="Kodiwulf" version="0.1.0" provider-name="NeoWulf">
     <extension point="xbmc.addon.repository" name="Kodiwulf">
       <dir>
         <info compressed="false">https://n-e-o-w-u-l-f.github.io/kodiwulf-repo/addons.xml</info>
