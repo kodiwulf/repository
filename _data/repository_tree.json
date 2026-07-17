@@ -11,12 +11,6 @@
       "href": "repository/",
       "kind": "Repository",
       "zip_count": 289
-    },
-    {
-      "name": "script",
-      "href": "script/",
-      "kind": "Script",
-      "zip_count": 2
     }
   ],
   "menu": [
@@ -2331,23 +2325,7 @@
       "kind": "Unterordner",
       "depth": 1,
       "zip_count": 1
-    },
-    {
-      "name": "script",
-      "path": "script",
-      "href": "script/",
-      "kind": "Script",
-      "depth": 0,
-      "zip_count": 2
-    },
-    {
-      "name": "module",
-      "path": "script/module",
-      "href": "script/module/",
-      "kind": "Unterordner",
-      "depth": 1,
-      "zip_count": 2
     }
   ],
-  "total_zips": 307
+  "total_zips": 305
 }

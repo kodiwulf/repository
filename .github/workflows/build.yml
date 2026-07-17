@@ -22,7 +22,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate repository metadata and Jekyll navigation
-        run: python3 tools/build.py --root "$GITHUB_WORKSPACE" --base-url "https://kodiwulf.github.io/repository/" --site-only
+        run: |
+          python3 tools/build.py --root "$GITHUB_WORKSPACE" --base-url "https://kodiwulf.github.io/repository/" --repo-version "1.0.0" --installer-only
+          python3 tools/build.py --root "$GITHUB_WORKSPACE" --base-url "https://kodiwulf.github.io/repository/" --site-only
 
       - name: Compile and validate build tools
         run: |

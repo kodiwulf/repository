@@ -2,6 +2,7 @@ title: KodiWulf Repository
 url: https://kodiwulf.github.io
 baseurl: /repository
 exclude:
+  - index.md
   - tools
   - node_modules
   - package.json

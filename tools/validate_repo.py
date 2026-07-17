@@ -5,6 +5,7 @@ import hashlib
 import json
 import re
 import sys
+import zipfile
 from pathlib import Path
 from urllib.parse import quote
 
@@ -12,6 +13,8 @@ from urllib.parse import quote
 ROOT = Path(__file__).resolve().parents[1]
 TECHNICAL_ROOTS = {".github", "Repository", "_data", "_layouts", "_site", "assets", "node_modules", "tools"}
 LEGACY_MIRROR_BRANCHES = {("repository", "plugins"), ("repository", "repository"), ("repository", "script")}
+NAVIGATION_ROOTS = {"plugins", "repository"}
+INSTALLER_NAME = "repository.kodiwulf-1.0.0.zip"
 
 
 def fail(message: str) -> None:
@@ -33,6 +36,11 @@ def main() -> None:
         fail(".nojekyll must not exist because Jekyll rendering is enabled")
     if not (ROOT / "_config.yml").is_file():
         fail("_config.yml is required for Jekyll")
+    if (ROOT / "index.md").exists():
+        fail("index.md must not compete with the Jekyll index.html output")
+    for asset in ("bg.png", "icon.png"):
+        if not (ROOT / asset).is_file():
+            fail(f"Kodi artwork is missing: {asset}")
 
     addons_xml = ROOT / "addons.xml"
     checksum = ROOT / "addons.xml.md5"
@@ -46,13 +54,33 @@ def main() -> None:
     if not tree_path.is_file():
         fail("Jekyll navigation data is missing: _data/repository_tree.json")
     tree = json.loads(tree_path.read_text(encoding="utf-8"))
-    public_roots = sorted(
-        path for path in ROOT.iterdir()
-        if path.is_dir() and not path.name.startswith(".") and path.name not in TECHNICAL_ROOTS
-    )
+    public_roots = sorted(path for path in ROOT.iterdir() if path.is_dir() and path.name in NAVIGATION_ROOTS)
     root_zips = sorted(ROOT.glob("*.zip"))
-    if len(root_zips) != 1 or not root_zips[0].name.startswith("repository.kodiwulf-"):
-        fail("repository.kodiwulf must be the only ZIP in repository root")
+    if [path.name for path in root_zips] != [INSTALLER_NAME]:
+        fail(f"{INSTALLER_NAME} must be the only ZIP in repository root")
+
+    with zipfile.ZipFile(root_zips[0]) as archive:
+        names = set(archive.namelist())
+        required_members = {
+            "repository.kodiwulf/addon.xml",
+            "repository.kodiwulf/icon.png",
+            "repository.kodiwulf/fanart.png",
+        }
+        missing = required_members - names
+        if missing:
+            fail(f"installer artwork or metadata is missing: {sorted(missing)[0]}")
+        if archive.read("repository.kodiwulf/icon.png") != (ROOT / "icon.png").read_bytes():
+            fail("installer icon.png does not match the selected Kodi icon")
+        if archive.read("repository.kodiwulf/fanart.png") != (ROOT / "bg.png").read_bytes():
+            fail("installer fanart.png does not match the selected Kodi banner")
+        addon_xml = archive.read("repository.kodiwulf/addon.xml").decode("utf-8")
+        for required in ('version="1.0.0"', "<icon>icon.png</icon>", "<fanart>fanart.png</fanart>"):
+            if required not in addon_xml:
+                fail(f"installer metadata is missing: {required}")
+        for category in ("plugins/program", "plugins/video", "repository", "script/module"):
+            expected_url = f"https://kodiwulf.github.io/repository/{category}/addons.xml"
+            if expected_url not in addon_xml:
+                fail(f"installer does not expose category: {category}")
 
     for zip_path in root_zips:
         linked_name = quote(zip_path.name, safe="/._-~")
@@ -67,8 +95,17 @@ def main() -> None:
     data_names = {item["name"] for item in tree.get("roots", [])}
     if data_names != {path.name for path in public_roots}:
         fail("Jekyll root navigation does not match public root directories")
-    if "site.data.repository_tree.menu" not in index:
-        fail("root index does not render the generated Jekyll menu")
+    if "site.data.repository_tree.roots" not in index:
+        fail("root index does not render the generated Jekyll roots")
+    for required in ("data-terminal-shadow", "data-terminal-solid", "brand-shadow", "brand-solid"):
+        if required not in index:
+            fail(f"two-layer banner markup is missing: {required}")
+    for font in ("DampfPlatzs.ttf", "DampfPlatzsh.ttf"):
+        if not (ROOT / "assets" / "fonts" / "dampfplatz" / font).is_file():
+            fail(f"Dampfplatz font is missing: {font}")
+    for item in json.loads(browser_data.removeprefix("window.KODIWULF_FILES=").split(";", 1)[0]):
+        if "size" not in item or "size_label" not in item:
+            fail(f"ZIP size metadata is missing: {item.get('path', '?')}")
 
     allowed_md5 = {checksum}
     allowed_md5.update(path for path in ROOT.rglob("addons.xml.md5") if (path.parent / "index.html").is_file())
@@ -80,6 +117,11 @@ def main() -> None:
     hashes = [hashlib.sha256(path.read_bytes()).hexdigest() for path in classified]
     if len(hashes) != len(set(hashes)):
         fail("duplicate ZIP content exists in the public category structure")
+    plugins_index = (ROOT / "plugins" / "index.html").read_text(encoding="utf-8")
+    for child in sorted(path for path in (ROOT / "plugins").iterdir() if path.is_dir()):
+        if f'href="{quote(child.name, safe="._-~")}/"' not in plugins_index:
+            fail(f"plugins index does not link category: {child.name}")
+
     required_indexes = [ROOT / "repository"]
     for parent_name in ("plugin", "plugins", "script"):
         parent = ROOT / parent_name

@@ -19,6 +19,8 @@ from kodiwulf_build_repo_core import AddonInfo, parse_addon_zip, pretty_xml
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BASE_URL = "https://kodiwulf.github.io/repository/"
+DEFAULT_REPO_VERSION = "1.0.0"
+NAVIGATION_ROOTS = {"plugins", "repository"}
 SKIP_PARTS = {".git", ".drdebug-backups", "__pycache__"}
 TECHNICAL_ROOTS = {
     ".github", "Repository", "_data", "_layouts", "_site", "assets", "node_modules", "tools"
@@ -28,6 +30,16 @@ LEGACY_MIRROR_BRANCHES = {("repository", "plugins"), ("repository", "repository"
 
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def format_size(size: int) -> str:
+    units = ("B", "KB", "MB", "GB")
+    value = float(size)
+    for unit in units:
+        if value < 1024 or unit == units[-1]:
+            return f"{value:.1f} {unit}" if unit != "B" else f"{int(value)} B"
+        value /= 1024
+    return f"{size} B"
 
 
 def category(info: AddonInfo) -> str:
@@ -158,18 +170,36 @@ def ensure_generic_index(directory: Path, root: Path) -> None:
     (directory / "index.html").write_text(index_document(f"KodiWulf / {directory.relative_to(root).as_posix()}", entries), encoding="utf-8")
 
 
+def write_browse_indexes(root: Path) -> None:
+    repository = root / "repository"
+    if repository.is_dir():
+        ensure_generic_index(repository, root)
+    for parent_name in ("plugins", "script"):
+        parent = root / parent_name
+        if not parent.is_dir():
+            continue
+        children = sorted(
+            (path for path in parent.iterdir() if path.is_dir() and not path.name.startswith(".")),
+            key=lambda path: path.name.lower(),
+        )
+        entries = [(f"{child.name}/", "Ordner", f"{child.name}/") for child in children]
+        (parent / "index.html").write_text(index_document(f"KodiWulf / {parent_name}", entries), encoding="utf-8")
+        for child in children:
+            ensure_generic_index(child, root)
+
+
 def write_site_root(root: Path) -> None:
     items = []
     for zip_path in sorted(root.glob("repository.kodiwulf-*.zip")):
-        items.append({"path": zip_path.name, "name": zip_path.name, "url": quote(zip_path.name, safe="/._-~"), "category": "installer"})
-    roots = public_roots(root)
+        items.append({"path": zip_path.name, "name": zip_path.name, "url": quote(zip_path.name, safe="/._-~"), "category": "installer", "size": zip_path.stat().st_size, "size_label": format_size(zip_path.stat().st_size)})
+    roots = [directory for directory in public_roots(root) if directory.name in NAVIGATION_ROOTS]
     tree_roots = []
     for directory in roots:
         top = directory.name
         zip_count = 0
         for zip_path in sorted(visible_zips(directory, root)):
             rel = zip_path.relative_to(root).as_posix()
-            items.append({"path": rel, "name": zip_path.name, "url": quote(rel, safe="/._-~"), "category": top})
+            items.append({"path": rel, "name": zip_path.name, "url": quote(rel, safe="/._-~"), "category": top, "size": zip_path.stat().st_size, "size_label": format_size(zip_path.stat().st_size)})
             zip_count += 1
         tree_roots.append({
             "name": top,
@@ -199,6 +229,8 @@ def write_site_root(root: Path) -> None:
         f'<a href="{quote(zip_path.name, safe="/._-~")}">{html.escape(zip_path.name)}</a>'
         for zip_path in sorted(root.glob("repository.kodiwulf-*.zip"))
     )
+    installers = sorted(root.glob("repository.kodiwulf-*.zip"))
+    installer_name = installers[-1].name if installers else "repository.kodiwulf-1.0.0.zip"
     kodi_links = "\n".join(part for part in (static_links, installer_links) if part)
     root_doc = """---
 layout: null
@@ -216,38 +248,42 @@ layout: null
 <body>
 <nav class="kodi-static" aria-label="Kodi ZIP index">__KODI_LINKS__</nav>
 <main>
-  <header class="hero animate-target">
-    <p class="eyebrow">GitHub Pages Kodi Repository</p>
-    <h1><span class="x">x</span>Wulf Repository</h1>
-    <p class="subtitle">Dunkler Repository-Index nach dem ursprünglichen KodiWulf-Design. Jekyll erkennt öffentliche Root-Ordner automatisch; Kodi erhält parallel einfache statische Links.</p>
-    <div class="hero-actions">
-      <a class="btn btn-danger" href="repository.kodiwulf-0.1.0.zip">Repository installieren</a>
-      <button class="btn btn-outline-info" type="button" data-bs-toggle="modal" data-bs-target="#stackModal">Frontend-Stack</button>
+  <header class="hero hero-banner animate-target">
+    <div class="hero-scrim"></div>
+    <div class="hero-content">
+      <p class="eyebrow">GitHub Pages · Kodi Repository</p>
+      <div class="brand-line">
+        <h1 class="brand-stage" aria-label="xWulf Repository">
+          <span class="brand-layer brand-shadow" aria-hidden="true">xWulf Repository</span>
+          <span class="brand-layer brand-solid"><span class="brand-x">x</span>Wulf <span class="brand-r">R</span>epository</span>
+        </h1>
+        <div class="terminal-stage" aria-live="polite" aria-label="KodiWulf Features">
+          <span class="terminal-layer terminal-shadow" aria-hidden="true"><span data-terminal-shadow></span><i>_</i></span>
+          <span class="terminal-layer terminal-solid"><span data-terminal-solid></span><i>_</i></span>
+        </div>
+      </div>
+      <p class="subtitle">ZIP-Browser für Kodi-Plugins und Repository-Pakete. Direkte Downloads, klare Ordnerwege, flüssige Navigation.</p>
+      <div class="hero-actions">
+        <a class="btn btn-danger install-button" href="__INSTALLER__"><span>ZIP</span> Repository 1.0.0 installieren</a>
+        <span id="react-summary" class="package-count">Pakete werden geladen …</span>
+      </div>
     </div>
   </header>
 
-  <section class="grid animate-target" aria-label="Repository-Dateien">
-    <article class="card"><h2>Repository XML</h2><p><a href="addons.xml">addons.xml</a></p></article>
-    <article class="card"><h2>Checksum</h2><p><a href="addons.xml.md5">addons.xml.md5</a></p></article>
-    <article class="card"><h2>Pakete</h2><div id="react-summary" class="metric">wird geladen …</div></article>
+  <section class="browser-shell animate-target" aria-label="KodiWulf ZIP Browser">
+    <div class="browser-heading">
+      <div><p class="eyebrow">Install from ZIP</p><h2>Repository Browser</h2></div>
+      <div id="vue-runtime" class="runtime-pill">Navigation bereit</div>
+    </div>
+    <div id="react-browser"></div>
   </section>
 
-  <section class="panel animate-target">
-    <div class="panel-head"><div><p class="eyebrow">Jekyll data navigation</p><h2>Repository-Bereiche</h2></div><span class="pill">{{ site.data.repository_tree.menu | size }} Menüpunkte</span></div>
-    <div id="vue-filter" class="filterbar"><label for="folder-search">Ordner filtern</label><div class="input-group"><input id="folder-search" class="form-control" type="search" v-model="query" @input="applyFilter" placeholder="z. B. plugin, script oder Popel"><button class="btn btn-outline-light" type="button" @click="clearFilter">Reset</button></div></div>
-    <div class="table-responsive"><table><thead><tr><th>Typ</th><th>Name</th><th>ZIPs</th></tr></thead><tbody id="jekyll-folders">
-    {% for node in site.data.repository_tree.menu %}
-      <tr class="folder-row" style="--depth:{{ node.depth }}" data-folder="{{ node.path | downcase }}"><td class="type">DIR</td><td><a href="{{ node.href | relative_url }}">{{ node.name }}/</a><br><small>{{ node.kind }} · {{ node.path }}</small></td><td>{{ node.zip_count }}</td></tr>
-    {% endfor %}
-    </tbody></table></div>
-  </section>
-
-  <section class="panel animate-target"><div class="panel-head"><h2>ZIP-Verteilung</h2><span class="pill">D3</span></div><div id="d3-chart" class="chart" role="img" aria-label="ZIP-Dateien pro Root-Ordner"></div></section>
-  <section class="panel animate-target"><div class="panel-head"><h2>ZIP File Browser</h2><span class="pill">React</span></div><div id="react-browser"></div></section>
-  <footer><span id="svelte-status">Svelte wird initialisiert …</span></footer>
+  <nav class="jekyll-fallback" aria-label="Jekyll Navigation">
+    {% for node in site.data.repository_tree.roots %}<a href="{{ node.href | relative_url }}">{{ node.name }}/</a>{% endfor %}
+  </nav>
+  <footer><span id="svelte-status">KodiWulf Repository wird initialisiert …</span></footer>
 </main>
 
-<div class="modal fade" id="stackModal" tabindex="-1" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5">Integrierter Stack</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button></div><div class="modal-body"><p>Bootstrap · Anime.js · jQuery · Jekyll · Vue · React · Svelte · D3</p><small>Jedes Werkzeug erweitert einen isolierten Bereich; die Kodi-Links funktionieren ohne JavaScript.</small></div></div></div></div>
 <noscript><p class="noscript">JavaScript erweitert die Website. Kodi und die Jekyll-Ordnerlinks bleiben ohne JavaScript verwendbar.</p></noscript>
 <script defer src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
@@ -260,6 +296,7 @@ layout: null
 </body></html>
 """
     root_doc = root_doc.replace("__KODI_LINKS__", kodi_links)
+    root_doc = root_doc.replace("__INSTALLER__", quote(installer_name, safe="/._-~"))
     (root / "index.html").write_text(root_doc, encoding="utf-8")
 
 
@@ -287,7 +324,12 @@ def make_repo_xml(categories: list[str], base_url: str, version: str) -> bytes:
   <extension point="xbmc.addon.repository" name="KodiWulf Repository">
 {chr(10).join(dirs)}
   </extension>
-  <extension point="xbmc.addon.metadata"><summary lang="de_DE">KodiWulf Add-on Repository</summary><platform>all</platform></extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="de_DE">KodiWulf Add-on Repository</summary>
+    <description lang="de_DE">KodiWulf Repository für direkt installierbare Kodi ZIP-Pakete.</description>
+    <platform>all</platform>
+    <assets><icon>icon.png</icon><fanart>fanart.png</fanart></assets>
+  </extension>
 </addon>
 """).encode("utf-8")
 
@@ -298,15 +340,38 @@ def write_repo_zip(root: Path, xml: bytes, version: str) -> Path:
         addon_dir = Path(temp) / "repository.kodiwulf"
         addon_dir.mkdir()
         (addon_dir / "addon.xml").write_bytes(xml)
+        if (root / "icon.png").is_file():
+            shutil.copy2(root / "icon.png", addon_dir / "icon.png")
+        if (root / "bg.png").is_file():
+            shutil.copy2(root / "bg.png", addon_dir / "fanart.png")
         with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as archive:
-            archive.write(addon_dir / "addon.xml", "repository.kodiwulf/addon.xml")
+            for file_path in sorted(addon_dir.iterdir()):
+                archive.write(file_path, f"repository.kodiwulf/{file_path.name}")
     return target
 
 
-def build(root: Path, base_url: str, version: str, apply: bool, backup: Path, site_only: bool = False) -> None:
+def installer_categories(root: Path) -> list[str]:
+    candidates = [root / "repository"]
+    candidates.extend(path for parent in (root / "plugins", root / "script") if parent.is_dir() for path in parent.iterdir() if path.is_dir())
+    return sorted(
+        path.relative_to(root).as_posix()
+        for path in candidates
+        if (path / "addons.xml").is_file() and (path / "addons.xml.md5").is_file()
+    )
+
+
+def build(root: Path, base_url: str, version: str, apply: bool, backup: Path, site_only: bool = False, installer_only: bool = False) -> None:
+    if installer_only:
+        categories = installer_categories(root)
+        if not categories:
+            raise RuntimeError("no repository metadata categories found")
+        target = write_repo_zip(root, make_repo_xml(categories, base_url, version), version)
+        print(f"OK: installer generated: {target.name}; categories: {', '.join(categories)}")
+        return
     if site_only:
+        write_browse_indexes(root)
         write_site_root(root)
-        print("OK: Jekyll navigation and frontend data generated")
+        print("OK: Kodi browse indexes, Jekyll navigation and frontend data generated")
         return
     by_identity: dict[tuple[str, str], list[tuple[Path, AddonInfo]]] = defaultdict(list)
     invalid: list[tuple[Path, str, str]] = []
@@ -415,12 +480,13 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", default=str(ROOT))
     parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
-    parser.add_argument("--repo-version", default="0.1.0")
+    parser.add_argument("--repo-version", default=DEFAULT_REPO_VERSION)
     parser.add_argument("--backup", default=str(ROOT.parent / "repository-zip-backup"))
     parser.add_argument("--apply", action="store_true")
     parser.add_argument("--site-only", action="store_true", help="Only regenerate Jekyll/frontend navigation without moving ZIPs")
+    parser.add_argument("--installer-only", action="store_true", help="Only rebuild the root repository installer ZIP")
     args = parser.parse_args()
-    build(Path(args.root).resolve(), args.base_url, args.repo_version, args.apply, Path(args.backup).resolve(), args.site_only)
+    build(Path(args.root).resolve(), args.base_url, args.repo_version, args.apply, Path(args.backup).resolve(), args.site_only, args.installer_only)
 
 
 if __name__ == "__main__":

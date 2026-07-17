@@ -2,83 +2,190 @@ import React from "https://esm.sh/react@19";
 import { createRoot } from "https://esm.sh/react-dom@19/client";
 
 const files = Array.isArray(window.KODIWULF_FILES) ? window.KODIWULF_FILES : [];
-const treeData = window.KODIWULF_TREE || { roots: [], total_zips: files.length };
+const packageFiles = files.filter((file) => file.category !== "installer");
 const h = React.createElement;
 
-function childrenAt(path) {
-  const prefix = path ? `${path}/` : "";
-  const folders = new Set();
-  const localFiles = [];
-  files.forEach((file) => {
-    if (!file.path.startsWith(prefix)) return;
-    const rest = file.path.slice(prefix.length);
-    const slash = rest.indexOf("/");
-    if (slash === -1) localFiles.push(file);
-    else folders.add(rest.slice(0, slash));
-  });
-  return { folders: [...folders].sort(), files: localFiles.sort((a, b) => a.name.localeCompare(b.name)) };
+const delay = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
+
+function directFiles(path) {
+  const prefix = `${path}/`;
+  return packageFiles
+    .filter((file) => file.path.startsWith(prefix))
+    .sort((left, right) => left.name.localeCompare(right.name, "de"));
 }
 
-function ZipBrowser() {
+function pluginSections() {
+  return [...new Set(packageFiles
+    .filter((file) => file.path.startsWith("plugins/"))
+    .map((file) => file.path.split("/")[1])
+    .filter(Boolean))]
+    .sort((left, right) => left.localeCompare(right, "de"));
+}
+
+function ZipIcon() {
+  return h("span", { className: "zip-icon", "aria-hidden": "true" },
+    h("svg", { viewBox: "0 0 48 48", focusable: "false" },
+      h("path", { d: "M8 5h21l11 11v27H8z" }),
+      h("path", { className: "zip-fold", d: "M29 5v12h11" }),
+      h("path", { className: "zip-teeth", d: "M18 7h7v5h-7zm0 7h7v5h-7zm0 7h7v5h-7zm0 7h7v5h-7z" }),
+      h("rect", { className: "zip-grip", x: "16", y: "34", width: "11", height: "6", rx: "2" })
+    ));
+}
+
+function FolderIcon() {
+  return h("span", { className: "folder-icon", "aria-hidden": "true" },
+    h("svg", { viewBox: "0 0 52 42", focusable: "false" },
+      h("path", { d: "M3 8h18l5 6h23v24H3z" }),
+      h("path", { d: "M3 8V4h17l5 6h24v5" })
+    ));
+}
+
+function Hamburger({ open }) {
+  return h("span", { className: `hamburger${open ? " is-open" : ""}`, "aria-hidden": "true" },
+    h("i"), h("i"), h("i"));
+}
+
+function FileRows({ path, query }) {
+  const normalized = query.trim().toLowerCase();
+  const list = directFiles(path).filter((file) => !normalized || file.name.toLowerCase().includes(normalized));
+
+  React.useEffect(() => {
+    window.anime?.({
+      targets: ".zip-row",
+      opacity: [0, 1],
+      translateY: [16, 0],
+      delay: window.anime.stagger(24),
+      duration: 420,
+      easing: "easeOutCubic"
+    });
+    if (window.d3 && list.length) {
+      const maximum = Math.max(...list.map((file) => Number(file.size) || 0), 1);
+      const scale = window.d3.scaleSqrt().domain([0, maximum]).range([8, 100]);
+      window.d3.selectAll(".size-meter span").style("width", (datum, index, nodes) => `${scale(Number(nodes[index].dataset.size) || 0)}%`);
+    }
+  }, [path, query]);
+
+  if (!list.length) return h("div", { className: "empty" }, "Keine passenden ZIP-Dateien gefunden.");
+  return h("ul", { className: "zip-list" }, list.map((file) =>
+    h("li", { className: "zip-row", key: file.path },
+      h(ZipIcon),
+      h("div", { className: "zip-copy" },
+        h("a", { className: "zip-name", href: file.url, download: "" }, file.name),
+        h("span", { className: "zip-path" }, file.path),
+        h("span", { className: "size-meter", "aria-hidden": "true" }, h("span", { "data-size": file.size || 0 }))
+      ),
+      h("div", { className: "zip-facts" }, h("strong", null, "ZIP"), h("span", null, file.size_label || "–")),
+      h("a", { className: "download-button", href: file.url, download: "", "aria-label": `${file.name} herunterladen` }, "↓")
+    )
+  ));
+}
+
+function RepositoryBrowser() {
   const [path, setPath] = React.useState("");
-  const current = childrenAt(path);
-  const parts = path ? path.split("/") : [];
-  const go = (next) => {
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const sections = pluginSections();
+
+  const navigate = (next) => {
+    setQuery("");
     setPath(next);
-    window.anime?.({ targets: "#react-browser .zip-entry", opacity: [0, 1], translateX: [-10, 0], delay: window.anime.stagger(18), duration: 260, easing: "easeOutQuad" });
+    if (next.startsWith("plugins/")) setDrawerOpen(false);
   };
-  const crumbs = [h("button", { className: "crumb", onClick: () => go(""), key: "root" }, "root")];
-  parts.forEach((part, index) => {
-    crumbs.push(h("span", { key: `sep-${index}` }, "/"));
-    crumbs.push(h("button", { className: "crumb", onClick: () => go(parts.slice(0, index + 1).join("/")), key: part }, part));
-  });
-  const rows = [];
-  if (path) rows.push(h("li", { className: "zip-entry", key: "up" }, h("span", { className: "type" }, "DIR"), h("button", { className: "zip-folder", onClick: () => go(parts.slice(0, -1).join("/")) }, "../"), h("span", { className: "zip-meta" }, "parent")));
-  current.folders.forEach((folder) => rows.push(h("li", { className: "zip-entry", key: folder }, h("span", { className: "type" }, "DIR"), h("button", { className: "zip-folder zip-name", onClick: () => go(path ? `${path}/${folder}` : folder) }, `${folder}/`), h("span", { className: "zip-meta" }, "folder"))));
-  current.files.forEach((file) => rows.push(h("li", { className: "zip-entry", key: file.path }, h("span", { className: "type" }, "ZIP"), h("a", { className: "zip-name", href: file.url }, file.name), h("span", { className: "zip-meta" }, file.category))));
+
+  React.useEffect(() => {
+    document.documentElement.classList.add("js-ready");
+    window.anime?.({ targets: ".folder-card", opacity: [0, 1], scale: [.96, 1], delay: window.anime.stagger(70), duration: 380, easing: "easeOutQuad" });
+  }, [path]);
+
+  React.useEffect(() => {
+    if (!drawerOpen) return;
+    window.anime?.({ targets: ".plugin-drawer", opacity: [0, 1], height: [0, "auto"], duration: 420, easing: "easeOutCubic" });
+    window.anime?.({ targets: ".drawer-link", opacity: [0, 1], translateX: [-18, 0], delay: window.anime.stagger(70, { start: 100 }), duration: 320, easing: "easeOutQuad" });
+  }, [drawerOpen]);
+
+  const root = path === "";
+  const title = root ? "Zwei Bereiche. Direkte ZIPs." : path === "repository" ? "repository/" : `${path}/`;
+
   return h(React.Fragment, null,
-    h("div", { className: "react-toolbar" }, h("nav", { className: "breadcrumbs", "aria-label": "ZIP-Pfad" }, crumbs), h("span", { className: "pill" }, `${current.folders.length + current.files.length} Einträge`)),
-    h("ul", { className: "zip-list" }, rows.length ? rows : h("li", { className: "empty" }, "Keine ZIP-Dateien in diesem Ordner"))
+    h("div", { className: "browser-toolbar" },
+      h("div", { className: "breadcrumb-line" },
+        h("button", { className: "crumb", onClick: () => navigate("") }, "root"),
+        path && h("span", { className: "crumb-separator" }, "/"),
+        path && h("button", { className: "crumb current", onClick: () => {} }, path)
+      ),
+      h("strong", { className: "browser-title" }, title)
+    ),
+    root ? h("div", { className: "root-view" },
+      h("div", { className: "folder-grid" },
+        h("button", { className: `folder-card${drawerOpen ? " active" : ""}`, onClick: () => setDrawerOpen((open) => !open), "aria-expanded": drawerOpen, "aria-controls": "plugin-drawer" },
+          h(FolderIcon), h("span", { className: "folder-copy" }, h("strong", null, "plugins/"), h("small", null, `${sections.length} Unterordner`)), h(Hamburger, { open: drawerOpen })),
+        h("button", { className: "folder-card", onClick: () => navigate("repository") },
+          h(FolderIcon), h("span", { className: "folder-copy" }, h("strong", null, "repository/"), h("small", null, `${directFiles("repository").length} ZIP-Dateien`)), h("span", { className: "folder-arrow" }, "→"))
+      ),
+      drawerOpen && h("nav", { id: "plugin-drawer", className: "plugin-drawer", "aria-label": "Plugin-Unterordner" },
+        h("div", { className: "drawer-head" }, h(Hamburger, { open: true }), h("span", null, "plugins/")),
+        sections.map((section) => h("button", { className: "drawer-link", key: section, onClick: () => navigate(`plugins/${section}`) },
+          h(FolderIcon), h("span", null, h("strong", null, `${section}/`), h("small", null, `${directFiles(`plugins/${section}`).length} ZIP-Dateien`)), h("b", null, "→")))
+      )
+    ) : h("div", { className: "files-view" },
+      h("div", { className: "file-actions" },
+        h("button", { className: "back-button", onClick: () => path.startsWith("plugins/") ? (setPath(""), setDrawerOpen(true)) : navigate("") }, "← zurück"),
+        h("label", { className: "zip-search" }, h("span", null, "ZIP suchen"), h("input", { type: "search", value: query, onChange: (event) => setQuery(event.target.value), placeholder: "Dateiname …" }))
+      ),
+      h(FileRows, { path, query })
+    )
   );
+}
+
+async function typeTerminal() {
+  const solid = document.querySelector("[data-terminal-solid]");
+  const shadow = document.querySelector("[data-terminal-shadow]");
+  if (!solid || !shadow) return;
+  const phrases = [
+    "plugin.video.xwulf",
+    "plugin.video.youtube",
+    "program add-ons",
+    "direct ZIP downloads",
+    "Kodi repository updates"
+  ];
+  let phraseIndex = 0;
+  while (true) {
+    const phrase = phrases[phraseIndex % phrases.length];
+    for (let index = 1; index <= phrase.length; index += 1) {
+      solid.textContent = shadow.textContent = phrase.slice(0, index);
+      await delay(58 + Math.random() * 48);
+    }
+    await delay(1250);
+    for (let index = phrase.length - 1; index >= 0; index -= 1) {
+      solid.textContent = shadow.textContent = phrase.slice(0, index);
+      await delay(28 + Math.random() * 25);
+    }
+    await delay(340);
+    phraseIndex += 1;
+  }
 }
 
 function boot() {
   const summary = document.getElementById("react-summary");
-  if (summary) createRoot(summary).render(h("span", null, `${files.length} ZIP-Dateien`));
+  if (summary) createRoot(summary).render(h("span", null, `${packageFiles.length} ZIP-Dateien online`));
   const browser = document.getElementById("react-browser");
-  if (browser) createRoot(browser).render(h(ZipBrowser));
+  if (browser) createRoot(browser).render(h(RepositoryBrowser));
 
-  if (window.Vue && document.getElementById("vue-filter")) {
-    window.Vue.createApp({
-      data: () => ({ query: "" }),
-      methods: {
-        applyFilter() {
-          const needle = this.query.trim().toLowerCase();
-          document.querySelectorAll(".folder-row").forEach((row) => { row.hidden = needle && !row.dataset.folder.includes(needle); });
-        },
-        clearFilter() { this.query = ""; this.$nextTick(this.applyFilter); }
-      }
-    }).mount("#vue-filter");
-  }
-
-  if (window.d3 && document.getElementById("d3-chart")) {
-    const data = treeData.roots || [];
-    const width = Math.max(620, data.length * 96);
-    const height = 160;
-    const max = Math.max(1, ...data.map((d) => d.zip_count));
-    const svg = window.d3.select("#d3-chart").append("svg").attr("viewBox", `0 0 ${width} ${height}`);
-    const x = window.d3.scaleBand().domain(data.map((d) => d.name)).range([16, width - 16]).padding(.28);
-    const y = window.d3.scaleLinear().domain([0, max]).range([118, 16]);
-    svg.selectAll("rect").data(data).join("rect").attr("class", "bar").attr("x", (d) => x(d.name)).attr("y", (d) => y(d.zip_count)).attr("width", x.bandwidth()).attr("height", (d) => 118 - y(d.zip_count)).attr("rx", 5);
-    svg.selectAll(".label").data(data).join("text").attr("class", "label").attr("x", (d) => x(d.name) + x.bandwidth() / 2).attr("y", 140).attr("text-anchor", "middle").text((d) => d.name);
-    svg.selectAll(".value").data(data).join("text").attr("class", "value").attr("x", (d) => x(d.name) + x.bandwidth() / 2).attr("y", (d) => y(d.zip_count) - 5).attr("text-anchor", "middle").text((d) => d.zip_count);
+  if (window.Vue && document.getElementById("vue-runtime")) {
+    window.Vue.createApp({ data: () => ({ ready: "Vue · Jekyll · React bereit" }), template: "<span>{{ ready }}</span>" }).mount("#vue-runtime");
   }
 
   window.jQuery?.(() => {
-    window.jQuery(".folder-row").on("mouseenter mouseleave", function () { window.jQuery(this).toggleClass("is-hovered"); });
-    window.jQuery(document).on("keydown", (event) => { if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") { event.preventDefault(); window.jQuery("#folder-search").trigger("focus"); } });
+    window.jQuery(".hero-banner").on("mousemove", function (event) {
+      const x = (event.offsetX / this.clientWidth - .5) * 8;
+      const y = (event.offsetY / this.clientHeight - .5) * 8;
+      this.style.setProperty("--parallax-x", `${x}px`);
+      this.style.setProperty("--parallax-y", `${y}px`);
+    });
   });
-  window.anime?.({ targets: ".animate-target", opacity: [0, 1], translateY: [18, 0], delay: window.anime.stagger(90), duration: 620, easing: "easeOutCubic" });
+
+  window.anime?.({ targets: ".animate-target", opacity: [0, 1], translateY: [24, 0], delay: window.anime.stagger(120), duration: 760, easing: "easeOutCubic" });
+  typeTerminal();
 }
 
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
