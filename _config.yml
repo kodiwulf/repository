@@ -3,6 +3,9 @@ url: https://kodiwulf.github.io
 baseurl: /repository
 exclude:
   - tools
+  - node_modules
+  - package.json
+  - package-lock.json
   - README.md
   - UPDATE_PROCESS.md
   - CHANGES.md

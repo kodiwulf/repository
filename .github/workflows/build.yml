@@ -1,4 +1,4 @@
-name: Validate Kodi repository
+name: Build and deploy Kodi repository
 
 on:
   push:
@@ -7,16 +7,47 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
-  validate:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Compile build tools
-        run: python3 -m py_compile tools/*.py
+      - name: Generate repository metadata and Jekyll navigation
+        run: python3 tools/build.py --root "$GITHUB_WORKSPACE" --base-url "https://kodiwulf.github.io/repository/" --site-only
 
-      - name: Validate published repository
-        run: python3 tools/validate_repo.py
+      - name: Compile and validate build tools
+        run: |
+          python3 -m py_compile tools/*.py
+          python3 tools/validate_repo.py
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,7 +1,61 @@
 ---
 layout: null
 ---
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>KodiWulf ZIP Browser</title><link rel="stylesheet" href="assets/theme.css"></head><body><nav class="kodi-static" aria-label="Kodi ZIP index"><a href="repository/">repository/</a>
-<a href="plugins/">plugins/</a>
+<!doctype html>
+<html lang="de" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>KodiWulf Repository</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ '/assets/theme.css' | relative_url }}">
+</head>
+<body>
+<nav class="kodi-static" aria-label="Kodi ZIP index"><a href="plugins/">plugins/</a>
+<a href="repository/">repository/</a>
 <a href="script/">script/</a>
-<a href="repository.kodiwulf-0.1.0.zip">repository.kodiwulf-0.1.0.zip</a></nav><div id="file-browser-root"></div><noscript><p class="noscript">JavaScript wird für den React-Dateibrowser benötigt. Kodi verwendet die statischen Links oben.</p></noscript><script src="https://unpkg.com/react@18/umd/react.production.min.js"></script><script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script><script src="assets/files.js"></script><script src="assets/file-browser.js"></script></body></html>
+<a href="repository.kodiwulf-0.1.0.zip">repository.kodiwulf-0.1.0.zip</a></nav>
+<main>
+  <header class="hero animate-target">
+    <p class="eyebrow">GitHub Pages Kodi Repository</p>
+    <h1><span class="x">x</span>Wulf Repository</h1>
+    <p class="subtitle">Dunkler Repository-Index nach dem ursprünglichen KodiWulf-Design. Jekyll erkennt öffentliche Root-Ordner automatisch; Kodi erhält parallel einfache statische Links.</p>
+    <div class="hero-actions">
+      <a class="btn btn-danger" href="repository.kodiwulf-0.1.0.zip">Repository installieren</a>
+      <button class="btn btn-outline-info" type="button" data-bs-toggle="modal" data-bs-target="#stackModal">Frontend-Stack</button>
+    </div>
+  </header>
+
+  <section class="grid animate-target" aria-label="Repository-Dateien">
+    <article class="card"><h2>Repository XML</h2><p><a href="addons.xml">addons.xml</a></p></article>
+    <article class="card"><h2>Checksum</h2><p><a href="addons.xml.md5">addons.xml.md5</a></p></article>
+    <article class="card"><h2>Pakete</h2><div id="react-summary" class="metric">wird geladen …</div></article>
+  </section>
+
+  <section class="panel animate-target">
+    <div class="panel-head"><div><p class="eyebrow">Jekyll data navigation</p><h2>Repository-Bereiche</h2></div><span class="pill">{{ site.data.repository_tree.menu | size }} Menüpunkte</span></div>
+    <div id="vue-filter" class="filterbar"><label for="folder-search">Ordner filtern</label><div class="input-group"><input id="folder-search" class="form-control" type="search" v-model="query" @input="applyFilter" placeholder="z. B. plugin, script oder Popel"><button class="btn btn-outline-light" type="button" @click="clearFilter">Reset</button></div></div>
+    <div class="table-responsive"><table><thead><tr><th>Typ</th><th>Name</th><th>ZIPs</th></tr></thead><tbody id="jekyll-folders">
+    {% for node in site.data.repository_tree.menu %}
+      <tr class="folder-row" style="--depth:{{ node.depth }}" data-folder="{{ node.path | downcase }}"><td class="type">DIR</td><td><a href="{{ node.href | relative_url }}">{{ node.name }}/</a><br><small>{{ node.kind }} · {{ node.path }}</small></td><td>{{ node.zip_count }}</td></tr>
+    {% endfor %}
+    </tbody></table></div>
+  </section>
+
+  <section class="panel animate-target"><div class="panel-head"><h2>ZIP-Verteilung</h2><span class="pill">D3</span></div><div id="d3-chart" class="chart" role="img" aria-label="ZIP-Dateien pro Root-Ordner"></div></section>
+  <section class="panel animate-target"><div class="panel-head"><h2>ZIP File Browser</h2><span class="pill">React</span></div><div id="react-browser"></div></section>
+  <footer><span id="svelte-status">Svelte wird initialisiert …</span></footer>
+</main>
+
+<div class="modal fade" id="stackModal" tabindex="-1" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5">Integrierter Stack</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button></div><div class="modal-body"><p>Bootstrap · Anime.js · jQuery · Jekyll · Vue · React · Svelte · D3</p><small>Jedes Werkzeug erweitert einen isolierten Bereich; die Kodi-Links funktionieren ohne JavaScript.</small></div></div></div></div>
+<noscript><p class="noscript">JavaScript erweitert die Website. Kodi und die Jekyll-Ordnerlinks bleiben ohne JavaScript verwendbar.</p></noscript>
+<script defer src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script defer src="{{ '/assets/files.js' | relative_url }}"></script>
+<script type="module" src="{{ '/assets/app.js' | relative_url }}"></script>
+<script type="module" src="{{ '/assets/svelte-status.js' | relative_url }}"></script>
+</body></html>

@@ -1,0 +1,2353 @@
+{
+  "roots": [
+    {
+      "name": "plugins",
+      "href": "plugins/",
+      "kind": "Plugin",
+      "zip_count": 15
+    },
+    {
+      "name": "repository",
+      "href": "repository/",
+      "kind": "Repository",
+      "zip_count": 289
+    },
+    {
+      "name": "script",
+      "href": "script/",
+      "kind": "Script",
+      "zip_count": 2
+    }
+  ],
+  "menu": [
+    {
+      "name": "plugins",
+      "path": "plugins",
+      "href": "plugins/",
+      "kind": "Plugin",
+      "depth": 0,
+      "zip_count": 15
+    },
+    {
+      "name": "program",
+      "path": "plugins/program",
+      "href": "plugins/program/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "video",
+      "path": "plugins/video",
+      "href": "plugins/video/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 14
+    },
+    {
+      "name": "repository",
+      "path": "repository",
+      "href": "repository/",
+      "kind": "Repository",
+      "depth": 0,
+      "zip_count": 289
+    },
+    {
+      "name": "assets",
+      "path": "repository/assets",
+      "href": "repository/assets/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 0
+    },
+    {
+      "name": "bassemhelal18_Repo",
+      "path": "repository/bassemhelal18_Repo",
+      "href": "repository/bassemhelal18_Repo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "Bee-Queen",
+      "path": "repository/Bee-Queen",
+      "href": "repository/Bee-Queen/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "chamchenko-dev",
+      "path": "repository/chamchenko-dev",
+      "href": "repository/chamchenko-dev/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "hellyrepo.kodi",
+      "path": "repository/hellyrepo.kodi",
+      "href": "repository/hellyrepo.kodi/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "MatrixFlix.Repo",
+      "path": "repository/MatrixFlix.Repo",
+      "href": "repository/MatrixFlix.Repo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "MB-KODI",
+      "path": "repository/MB-KODI",
+      "href": "repository/MB-KODI/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "One.repo",
+      "path": "repository/One.repo",
+      "href": "repository/One.repo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "playforfun.repository",
+      "path": "repository/playforfun.repository",
+      "href": "repository/playforfun.repository/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repo.atlantis",
+      "path": "repository/repo.atlantis",
+      "href": "repository/repo.atlantis/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repo.bg.plugins",
+      "path": "repository/repo.bg.plugins",
+      "href": "repository/repo.bg.plugins/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repo.garmedcen",
+      "path": "repository/repo.garmedcen",
+      "href": "repository/repo.garmedcen/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repo_vietmediaf_offical",
+      "path": "repository/repo_vietmediaf_offical",
+      "href": "repository/repo_vietmediaf_offical/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.2026",
+      "path": "repository/repository.2026",
+      "href": "repository/repository.2026/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.5star",
+      "path": "repository/repository.5star",
+      "href": "repository/repository.5star/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.709",
+      "path": "repository/repository.709",
+      "href": "repository/repository.709/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.7mdan",
+      "path": "repository/repository.7mdan",
+      "href": "repository/repository.7mdan/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.7Plus",
+      "path": "repository/repository.7Plus",
+      "href": "repository/repository.7Plus/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.a4kstreaming",
+      "path": "repository/repository.a4kstreaming",
+      "href": "repository/repository.a4kstreaming/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 2
+    },
+    {
+      "name": "repository.a4ksubtitles",
+      "path": "repository/repository.a4ksubtitles",
+      "href": "repository/repository.a4ksubtitles/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.acestream-channels",
+      "path": "repository/repository.acestream-channels",
+      "href": "repository/repository.acestream-channels/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 2
+    },
+    {
+      "name": "repository.ad0lar",
+      "path": "repository/repository.ad0lar",
+      "href": "repository/repository.ad0lar/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.addon-rajada",
+      "path": "repository/repository.addon-rajada",
+      "href": "repository/repository.addon-rajada/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.addonniss",
+      "path": "repository/repository.addonniss",
+      "href": "repository/repository.addonniss/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.addons4kodi",
+      "path": "repository/repository.addons4kodi",
+      "href": "repository/repository.addons4kodi/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.adi",
+      "path": "repository/repository.adi",
+      "href": "repository/repository.adi/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.adulthideout",
+      "path": "repository/repository.adulthideout",
+      "href": "repository/repository.adulthideout/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.aenemapy",
+      "path": "repository/repository.aenemapy",
+      "href": "repository/repository.aenemapy/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.alado.tv",
+      "path": "repository/repository.alado.tv",
+      "href": "repository/repository.alado.tv/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.alfa-addon",
+      "path": "repository/repository.alfa-addon",
+      "href": "repository/repository.alfa-addon/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.aliunde",
+      "path": "repository/repository.aliunde",
+      "href": "repository/repository.aliunde/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.all",
+      "path": "repository/repository.all",
+      "href": "repository/repository.all/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.andtvban",
+      "path": "repository/repository.andtvban",
+      "href": "repository/repository.andtvban/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.angelitto",
+      "path": "repository/repository.angelitto",
+      "href": "repository/repository.angelitto/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.animaniac",
+      "path": "repository/repository.animaniac",
+      "href": "repository/repository.animaniac/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.anxdpanic",
+      "path": "repository/repository.anxdpanic",
+      "href": "repository/repository.anxdpanic/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.arda",
+      "path": "repository/repository.arda",
+      "href": "repository/repository.arda/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.arkane14",
+      "path": "repository/repository.arkane14",
+      "href": "repository/repository.arkane14/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.armaniflix",
+      "path": "repository/repository.armaniflix",
+      "href": "repository/repository.armaniflix/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.arnoldvink",
+      "path": "repository/repository.arnoldvink",
+      "href": "repository/repository.arnoldvink/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.arxtic-ape",
+      "path": "repository/repository.arxtic-ape",
+      "href": "repository/repository.arxtic-ape/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.asgardrepo",
+      "path": "repository/repository.asgardrepo",
+      "href": "repository/repository.asgardrepo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.atlas",
+      "path": "repository/repository.atlas",
+      "href": "repository/repository.atlas/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.autowidget",
+      "path": "repository/repository.autowidget",
+      "href": "repository/repository.autowidget/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.axbmcuser",
+      "path": "repository/repository.axbmcuser",
+      "href": "repository/repository.axbmcuser/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.azzyaddons",
+      "path": "repository/repository.azzyaddons",
+      "href": "repository/repository.azzyaddons/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.balandro",
+      "path": "repository/repository.balandro",
+      "href": "repository/repository.balandro/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.balkandzo",
+      "path": "repository/repository.balkandzo",
+      "href": "repository/repository.balkandzo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.bg",
+      "path": "repository/repository.bg",
+      "href": "repository/repository.bg/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.bleak-lodge",
+      "path": "repository/repository.bleak-lodge",
+      "href": "repository/repository.bleak-lodge/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.bossanova808",
+      "path": "repository/repository.bossanova808",
+      "href": "repository/repository.bossanova808/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.BrazucaPlay",
+      "path": "repository/repository.BrazucaPlay",
+      "href": "repository/repository.BrazucaPlay/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.breezz",
+      "path": "repository/repository.breezz",
+      "href": "repository/repository.breezz/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.bugatsinho",
+      "path": "repository/repository.bugatsinho",
+      "href": "repository/repository.bugatsinho/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.burekasKodi",
+      "path": "repository/repository.burekasKodi",
+      "href": "repository/repository.burekasKodi/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.butter",
+      "path": "repository/repository.butter",
+      "href": "repository/repository.butter/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.castagnait",
+      "path": "repository/repository.castagnait",
+      "href": "repository/repository.castagnait/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.cbtv",
+      "path": "repository/repository.cbtv",
+      "href": "repository/repository.cbtv/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.cder.sk",
+      "path": "repository/repository.cder.sk",
+      "href": "repository/repository.cder.sk/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.centry",
+      "path": "repository/repository.centry",
+      "href": "repository/repository.centry/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.chainsrepo",
+      "path": "repository/repository.chainsrepo",
+      "href": "repository/repository.chainsrepo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.Chameleon",
+      "path": "repository/repository.Chameleon",
+      "href": "repository/repository.Chameleon/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.cMaNWizard",
+      "path": "repository/repository.cMaNWizard",
+      "href": "repository/repository.cMaNWizard/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.cocoscrapers",
+      "path": "repository/repository.cocoscrapers",
+      "href": "repository/repository.cocoscrapers/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.codingPF",
+      "path": "repository/repository.codingPF",
+      "href": "repository/repository.codingPF/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.collabsvito",
+      "path": "repository/repository.collabsvito",
+      "href": "repository/repository.collabsvito/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.collabsvito.nexus",
+      "path": "repository/repository.collabsvito.nexus",
+      "href": "repository/repository.collabsvito.nexus/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.CrashX",
+      "path": "repository/repository.CrashX",
+      "href": "repository/repository.CrashX/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.cywteow",
+      "path": "repository/repository.cywteow",
+      "href": "repository/repository.cywteow/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.dab",
+      "path": "repository/repository.dab",
+      "href": "repository/repository.dab/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.depot.quebec",
+      "path": "repository/repository.depot.quebec",
+      "href": "repository/repository.depot.quebec/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.derzis",
+      "path": "repository/repository.derzis",
+      "href": "repository/repository.derzis/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.devalls",
+      "path": "repository/repository.devalls",
+      "href": "repository/repository.devalls/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.dexe",
+      "path": "repository/repository.dexe",
+      "href": "repository/repository.dexe/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.diamondrepo",
+      "path": "repository/repository.diamondrepo",
+      "href": "repository/repository.diamondrepo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.diggz",
+      "path": "repository/repository.diggz",
+      "href": "repository/repository.diggz/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.dobbelina",
+      "path": "repository/repository.dobbelina",
+      "href": "repository/repository.dobbelina/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.don24crkrepository1",
+      "path": "repository/repository.don24crkrepository1",
+      "href": "repository/repository.don24crkrepository1/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.dontpanic",
+      "path": "repository/repository.dontpanic",
+      "href": "repository/repository.dontpanic/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.doomzday",
+      "path": "repository/repository.doomzday",
+      "href": "repository/repository.doomzday/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.dregs",
+      "path": "repository/repository.dregs",
+      "href": "repository/repository.dregs/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.eintamil",
+      "path": "repository/repository.eintamil",
+      "href": "repository/repository.eintamil/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.elementumorg",
+      "path": "repository/repository.elementumorg",
+      "href": "repository/repository.elementumorg/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.emad",
+      "path": "repository/repository.emad",
+      "href": "repository/repository.emad/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.emby.kodi",
+      "path": "repository/repository.emby.kodi",
+      "href": "repository/repository.emby.kodi/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.enigmawiz",
+      "path": "repository/repository.enigmawiz",
+      "href": "repository/repository.enigmawiz/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.estupalant",
+      "path": "repository/repository.estupalant",
+      "href": "repository/repository.estupalant/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.ezra",
+      "path": "repository/repository.ezra",
+      "href": "repository/repository.ezra/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.EzzerMacsWizard",
+      "path": "repository/repository.EzzerMacsWizard",
+      "href": "repository/repository.EzzerMacsWizard/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.fanfilm",
+      "path": "repository/repository.fanfilm",
+      "href": "repository/repository.fanfilm/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.fanvodpl",
+      "path": "repository/repository.fanvodpl",
+      "href": "repository/repository.fanvodpl/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.Fido",
+      "path": "repository/repository.Fido",
+      "href": "repository/repository.Fido/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.fivebanger",
+      "path": "repository/repository.fivebanger",
+      "href": "repository/repository.fivebanger/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.flixrepo",
+      "path": "repository/repository.flixrepo",
+      "href": "repository/repository.flixrepo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.forge",
+      "path": "repository/repository.forge",
+      "href": "repository/repository.forge/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.fr33p0rt",
+      "path": "repository/repository.fr33p0rt",
+      "href": "repository/repository.fr33p0rt/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.frenchdj",
+      "path": "repository/repository.frenchdj",
+      "href": "repository/repository.frenchdj/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.fubuz",
+      "path": "repository/repository.fubuz",
+      "href": "repository/repository.fubuz/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.fuchs246",
+      "path": "repository/repository.fuchs246",
+      "href": "repository/repository.fuchs246/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.funstersplace",
+      "path": "repository/repository.funstersplace",
+      "href": "repository/repository.funstersplace/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.gaia.full",
+      "path": "repository/repository.gaia.full",
+      "href": "repository/repository.gaia.full/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.gearheads2",
+      "path": "repository/repository.gearheads2",
+      "href": "repository/repository.gearheads2/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 2
+    },
+    {
+      "name": "repository.giaitri",
+      "path": "repository/repository.giaitri",
+      "href": "repository/repository.giaitri/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.gigoro33-addon",
+      "path": "repository/repository.gigoro33-addon",
+      "href": "repository/repository.gigoro33-addon/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.github",
+      "path": "repository/repository.github",
+      "href": "repository/repository.github/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.gknwiz",
+      "path": "repository/repository.gknwiz",
+      "href": "repository/repository.gknwiz/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.greenball",
+      "path": "repository/repository.greenball",
+      "href": "repository/repository.greenball/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.grindhousekodi",
+      "path": "repository/repository.grindhousekodi",
+      "href": "repository/repository.grindhousekodi/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.GTKing-Phoenix",
+      "path": "repository/repository.GTKing-Phoenix",
+      "href": "repository/repository.GTKing-Phoenix/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.gujal",
+      "path": "repository/repository.gujal",
+      "href": "repository/repository.gujal/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.gwen84",
+      "path": "repository/repository.gwen84",
+      "href": "repository/repository.gwen84/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.hasamba",
+      "path": "repository/repository.hasamba",
+      "href": "repository/repository.hasamba/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.heppen",
+      "path": "repository/repository.heppen",
+      "href": "repository/repository.heppen/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.hermit",
+      "path": "repository/repository.hermit",
+      "href": "repository/repository.hermit/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.hooty",
+      "path": "repository/repository.hooty",
+      "href": "repository/repository.hooty/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.hsk.crew.repo",
+      "path": "repository/repository.hsk.crew.repo",
+      "href": "repository/repository.hsk.crew.repo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.hsk.forever",
+      "path": "repository/repository.hsk.forever",
+      "href": "repository/repository.hsk.forever/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.hub",
+      "path": "repository/repository.hub",
+      "href": "repository/repository.hub/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.ivarbrandt",
+      "path": "repository/repository.ivarbrandt",
+      "href": "repository/repository.ivarbrandt/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.jacktook",
+      "path": "repository/repository.jacktook",
+      "href": "repository/repository.jacktook/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.jamal2362",
+      "path": "repository/repository.jamal2362",
+      "href": "repository/repository.jamal2362/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 2
+    },
+    {
+      "name": "repository.jellyfin.kodi",
+      "path": "repository/repository.jellyfin.kodi",
+      "href": "repository/repository.jellyfin.kodi/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.jenrepo",
+      "path": "repository/repository.jenrepo",
+      "href": "repository/repository.jenrepo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.jewrepo",
+      "path": "repository/repository.jewrepo",
+      "href": "repository/repository.jewrepo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.jizzplanet",
+      "path": "repository/repository.jizzplanet",
+      "href": "repository/repository.jizzplanet/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.jmooremcc",
+      "path": "repository/repository.jmooremcc",
+      "href": "repository/repository.jmooremcc/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.jsergio",
+      "path": "repository/repository.jsergio",
+      "href": "repository/repository.jsergio/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.JuDeer",
+      "path": "repository/repository.JuDeer",
+      "href": "repository/repository.JuDeer/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.jurialmunkey",
+      "path": "repository/repository.jurialmunkey",
+      "href": "repository/repository.jurialmunkey/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.kodi.media",
+      "path": "repository/repository.kodi.media",
+      "href": "repository/repository.kodi.media/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.kodi.reavey05.com",
+      "path": "repository/repository.kodi.reavey05.com",
+      "href": "repository/repository.kodi.reavey05.com/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.kodifitzwell",
+      "path": "repository/repository.kodifitzwell",
+      "href": "repository/repository.kodifitzwell/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.kodiloucosbr",
+      "path": "repository/repository.kodiloucosbr",
+      "href": "repository/repository.kodiloucosbr/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.kodiman_public",
+      "path": "repository/repository.kodiman_public",
+      "href": "repository/repository.kodiman_public/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.kodinerds",
+      "path": "repository/repository.kodinerds",
+      "href": "repository/repository.kodinerds/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.kodinewbs",
+      "path": "repository/repository.kodinewbs",
+      "href": "repository/repository.kodinewbs/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.kodipirates",
+      "path": "repository/repository.kodipirates",
+      "href": "repository/repository.kodipirates/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.KODIvertiDO_TEAM",
+      "path": "repository/repository.KODIvertiDO_TEAM",
+      "href": "repository/repository.KODIvertiDO_TEAM/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.kodiwulf",
+      "path": "repository/repository.kodiwulf",
+      "href": "repository/repository.kodiwulf/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 2
+    },
+    {
+      "name": "repository.kpl-addons",
+      "path": "repository/repository.kpl-addons",
+      "href": "repository/repository.kpl-addons/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.kubi2021",
+      "path": "repository/repository.kubi2021",
+      "href": "repository/repository.kubi2021/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.kus.allinone",
+      "path": "repository/repository.kus.allinone",
+      "href": "repository/repository.kus.allinone/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.lattsrepo",
+      "path": "repository/repository.lattsrepo",
+      "href": "repository/repository.lattsrepo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.lekma",
+      "path": "repository/repository.lekma",
+      "href": "repository/repository.lekma/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.lime",
+      "path": "repository/repository.lime",
+      "href": "repository/repository.lime/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.livetvSerbia",
+      "path": "repository/repository.livetvSerbia",
+      "href": "repository/repository.livetvSerbia/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.loop",
+      "path": "repository/repository.loop",
+      "href": "repository/repository.loop/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.LostSoul",
+      "path": "repository/repository.LostSoul",
+      "href": "repository/repository.LostSoul/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.luar",
+      "path": "repository/repository.luar",
+      "href": "repository/repository.luar/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.luc_repo",
+      "path": "repository/repository.luc_repo",
+      "href": "repository/repository.luc_repo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.lunatixz",
+      "path": "repository/repository.lunatixz",
+      "href": "repository/repository.lunatixz/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.madforit",
+      "path": "repository/repository.madforit",
+      "href": "repository/repository.madforit/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.magellan",
+      "path": "repository/repository.magellan",
+      "href": "repository/repository.magellan/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.Magnetic",
+      "path": "repository/repository.Magnetic",
+      "href": "repository/repository.Magnetic/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.majide",
+      "path": "repository/repository.majide",
+      "href": "repository/repository.majide/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.mar33",
+      "path": "repository/repository.mar33",
+      "href": "repository/repository.mar33/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.marcelveldt",
+      "path": "repository/repository.marcelveldt",
+      "href": "repository/repository.marcelveldt/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.mbebe",
+      "path": "repository/repository.mbebe",
+      "href": "repository/repository.mbebe/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.mediafusion",
+      "path": "repository/repository.mediafusion",
+      "href": "repository/repository.mediafusion/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.mhancoc7.public",
+      "path": "repository/repository.mhancoc7.public",
+      "href": "repository/repository.mhancoc7.public/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.michaz",
+      "path": "repository/repository.michaz",
+      "href": "repository/repository.michaz/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.Mirepor",
+      "path": "repository/repository.Mirepor",
+      "href": "repository/repository.Mirepor/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.movieshark",
+      "path": "repository/repository.movieshark",
+      "href": "repository/repository.movieshark/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.mrfixit2001",
+      "path": "repository/repository.mrfixit2001",
+      "href": "repository/repository.mrfixit2001/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.mtr81",
+      "path": "repository/repository.mtr81",
+      "href": "repository/repository.mtr81/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.NarcacistWizard",
+      "path": "repository/repository.NarcacistWizard",
+      "href": "repository/repository.NarcacistWizard/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.newdiamond",
+      "path": "repository/repository.newdiamond",
+      "href": "repository/repository.newdiamond/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.newf",
+      "path": "repository/repository.newf",
+      "href": "repository/repository.newf/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.nexus",
+      "path": "repository/repository.nexus",
+      "href": "repository/repository.nexus/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.nixgates",
+      "path": "repository/repository.nixgates",
+      "href": "repository/repository.nixgates/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.notoco.univ19",
+      "path": "repository/repository.notoco.univ19",
+      "href": "repository/repository.notoco.univ19/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.nxtflix",
+      "path": "repository/repository.nxtflix",
+      "href": "repository/repository.nxtflix/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.ocean",
+      "path": "repository/repository.ocean",
+      "href": "repository/repository.ocean/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.octopus",
+      "path": "repository/repository.octopus",
+      "href": "repository/repository.octopus/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.offspring",
+      "path": "repository/repository.offspring",
+      "href": "repository/repository.offspring/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.oldsalt",
+      "path": "repository/repository.oldsalt",
+      "href": "repository/repository.oldsalt/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.oliver",
+      "path": "repository/repository.oliver",
+      "href": "repository/repository.oliver/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.omega",
+      "path": "repository/repository.omega",
+      "href": "repository/repository.omega/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.ontv",
+      "path": "repository/repository.ontv",
+      "href": "repository/repository.ontv/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.onzarking1300",
+      "path": "repository/repository.onzarking1300",
+      "href": "repository/repository.onzarking1300/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.opencode",
+      "path": "repository/repository.opencode",
+      "href": "repository/repository.opencode/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.openwizard",
+      "path": "repository/repository.openwizard",
+      "href": "repository/repository.openwizard/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.orion",
+      "path": "repository/repository.orion",
+      "href": "repository/repository.orion/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.otaku",
+      "path": "repository/repository.otaku",
+      "href": "repository/repository.otaku/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.paco8",
+      "path": "repository/repository.paco8",
+      "href": "repository/repository.paco8/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.Palantir",
+      "path": "repository/repository.Palantir",
+      "href": "repository/repository.Palantir/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.peno64",
+      "path": "repository/repository.peno64",
+      "href": "repository/repository.peno64/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.pep",
+      "path": "repository/repository.pep",
+      "href": "repository/repository.pep/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.persia",
+      "path": "repository/repository.persia",
+      "href": "repository/repository.persia/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.pikdum",
+      "path": "repository/repository.pikdum",
+      "href": "repository/repository.pikdum/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.plexkodiconnect",
+      "path": "repository/repository.plexkodiconnect",
+      "href": "repository/repository.plexkodiconnect/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.plugin.hunter",
+      "path": "repository/repository.plugin.hunter",
+      "href": "repository/repository.plugin.hunter/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.pogowurst.addons",
+      "path": "repository/repository.pogowurst.addons",
+      "href": "repository/repository.pogowurst.addons/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.polishteam",
+      "path": "repository/repository.polishteam",
+      "href": "repository/repository.polishteam/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.prippistream",
+      "path": "repository/repository.prippistream",
+      "href": "repository/repository.prippistream/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.pseudotv",
+      "path": "repository/repository.pseudotv",
+      "href": "repository/repository.pseudotv/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.rdplayer",
+      "path": "repository/repository.rdplayer",
+      "href": "repository/repository.rdplayer/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.redwizard",
+      "path": "repository/repository.redwizard",
+      "href": "repository/repository.redwizard/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.remod",
+      "path": "repository/repository.remod",
+      "href": "repository/repository.remod/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.resolveurl",
+      "path": "repository/repository.resolveurl",
+      "href": "repository/repository.resolveurl/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.Rising.Tides",
+      "path": "repository/repository.Rising.Tides",
+      "href": "repository/repository.Rising.Tides/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.robinhood.wizard",
+      "path": "repository/repository.robinhood.wizard",
+      "href": "repository/repository.robinhood.wizard/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.Rockcrusher",
+      "path": "repository/repository.Rockcrusher",
+      "href": "repository/repository.Rockcrusher/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.roooar",
+      "path": "repository/repository.roooar",
+      "href": "repository/repository.roooar/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.sanctuary",
+      "path": "repository/repository.sanctuary",
+      "href": "repository/repository.sanctuary/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.sandmann79-py3.plugins",
+      "path": "repository/repository.sandmann79-py3.plugins",
+      "href": "repository/repository.sandmann79-py3.plugins/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.sarsaila",
+      "path": "repository/repository.sarsaila",
+      "href": "repository/repository.sarsaila/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.search.db",
+      "path": "repository/repository.search.db",
+      "href": "repository/repository.search.db/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.seizu",
+      "path": "repository/repository.seizu",
+      "href": "repository/repository.seizu/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.seyirTURK",
+      "path": "repository/repository.seyirTURK",
+      "href": "repository/repository.seyirTURK/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.shadow",
+      "path": "repository/repository.shadow",
+      "href": "repository/repository.shadow/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.siku2",
+      "path": "repository/repository.siku2",
+      "href": "repository/repository.siku2/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.skinbase.nexus",
+      "path": "repository/repository.skinbase.nexus",
+      "href": "repository/repository.skinbase.nexus/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.skinbase.omega",
+      "path": "repository/repository.skinbase.omega",
+      "href": "repository/repository.skinbase.omega/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.sktv",
+      "path": "repository/repository.sktv",
+      "href": "repository/repository.sktv/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.slyguy",
+      "path": "repository/repository.slyguy",
+      "href": "repository/repository.slyguy/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.sniper",
+      "path": "repository/repository.sniper",
+      "href": "repository/repository.sniper/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.southpaw",
+      "path": "repository/repository.southpaw",
+      "href": "repository/repository.southpaw/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.spain",
+      "path": "repository/repository.spain",
+      "href": "repository/repository.spain/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.StreamArmy",
+      "path": "repository/repository.StreamArmy",
+      "href": "repository/repository.StreamArmy/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.streamedez",
+      "path": "repository/repository.streamedez",
+      "href": "repository/repository.streamedez/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.stva",
+      "path": "repository/repository.stva",
+      "href": "repository/repository.stva/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.subskip",
+      "path": "repository/repository.subskip",
+      "href": "repository/repository.subskip/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.superservidorbrazuca",
+      "path": "repository/repository.superservidorbrazuca",
+      "href": "repository/repository.superservidorbrazuca/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.swagotaku",
+      "path": "repository/repository.swagotaku",
+      "href": "repository/repository.swagotaku/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.t4krepo",
+      "path": "repository/repository.t4krepo",
+      "href": "repository/repository.t4krepo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.TakeOne",
+      "path": "repository/repository.TakeOne",
+      "href": "repository/repository.TakeOne/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.tdw1980",
+      "path": "repository/repository.tdw1980",
+      "href": "repository/repository.tdw1980/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.TechNEWSology",
+      "path": "repository/repository.TechNEWSology",
+      "href": "repository/repository.TechNEWSology/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.tekbec",
+      "path": "repository/repository.tekbec",
+      "href": "repository/repository.tekbec/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.terrytibbs",
+      "path": "repository/repository.terrytibbs",
+      "href": "repository/repository.terrytibbs/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.the666mafia",
+      "path": "repository/repository.the666mafia",
+      "href": "repository/repository.the666mafia/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.theblackghost",
+      "path": "repository/repository.theblackghost",
+      "href": "repository/repository.theblackghost/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.thecrew",
+      "path": "repository/repository.thecrew",
+      "href": "repository/repository.thecrew/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.thecrew.alpha",
+      "path": "repository/repository.thecrew.alpha",
+      "href": "repository/repository.thecrew.alpha/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 2
+    },
+    {
+      "name": "repository.thegroove",
+      "path": "repository/repository.thegroove",
+      "href": "repository/repository.thegroove/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.thelab",
+      "path": "repository/repository.thelab",
+      "href": "repository/repository.thelab/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.thewarehouse",
+      "path": "repository/repository.thewarehouse",
+      "href": "repository/repository.thewarehouse/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.titan.bingie.mod",
+      "path": "repository/repository.titan.bingie.mod",
+      "href": "repository/repository.titan.bingie.mod/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.torrest",
+      "path": "repository/repository.torrest",
+      "href": "repository/repository.torrest/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.tr.kw",
+      "path": "repository/repository.tr.kw",
+      "href": "repository/repository.tr.kw/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.turkvod",
+      "path": "repository/repository.turkvod",
+      "href": "repository/repository.turkvod/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.tvchopo",
+      "path": "repository/repository.tvchopo",
+      "href": "repository/repository.tvchopo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.tvone",
+      "path": "repository/repository.tvone",
+      "href": "repository/repository.tvone/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.twilight0",
+      "path": "repository/repository.twilight0",
+      "href": "repository/repository.twilight0/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.twistednutz",
+      "path": "repository/repository.twistednutz",
+      "href": "repository/repository.twistednutz/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.ukturk",
+      "path": "repository/repository.ukturk",
+      "href": "repository/repository.ukturk/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.umbrella",
+      "path": "repository/repository.umbrella",
+      "href": "repository/repository.umbrella/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.vlmaksime",
+      "path": "repository/repository.vlmaksime",
+      "href": "repository/repository.vlmaksime/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.vstream",
+      "path": "repository/repository.vstream",
+      "href": "repository/repository.vstream/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.wave",
+      "path": "repository/repository.wave",
+      "href": "repository/repository.wave/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.wetdreams69",
+      "path": "repository/repository.wetdreams69",
+      "href": "repository/repository.wetdreams69/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.Wherethemonsterslive",
+      "path": "repository/repository.Wherethemonsterslive",
+      "href": "repository/repository.Wherethemonsterslive/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.wiiego",
+      "path": "repository/repository.wiiego",
+      "href": "repository/repository.wiiego/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.wltv",
+      "path": "repository/repository.wltv",
+      "href": "repository/repository.wltv/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.wod",
+      "path": "repository/repository.wod",
+      "href": "repository/repository.wod/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.World",
+      "path": "repository/repository.World",
+      "href": "repository/repository.World/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.WorldNexus",
+      "path": "repository/repository.WorldNexus",
+      "href": "repository/repository.WorldNexus/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.Worldolympic",
+      "path": "repository/repository.Worldolympic",
+      "href": "repository/repository.Worldolympic/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.WorldOmega",
+      "path": "repository/repository.WorldOmega",
+      "href": "repository/repository.WorldOmega/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.Worldrepo",
+      "path": "repository/repository.Worldrepo",
+      "href": "repository/repository.Worldrepo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.WorldTest",
+      "path": "repository/repository.WorldTest",
+      "href": "repository/repository.WorldTest/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.xbmcadult",
+      "path": "repository/repository.xbmcadult",
+      "href": "repository/repository.xbmcadult/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.xonfluence",
+      "path": "repository/repository.xonfluence",
+      "href": "repository/repository.xonfluence/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.xship",
+      "path": "repository/repository.xship",
+      "href": "repository/repository.xship/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.xstream",
+      "path": "repository/repository.xstream",
+      "href": "repository/repository.xstream/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.xtasyd",
+      "path": "repository/repository.xtasyd",
+      "href": "repository/repository.xtasyd/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.yt.testing_official",
+      "path": "repository/repository.yt.testing_official",
+      "href": "repository/repository.yt.testing_official/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.yt.testing_unofficial",
+      "path": "repository/repository.yt.testing_unofficial",
+      "href": "repository/repository.yt.testing_unofficial/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.ytmusic",
+      "path": "repository/repository.ytmusic",
+      "href": "repository/repository.ytmusic/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.zachmorris",
+      "path": "repository/repository.zachmorris",
+      "href": "repository/repository.zachmorris/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.zadarbuild",
+      "path": "repository/repository.zadarbuild",
+      "href": "repository/repository.zadarbuild/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.ZadarHRrepo",
+      "path": "repository/repository.ZadarHRrepo",
+      "href": "repository/repository.ZadarHRrepo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.zarepo",
+      "path": "repository/repository.zarepo",
+      "href": "repository/repository.zarepo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.zeltorix",
+      "path": "repository/repository.zeltorix",
+      "href": "repository/repository.zeltorix/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.zero",
+      "path": "repository/repository.zero",
+      "href": "repository/repository.zero/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.zeus768",
+      "path": "repository/repository.zeus768",
+      "href": "repository/repository.zeus768/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.zkte",
+      "path": "repository/repository.zkte",
+      "href": "repository/repository.zkte/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.zombi",
+      "path": "repository/repository.zombi",
+      "href": "repository/repository.zombi/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repository.zomboided.plugins",
+      "path": "repository/repository.zomboided.plugins",
+      "href": "repository/repository.zomboided.plugins/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "repovnmedia",
+      "path": "repository/repovnmedia",
+      "href": "repository/repovnmedia/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "Repozytorium-Kodi",
+      "path": "repository/Repozytorium-Kodi",
+      "href": "repository/Repozytorium-Kodi/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "tools",
+      "path": "repository/tools",
+      "href": "repository/tools/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 0
+    },
+    {
+      "name": "vkkodi.repo",
+      "path": "repository/vkkodi.repo",
+      "href": "repository/vkkodi.repo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "Yonn1981_Repo",
+      "path": "repository/Yonn1981_Repo",
+      "href": "repository/Yonn1981_Repo/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 1
+    },
+    {
+      "name": "script",
+      "path": "script",
+      "href": "script/",
+      "kind": "Script",
+      "depth": 0,
+      "zip_count": 2
+    },
+    {
+      "name": "module",
+      "path": "script/module",
+      "href": "script/module/",
+      "kind": "Unterordner",
+      "depth": 1,
+      "zip_count": 2
+    }
+  ],
+  "total_zips": 307
+}

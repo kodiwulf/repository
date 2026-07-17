@@ -20,6 +20,10 @@ from kodiwulf_build_repo_core import AddonInfo, parse_addon_zip, pretty_xml
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BASE_URL = "https://kodiwulf.github.io/repository/"
 SKIP_PARTS = {".git", ".drdebug-backups", "__pycache__"}
+TECHNICAL_ROOTS = {
+    ".github", "Repository", "_data", "_layouts", "_site", "assets", "node_modules", "tools"
+}
+LEGACY_MIRROR_BRANCHES = {("repository", "plugins"), ("repository", "repository"), ("repository", "script")}
 
 
 def digest(path: Path) -> str:
@@ -53,6 +57,10 @@ def candidates(root: Path) -> list[Path]:
         rel = path.relative_to(root)
         if any(part in SKIP_PARTS for part in rel.parts):
             continue
+        if rel.parts and rel.parts[0] == "Repository":
+            continue
+        if len(rel.parts) > 1 and (rel.parts[0], rel.parts[1]) in LEGACY_MIRROR_BRANCHES:
+            continue
         if len(rel.parts) == 1 and path.name.startswith("repository.kodiwulf-"):
             continue
         result.append(path)
@@ -68,46 +76,190 @@ def choose_source(paths: list[Path], root: Path) -> Path:
 
 
 def index_document(title: str, entries: list[tuple[str, str, str]]) -> str:
-    buttons = "\n".join(
-        f'<a class="entry" href="{html.escape(quote(href, safe="/._-~"))}">{html.escape(name)}</a>'
+    rows = "\n".join(
+        f'<tr><td class="type">{"DIR" if href.endswith("/") else "ZIP"}</td>'
+        f'<td><a href="{html.escape(quote(href, safe="/._-~"))}">{html.escape(name)}</a></td>'
+        f'<td>{html.escape(version)}</td></tr>'
         for name, version, href in entries
-    ) or '<p class="empty">Keine ZIP-Dateien vorhanden.</p>'
+    ) or '<tr><td colspan="3" class="empty">Keine ZIP-Dateien vorhanden.</td></tr>'
     return f"""---
 layout: null
 ---
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{html.escape(title)}</title><link rel="stylesheet" href="/repository/assets/theme.css"></head>
-<body><main class="shell"><header class="masthead"><div><p class="eyebrow">kodiwulf // install from zip</p><h1 class="title">{html.escape(title)}</h1></div></header><section class="browser"><div class="toolbar"><nav class="breadcrumbs"><a class="crumb" href="/repository/">root</a></nav><span class="count">ZIP archives</span></div><div class="listing">{buttons}</div></section></main></body></html>
+<html lang="de" data-bs-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{html.escape(title)}</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"><link rel="stylesheet" href="/repository/assets/theme.css"></head>
+<body><main><header class="hero compact"><p class="eyebrow">GitHub Pages Kodi Repository</p><h1><span class="x">x</span>Wulf Repository</h1><p class="subtitle">{html.escape(title)}</p></header><section class="panel"><div class="panel-head"><h2>Index</h2><a class="pill" href="/repository/">root</a></div><div class="table-responsive"><table><thead><tr><th>Typ</th><th>Name</th><th>Art</th></tr></thead><tbody>{rows}</tbody></table></div></section></main></body></html>
 """
 
 
-def write_react_root(root: Path) -> None:
+def public_roots(root: Path) -> list[Path]:
+    return sorted(
+        (
+            path for path in root.iterdir()
+            if path.is_dir()
+            and not path.name.startswith(".")
+            and path.name not in TECHNICAL_ROOTS
+        ),
+        key=lambda path: path.name.lower(),
+    )
+
+
+def is_visible_directory(path: Path, root: Path) -> bool:
+    relative = path.relative_to(root)
+    if relative.parts and relative.parts[0] == "Repository":
+        return False
+    return not (len(relative.parts) > 1 and (relative.parts[0], relative.parts[1]) in LEGACY_MIRROR_BRANCHES)
+
+
+def visible_zips(directory: Path, root: Path) -> list[Path]:
+    result = []
+    for path in directory.rglob("*.zip"):
+        relative = path.relative_to(root)
+        if len(relative.parts) == 2 and relative.parts[0] == "repository" and path.name.startswith("repository.kodiwulf-"):
+            continue
+        if is_visible_directory(path.parent, root):
+            result.append(path)
+    return result
+
+
+def root_kind(name: str) -> str:
+    lowered = name.lower()
+    if lowered == "repository":
+        return "Repository"
+    if lowered in {"plugin", "plugins"}:
+        return "Plugin"
+    if lowered == "script":
+        return "Script"
+    return "Script-Erweiterung"
+
+
+def menu_nodes(directory: Path, root: Path, depth: int = 0) -> list[dict[str, object]]:
+    relative = directory.relative_to(root).as_posix()
+    nodes = [{
+        "name": directory.name,
+        "path": relative,
+        "href": quote(relative, safe="/._-~") + "/",
+        "kind": root_kind(directory.name) if depth == 0 else "Unterordner",
+        "depth": depth,
+        "zip_count": len(visible_zips(directory, root)),
+    }]
+    if depth < 1:
+        for child in sorted((item for item in directory.iterdir() if item.is_dir() and not item.name.startswith(".") and is_visible_directory(item, root)), key=lambda item: item.name.lower()):
+            nodes.extend(menu_nodes(child, root, depth + 1))
+    return nodes
+
+
+def ensure_generic_index(directory: Path, root: Path) -> None:
+    entries = [(f"{child.name}/", "Ordner", f"{child.name}/") for child in sorted((item for item in directory.iterdir() if item.is_dir() and not item.name.startswith(".")), key=lambda item: item.name.lower())]
+    entries.extend(
+        (zip_path.name, "ZIP", zip_path.relative_to(directory).as_posix())
+        for zip_path in sorted(directory.rglob("*.zip"), key=lambda item: item.name.lower())
+    )
+    (directory / "index.html").write_text(index_document(f"KodiWulf / {directory.relative_to(root).as_posix()}", entries), encoding="utf-8")
+
+
+def write_site_root(root: Path) -> None:
     items = []
     for zip_path in sorted(root.glob("repository.kodiwulf-*.zip")):
         items.append({"path": zip_path.name, "name": zip_path.name, "url": quote(zip_path.name, safe="/._-~"), "category": "installer"})
-    for top in ("repository", "plugins", "script"):
-        directory = root / top
-        if not directory.is_dir():
-            continue
-        for zip_path in sorted(directory.rglob("*.zip")):
+    roots = public_roots(root)
+    tree_roots = []
+    for directory in roots:
+        top = directory.name
+        zip_count = 0
+        for zip_path in sorted(visible_zips(directory, root)):
             rel = zip_path.relative_to(root).as_posix()
             items.append({"path": rel, "name": zip_path.name, "url": quote(rel, safe="/._-~"), "category": top})
+            zip_count += 1
+        tree_roots.append({
+            "name": top,
+            "href": quote(top, safe="._-~") + "/",
+            "kind": root_kind(top),
+            "zip_count": zip_count,
+        })
     assets = root / "assets"
     assets.mkdir(exist_ok=True)
-    (assets / "files.js").write_text("window.KODIWULF_FILES=" + json.dumps(items, ensure_ascii=False, separators=(",", ":")) + ";\n", encoding="utf-8")
-    installer_links = "".join(
+    menu = [node for directory in roots for node in menu_nodes(directory, root)]
+    tree = {"roots": tree_roots, "menu": menu, "total_zips": len(items)}
+    data_dir = root / "_data"
+    data_dir.mkdir(exist_ok=True)
+    (data_dir / "repository_tree.json").write_text(
+        json.dumps(tree, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    (assets / "files.js").write_text(
+        "window.KODIWULF_FILES=" + json.dumps(items, ensure_ascii=False, separators=(",", ":")) + ";\n"
+        + "window.KODIWULF_TREE=" + json.dumps(tree, ensure_ascii=False, separators=(",", ":")) + ";\n",
+        encoding="utf-8",
+    )
+    static_links = "\n".join(
+        f'<a href="{quote(directory.name, safe="._-~")}/">{html.escape(directory.name)}/</a>'
+        for directory in roots
+    )
+    installer_links = "\n".join(
         f'<a href="{quote(zip_path.name, safe="/._-~")}">{html.escape(zip_path.name)}</a>'
         for zip_path in sorted(root.glob("repository.kodiwulf-*.zip"))
     )
-    root_doc = f"""---
+    kodi_links = "\n".join(part for part in (static_links, installer_links) if part)
+    root_doc = """---
 layout: null
 ---
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>KodiWulf ZIP Browser</title><link rel="stylesheet" href="assets/theme.css"></head><body><nav class="kodi-static" aria-label="Kodi ZIP index"><a href="repository/">repository/</a><a href="plugins/">plugins/</a><a href="script/">script/</a>{installer_links}</nav><div id="file-browser-root"></div><noscript><p class="noscript">JavaScript wird für den React-Dateibrowser benötigt. Kodi verwendet die statischen Links oben.</p></noscript><script src="https://unpkg.com/react@18/umd/react.production.min.js"></script><script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script><script src="assets/files.js"></script><script src="assets/file-browser.js"></script></body></html>
+<!doctype html>
+<html lang="de" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>KodiWulf Repository</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ '/assets/theme.css' | relative_url }}">
+</head>
+<body>
+<nav class="kodi-static" aria-label="Kodi ZIP index">__KODI_LINKS__</nav>
+<main>
+  <header class="hero animate-target">
+    <p class="eyebrow">GitHub Pages Kodi Repository</p>
+    <h1><span class="x">x</span>Wulf Repository</h1>
+    <p class="subtitle">Dunkler Repository-Index nach dem ursprünglichen KodiWulf-Design. Jekyll erkennt öffentliche Root-Ordner automatisch; Kodi erhält parallel einfache statische Links.</p>
+    <div class="hero-actions">
+      <a class="btn btn-danger" href="repository.kodiwulf-0.1.0.zip">Repository installieren</a>
+      <button class="btn btn-outline-info" type="button" data-bs-toggle="modal" data-bs-target="#stackModal">Frontend-Stack</button>
+    </div>
+  </header>
+
+  <section class="grid animate-target" aria-label="Repository-Dateien">
+    <article class="card"><h2>Repository XML</h2><p><a href="addons.xml">addons.xml</a></p></article>
+    <article class="card"><h2>Checksum</h2><p><a href="addons.xml.md5">addons.xml.md5</a></p></article>
+    <article class="card"><h2>Pakete</h2><div id="react-summary" class="metric">wird geladen …</div></article>
+  </section>
+
+  <section class="panel animate-target">
+    <div class="panel-head"><div><p class="eyebrow">Jekyll data navigation</p><h2>Repository-Bereiche</h2></div><span class="pill">{{ site.data.repository_tree.menu | size }} Menüpunkte</span></div>
+    <div id="vue-filter" class="filterbar"><label for="folder-search">Ordner filtern</label><div class="input-group"><input id="folder-search" class="form-control" type="search" v-model="query" @input="applyFilter" placeholder="z. B. plugin, script oder Popel"><button class="btn btn-outline-light" type="button" @click="clearFilter">Reset</button></div></div>
+    <div class="table-responsive"><table><thead><tr><th>Typ</th><th>Name</th><th>ZIPs</th></tr></thead><tbody id="jekyll-folders">
+    {% for node in site.data.repository_tree.menu %}
+      <tr class="folder-row" style="--depth:{{ node.depth }}" data-folder="{{ node.path | downcase }}"><td class="type">DIR</td><td><a href="{{ node.href | relative_url }}">{{ node.name }}/</a><br><small>{{ node.kind }} · {{ node.path }}</small></td><td>{{ node.zip_count }}</td></tr>
+    {% endfor %}
+    </tbody></table></div>
+  </section>
+
+  <section class="panel animate-target"><div class="panel-head"><h2>ZIP-Verteilung</h2><span class="pill">D3</span></div><div id="d3-chart" class="chart" role="img" aria-label="ZIP-Dateien pro Root-Ordner"></div></section>
+  <section class="panel animate-target"><div class="panel-head"><h2>ZIP File Browser</h2><span class="pill">React</span></div><div id="react-browser"></div></section>
+  <footer><span id="svelte-status">Svelte wird initialisiert …</span></footer>
+</main>
+
+<div class="modal fade" id="stackModal" tabindex="-1" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5">Integrierter Stack</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button></div><div class="modal-body"><p>Bootstrap · Anime.js · jQuery · Jekyll · Vue · React · Svelte · D3</p><small>Jedes Werkzeug erweitert einen isolierten Bereich; die Kodi-Links funktionieren ohne JavaScript.</small></div></div></div></div>
+<noscript><p class="noscript">JavaScript erweitert die Website. Kodi und die Jekyll-Ordnerlinks bleiben ohne JavaScript verwendbar.</p></noscript>
+<script defer src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script defer src="{{ '/assets/files.js' | relative_url }}"></script>
+<script type="module" src="{{ '/assets/app.js' | relative_url }}"></script>
+<script type="module" src="{{ '/assets/svelte-status.js' | relative_url }}"></script>
+</body></html>
 """
-    # Kodi's basic directory parser can skip every second anchor when links are
-    # directly adjacent. Keep real whitespace between all static anchors.
-    root_doc = root_doc.replace("</a><a ", "</a>\n<a ")
+    root_doc = root_doc.replace("__KODI_LINKS__", kodi_links)
     (root / "index.html").write_text(root_doc, encoding="utf-8")
 
 
@@ -151,7 +303,11 @@ def write_repo_zip(root: Path, xml: bytes, version: str) -> Path:
     return target
 
 
-def build(root: Path, base_url: str, version: str, apply: bool, backup: Path) -> None:
+def build(root: Path, base_url: str, version: str, apply: bool, backup: Path, site_only: bool = False) -> None:
+    if site_only:
+        write_site_root(root)
+        print("OK: Jekyll navigation and frontend data generated")
+        return
     by_identity: dict[tuple[str, str], list[tuple[Path, AddonInfo]]] = defaultdict(list)
     invalid: list[tuple[Path, str, str]] = []
     for path in candidates(root):
@@ -231,18 +387,27 @@ def build(root: Path, base_url: str, version: str, apply: bool, backup: Path) ->
         (directory / "index.html").write_text(index_document(f"KodiWulf / {group}", entries), encoding="utf-8")
 
     for parent_name in ("plugins", "script"):
-        children = sorted({Path(group).parts[1] for group in grouped if Path(group).parts[0] == parent_name and len(Path(group).parts) > 1})
         parent = root / parent_name
         parent.mkdir(exist_ok=True)
+        children = sorted(path.name for path in parent.iterdir() if path.is_dir() and not path.name.startswith("."))
         entries = [(f"{child}/", "Ordner", f"{child}/") for child in children]
         (parent / "index.html").write_text(index_document(f"KodiWulf / {parent_name}", entries), encoding="utf-8")
+        for child in children:
+            child_dir = parent / child
+            if not (child_dir / "index.html").is_file():
+                ensure_generic_index(child_dir, root)
 
     repo_xml = make_repo_xml(sorted(grouped), base_url, version)
     repo_zip = write_repo_zip(root, repo_xml, version)
     all_infos = [info for infos in grouped.values() for info in infos]
     write_metadata(root, all_infos)
 
-    write_react_root(root)
+    for directory in public_roots(root):
+        if directory.name not in {"repository", "plugins", "script"}:
+            ensure_generic_index(directory, root)
+            for child in (item for item in directory.iterdir() if item.is_dir() and not item.name.startswith(".")):
+                ensure_generic_index(child, root)
+    write_site_root(root)
     print(f"OK: {len(all_infos)} ZIPs classified; installer: {repo_zip.name}")
 
 
@@ -253,8 +418,9 @@ def main() -> None:
     parser.add_argument("--repo-version", default="0.1.0")
     parser.add_argument("--backup", default=str(ROOT.parent / "repository-zip-backup"))
     parser.add_argument("--apply", action="store_true")
+    parser.add_argument("--site-only", action="store_true", help="Only regenerate Jekyll/frontend navigation without moving ZIPs")
     args = parser.parse_args()
-    build(Path(args.root).resolve(), args.base_url, args.repo_version, args.apply, Path(args.backup).resolve())
+    build(Path(args.root).resolve(), args.base_url, args.repo_version, args.apply, Path(args.backup).resolve(), args.site_only)
 
 
 if __name__ == "__main__":
