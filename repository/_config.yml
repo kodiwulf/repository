@@ -1,0 +1,8 @@
+title: KodiWulf Repository
+url: https://kodiwulf.github.io
+baseurl: /repository
+exclude:
+  - tools
+  - README.md
+  - UPDATE_PROCESS.md
+  - CHANGES.md

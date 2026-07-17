@@ -41,6 +41,11 @@ def main() -> None:
     for required in ("react.production.min.js", "react-dom.production.min.js", "anime.min.js", "assets/file-browser.js"):
         if required not in index:
             fail(f"missing React/Anime browser resource: {required}")
+    for href in ("repository/", "plugins/", "script/", quote(root_zips[0].name, safe="/._-~")):
+        if f'href="{href}"' not in index:
+            fail(f"missing static Kodi root link: {href}")
+    if 'href="plugin/' in index:
+        fail("obsolete singular plugin/ link exists in root index")
 
     allowed_md5 = {checksum}
     allowed_md5.update(path for path in ROOT.rglob("addons.xml.md5") if (path.parent / "index.html").is_file())

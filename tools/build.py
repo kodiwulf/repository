@@ -69,7 +69,7 @@ def choose_source(paths: list[Path], root: Path) -> Path:
 
 def index_document(title: str, entries: list[tuple[str, str, str]]) -> str:
     buttons = "\n".join(
-        f'<a class="entry" href="{html.escape(quote(href, safe="/._-~"))}"><span class="glyph">ZIP</span><strong class="name">{html.escape(name)}</strong><span class="meta">{html.escape(version)}</span></a>'
+        f'<a class="entry" href="{html.escape(quote(href, safe="/._-~"))}">{html.escape(name)}</a>'
         for name, version, href in entries
     ) or '<p class="empty">Keine ZIP-Dateien vorhanden.</p>'
     return f"""---
@@ -96,11 +96,18 @@ def write_react_root(root: Path) -> None:
     assets = root / "assets"
     assets.mkdir(exist_ok=True)
     (assets / "files.js").write_text("window.KODIWULF_FILES=" + json.dumps(items, ensure_ascii=False, separators=(",", ":")) + ";\n", encoding="utf-8")
-    root_doc = """---
+    installer_links = "".join(
+        f'<a href="{quote(zip_path.name, safe="/._-~")}">{html.escape(zip_path.name)}</a>'
+        for zip_path in sorted(root.glob("repository.kodiwulf-*.zip"))
+    )
+    root_doc = f"""---
 layout: null
 ---
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>KodiWulf ZIP Browser</title><link rel="stylesheet" href="assets/theme.css"></head><body><div id="file-browser-root"></div><noscript><p class="noscript">JavaScript wird für den React-Dateibrowser benötigt. Kodi kann weiterhin die Kategorie-Indizes öffnen.</p></noscript><script src="https://unpkg.com/react@18/umd/react.production.min.js"></script><script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script><script src="assets/files.js"></script><script src="assets/file-browser.js"></script></body></html>
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>KodiWulf ZIP Browser</title><link rel="stylesheet" href="assets/theme.css"></head><body><nav class="kodi-static" aria-label="Kodi ZIP index"><a href="repository/">repository/</a><a href="plugins/">plugins/</a><a href="script/">script/</a>{installer_links}</nav><div id="file-browser-root"></div><noscript><p class="noscript">JavaScript wird für den React-Dateibrowser benötigt. Kodi verwendet die statischen Links oben.</p></noscript><script src="https://unpkg.com/react@18/umd/react.production.min.js"></script><script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script><script src="assets/files.js"></script><script src="assets/file-browser.js"></script></body></html>
 """
+    # Kodi's basic directory parser can skip every second anchor when links are
+    # directly adjacent. Keep real whitespace between all static anchors.
+    root_doc = root_doc.replace("</a><a ", "</a>\n<a ")
     (root / "index.html").write_text(root_doc, encoding="utf-8")
 
 
@@ -220,14 +227,14 @@ def build(root: Path, base_url: str, version: str, apply: bool, backup: Path) ->
         entries = []
         for zip_path in sorted(directory.rglob("*.zip"), key=lambda item: item.name.lower()):
             rel = zip_path.relative_to(directory).as_posix()
-            entries.append((zip_path.stem, "ZIP", rel))
+            entries.append((zip_path.name, "ZIP", rel))
         (directory / "index.html").write_text(index_document(f"KodiWulf / {group}", entries), encoding="utf-8")
 
     for parent_name in ("plugins", "script"):
         children = sorted({Path(group).parts[1] for group in grouped if Path(group).parts[0] == parent_name and len(Path(group).parts) > 1})
         parent = root / parent_name
         parent.mkdir(exist_ok=True)
-        entries = [(child.title(), "Ordner", f"{child}/") for child in children]
+        entries = [(f"{child}/", "Ordner", f"{child}/") for child in children]
         (parent / "index.html").write_text(index_document(f"KodiWulf / {parent_name}", entries), encoding="utf-8")
 
     repo_xml = make_repo_xml(sorted(grouped), base_url, version)

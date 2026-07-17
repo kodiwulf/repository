@@ -482,7 +482,7 @@
       <description lang="en_GB">This repository is for development builds of MB-Kodi Addons.
 		
 Program Addons: 
-- "Insert/Swap Kodi Favourites" - Program Addon that allows you to easily re-order your favourites. Works in all skins including Confluence skin.</description>
+- &quot;Insert/Swap Kodi Favourites&quot; - Program Addon that allows you to easily re-order your favourites. Works in all skins including Confluence skin.</description>
       
 	
       <disclaimer>Information published on or related to MB-Kodi® repository is accurate and correct to our knowledge, however, there may be omissions, errors, or mistakes. Content published on or related to MB-Kodi is for informational purposes only. By continuing to use these services, you agree to the Terms and Conditions outlined in the ReadMe file. https://github.com/M-Borsch/repository.kodi.mb/blob/main/README.md</disclaimer>
@@ -492,28 +492,28 @@ Program Addons:
         [COLOR lavender][B]M-Borsch Repository[/B][/COLOR]
 [B]4.2:[/B]
 - Minor Release: Repo contains only 1 Program Addon.
- - This version of "Insert/Swap Kodi Favourites" uses the configuration panel to allow users to set the thumbnail size small/large.
+ - This version of &quot;Insert/Swap Kodi Favourites&quot; uses the configuration panel to allow users to set the thumbnail size small/large.
 [B]4.1:[/B]
 - Minor Release: Repo contains only 1 Program Addon.
- - This version of "Insert/Swap Kodi Favourites" uses the configuration panel to allow users to set the label font size small/med/large.
+ - This version of &quot;Insert/Swap Kodi Favourites&quot; uses the configuration panel to allow users to set the label font size small/med/large.
 [B]4.0:[/B]
 - Major Release: Repo now contains only 1 Program Addon.
-- This version of "Insert/Swap Kodi Favourites" adds the configuration panel for adding settings.
+- This version of &quot;Insert/Swap Kodi Favourites&quot; adds the configuration panel for adding settings.
   Added:
-  - "Insert/Swap Kodi Favourites"
+  - &quot;Insert/Swap Kodi Favourites&quot;
   Removed:
-  - "Order Favourites"
+  - &quot;Order Favourites&quot;
 [B]3.1:[/B]
 - Minor Release: Repo now contains only 1 version of Order Favourites.
   Added:
-  - "Order Favourites"
+  - &quot;Order Favourites&quot;
   Removed:
-  - "Order Favourites - Insert"
-  - "Order Favourites - Swap"
+  - &quot;Order Favourites - Insert&quot;
+  - &quot;Order Favourites - Swap&quot;
 [B]3.0:[/B]
 - Major Release: Repo now contains two versions of Program Addons:
   Added:
-  - "Order Favourites - Insert"
+  - &quot;Order Favourites - Insert&quot;
   - Order Favourites - Swap
 [B]2.1:[/B]
 - Minor Fix: Add icon for Addon	
@@ -626,7 +626,7 @@ Program Addons:
     
       <news>
 [COLOR lime]•[/COLOR] Adaptação das informações de acordo com a versão atual do Kodi.
-[COLOR lime]•[/COLOR] Adição de capturas de tela em "resources" para visualização prévia.
+[COLOR lime]•[/COLOR] Adição de capturas de tela em &quot;resources&quot; para visualização prévia.
 [COLOR lime]•[/COLOR] Atualização dos links de apontamento para o GitHub.
 [COLOR lime]•[/COLOR] O repositório oferecerá suporte apenas para as versões mais recentes.
 [COLOR lime]•[/COLOR] Atualizado os links de apontamento para raw.usercontent
@@ -1509,6 +1509,79 @@ Program Addons:
       </assets>
       
 	
+    </extension>
+    
+
+  </addon>
+  <addon id="plugin.video.wm2026" name="WM 2026" version="1.0.2" provider-name="SGK, AI">
+    
+    
+    <requires>
+      
+        
+      <import addon="xbmc.python" version="3.0.1"/>
+      
+        
+      <import addon="inputstream.adaptive" version="20.3.5"/>
+      
+    
+    </requires>
+    
+    
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+      
+        
+      <provides>video</provides>
+      
+    
+    </extension>
+    
+    
+    <extension point="xbmc.addon.metadata">
+      
+		
+      <summary lang="en_GB">2026 FIFA World Cup Livestreams + Schedule</summary>
+      
+        
+      <summary lang="de_DE">FIFA WM 2026 Livestreams + Spielplan</summary>
+      
+        
+      <description lang="en_GB">Small Kodi Add-on for the 2026 FIFA World Cup.[CR]Features:[CR]- 2026 World Cup Schedule[CR]- ARD + ZDF Livestreams[CR]- Direct Match Launch[CR]- Live Indicators[CR]- Filter by Matchday &amp; Knockout Stage[CR]Uses publicly available streams from ARD and ZDF.</description>
+      
+        
+      <description lang="de_DE">Kleines Kodi-Addon für die FIFA Fußball-Weltmeisterschaft 2026.[CR]Funktionen:[CR]- Spielplan der WM 2026[CR]- ARD + ZDF Livestreams[CR]- Direkter Spielstart[CR]- Live-Markierungen[CR]- Filter nach Spieltagen &amp; KO-Phase[CR]Verwendet öffentlich verfügbare Streams von ARD und ZDF.</description>
+      
+        
+      <platform>all</platform>
+      
+        
+      <license>CC BY-NC-SA 4.0</license>
+      
+        
+      <forum/>
+      
+        
+      <website/>
+      
+        
+      <source/>
+      
+        
+      <email/>
+      
+        
+      <assets>
+        
+            
+        <icon>icon.png</icon>
+        
+            
+        <fanart>fanart.jpg</fanart>
+        
+        
+      </assets>
+      
+    
     </extension>
     
 
@@ -4552,7 +4625,7 @@ Added new repo tree for Kodi 21 (Omega)
 
 [B]1.2.0[/B] (2023-12-08)
 
-Version in sync for major rework of "A Confluence ZEITGEIST" 3.6.0
+Version in sync for major rework of &quot;A Confluence ZEITGEIST&quot; 3.6.0
 (Version numbers vary on other Kodi generations)
 
 New addon icon
@@ -7999,8 +8072,8 @@ Kodi is a registered trademark of the XBMC Foundation. We are not connected to o
       <news>
 - Allow running in standalone mode
 - Migrate to GitHub API
-- Add support for "tag_pattern" field
-- Add support for private repositories by supplying a "token"
+- Add support for &quot;tag_pattern&quot; field
+- Add support for private repositories by supplying a &quot;token&quot;
 - Try to automatically determine zip ref from version
 - Multiple minor improvements
         </news>
@@ -17493,7 +17566,7 @@ https://t.me/kodimansgroup</description>
       <summary lang="ru">Дополнения для Kodi.tv</summary>
       
 		
-      <description lang="ru">Плагины авторов форума XBMC[CR]Если вы обнаружили нерабочее дополнение, сообщите об этом разработчику плагина в соответствующей теме раздела "Помощь по плагинам" русского форума xbmc.ru.</description>
+      <description lang="ru">Плагины авторов форума XBMC[CR]Если вы обнаружили нерабочее дополнение, сообщите об этом разработчику плагина в соответствующей теме раздела &quot;Помощь по плагинам&quot; русского форума xbmc.ru.</description>
       
 		
       <disclaimer lang="en_US">Official Team Kodi did not make the add-ons on this repository and are not responsible for their content</disclaimer>
@@ -19413,7 +19486,7 @@ https://t.me/kodimansgroup</description>
       <summary lang="ru">Дополнения для Kodi.tv</summary>
       
         
-      <description lang="ru">Плагины авторов форума XBMC[CR]Если вы обнаружили нерабочее дополнение, сообщите об этом разработчику плагина в соответствующей теме раздела "Помощь по плагинам" русского форума xbmc.ru.</description>
+      <description lang="ru">Плагины авторов форума XBMC[CR]Если вы обнаружили нерабочее дополнение, сообщите об этом разработчику плагина в соответствующей теме раздела &quot;Помощь по плагинам&quot; русского форума xbmc.ru.</description>
       
         
       <disclaimer lang="en_US">Official Team Kodi did not make the add-ons on this repository and are not responsible for their content</disclaimer>
@@ -25479,7 +25552,7 @@ Auto-Update: Checks GitHub every 30 minutes for new commits and forces Kodi to r
 		
       <description>Yêu cầu:
 			+ Kodi 20 trở lên.
-			+ Mở chế độ "Cập nhật các tiện ích từ Bất kỳ kho lưu trữ nào" bằng cách:
+			+ Mở chế độ &quot;Cập nhật các tiện ích từ Bất kỳ kho lưu trữ nào&quot; bằng cách:
 			- Anh ngữ: Settings &gt; System &gt; Add-ons &gt; Unknown sources &gt; Any repositories
 			- Việt ngữ: Cài đặt &gt; Hệ thống &gt; Tiện ích &gt; Không rõ nguồn gốc &gt; Bất kỳ kho lưu trữ nào
 		</description>

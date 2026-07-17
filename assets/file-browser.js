@@ -76,4 +76,7 @@
   }
 
   ReactDOM.createRoot(document.getElementById("file-browser-root")).render(h(App));
+  document.documentElement.classList.add("react-ready");
+  const kodiIndex = document.querySelector(".kodi-static");
+  if (kodiIndex) kodiIndex.hidden = true;
 })();
