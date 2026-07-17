@@ -6,6 +6,7 @@ import json
 import re
 import sys
 import zipfile
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from urllib.parse import quote
 
@@ -100,12 +101,38 @@ def main() -> None:
     for required in ("data-terminal-shadow", "data-terminal-solid", "brand-shadow", "brand-solid"):
         if required not in index:
             fail(f"two-layer banner markup is missing: {required}")
-    for font in ("DampfPlatzs.ttf", "DampfPlatzsh.ttf"):
+    for font in ("DampfPlatz.ttf", "DampfPlatzs.ttf", "DampfPlatzsh.ttf"):
         if not (ROOT / "assets" / "fonts" / "dampfplatz" / font).is_file():
             fail(f"Dampfplatz font is missing: {font}")
     for item in json.loads(browser_data.removeprefix("window.KODIWULF_FILES=").split(";", 1)[0]):
         if "size" not in item or "size_label" not in item:
             fail(f"ZIP size metadata is missing: {item.get('path', '?')}")
+
+    category_dirs = [ROOT / "repository"]
+    category_dirs.extend(
+        path
+        for parent in (ROOT / "plugins", ROOT / "script")
+        if parent.is_dir()
+        for path in parent.iterdir()
+        if path.is_dir()
+    )
+    for directory in category_dirs:
+        metadata = ET.parse(directory / "addons.xml").getroot()
+        addon_ids = [addon.get("id") for addon in metadata]
+        if len(addon_ids) != len(set(addon_ids)):
+            fail(f"duplicate add-on ID in metadata: {directory.relative_to(ROOT)}")
+        for addon_dir in (path for path in directory.iterdir() if path.is_dir()):
+            direct_zips = sorted(addon_dir.glob("*.zip"))
+            if not direct_zips:
+                continue
+            addon_index = addon_dir / "index.html"
+            if not addon_index.is_file():
+                fail(f"Kodi browse index is missing: {addon_dir.relative_to(ROOT)}")
+            addon_page = addon_index.read_text(encoding="utf-8")
+            for zip_path in direct_zips:
+                href = quote(zip_path.name, safe="/._-~")
+                if f'href="{href}"' not in addon_page:
+                    fail(f"ZIP is not linked in add-on index: {zip_path.relative_to(ROOT)}")
 
     allowed_md5 = {checksum}
     allowed_md5.update(path for path in ROOT.rglob("addons.xml.md5") if (path.parent / "index.html").is_file())

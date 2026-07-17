@@ -1,3 +1,4 @@
+@font-face { font-family: "Dampfplatz"; src: url("fonts/dampfplatz/DampfPlatz.ttf") format("truetype"); font-display: swap; }
 @font-face { font-family: "Dampfplatz Solid"; src: url("fonts/dampfplatz/DampfPlatzs.ttf") format("truetype"); font-display: swap; }
 @font-face { font-family: "Dampfplatz Shadow"; src: url("fonts/dampfplatz/DampfPlatzsh.ttf") format("truetype"); font-display: swap; }
 
@@ -48,11 +49,10 @@ main { width: min(1240px, calc(100% - 28px)); margin: 0 auto; padding: 28px 0 50
 .hero-banner::before {
   content: "";
   position: absolute;
-  inset: -16px;
+  inset: 0;
   z-index: -3;
-  background: url("../bg.png") center 38% / cover no-repeat;
-  transform: translate(var(--parallax-x, 0), var(--parallax-y, 0)) scale(1.035);
-  transition: transform .5s cubic-bezier(.2, .8, .2, 1);
+  background: url("../bg.png") calc(50% + var(--parallax-x, 0px)) calc(42% + var(--parallax-y, 0px)) / cover no-repeat;
+  transition: background-position .55s cubic-bezier(.2, .8, .2, 1);
 }
 .hero-scrim {
   position: absolute;
@@ -75,8 +75,8 @@ main { width: min(1240px, calc(100% - 28px)); margin: 0 auto; padding: 28px 0 50
   white-space: nowrap;
 }
 .brand-layer { position: absolute; inset: 0; display: block; width: 100%; height: 100%; font-weight: 400; white-space: nowrap; }
-.brand-shadow { z-index: 2; color: #030303; font-family: "Dampfplatz Shadow", serif; text-shadow: 0 5px 16px rgba(0, 0, 0, .95); pointer-events: none; }
-.brand-solid { z-index: 1; color: #fff; font-family: "Dampfplatz Solid", serif; text-shadow: 0 0 30px rgba(255, 255, 255, .16); }
+.brand-shadow { z-index: 2; color: #030303; font-family: "Dampfplatz", serif; text-shadow: 0 5px 16px rgba(0, 0, 0, .95); pointer-events: none; }
+.brand-solid { z-index: 1; color: #fff; font-family: "Dampfplatz Shadow", serif; text-shadow: 0 0 30px rgba(255, 255, 255, .16); }
 .brand-x, .brand-r { color: var(--red-hot); text-shadow: 0 0 28px rgba(255, 36, 49, .48); }
 
 .terminal-stage { position: relative; flex: 1 1 240px; min-width: min(100%, 240px); height: clamp(32px, 4vw, 44px); margin-bottom: .35em; font-size: clamp(24px, 2.8vw, 36px); line-height: 1; white-space: nowrap; }

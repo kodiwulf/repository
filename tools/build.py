@@ -42,6 +42,13 @@ def format_size(size: int) -> str:
     return f"{size} B"
 
 
+def version_key(version: str) -> tuple[tuple[int, object], ...]:
+    return tuple(
+        (0, int(part)) if part.isdigit() else (1, part.lower())
+        for part in re.findall(r"\d+|[^\d]+", version)
+    )
+
+
 def category(info: AddonInfo) -> str:
     addon_id = info.addon_id.lower()
     if info.is_repository:
@@ -174,6 +181,12 @@ def write_browse_indexes(root: Path) -> None:
     repository = root / "repository"
     if repository.is_dir():
         ensure_generic_index(repository, root)
+        for addon_dir in (
+            path
+            for path in repository.iterdir()
+            if path.is_dir() and not path.name.startswith(".") and any(path.glob("*.zip"))
+        ):
+            ensure_generic_index(addon_dir, root)
     for parent_name in ("plugins", "script"):
         parent = root / parent_name
         if not parent.is_dir():
@@ -186,6 +199,12 @@ def write_browse_indexes(root: Path) -> None:
         (parent / "index.html").write_text(index_document(f"KodiWulf / {parent_name}", entries), encoding="utf-8")
         for child in children:
             ensure_generic_index(child, root)
+            for addon_dir in (
+                path
+                for path in child.iterdir()
+                if path.is_dir() and not path.name.startswith(".") and any(path.glob("*.zip"))
+            ):
+                ensure_generic_index(addon_dir, root)
 
 
 def write_site_root(root: Path) -> None:
@@ -301,8 +320,13 @@ layout: null
 
 
 def write_metadata(directory: Path, infos: list[AddonInfo]) -> None:
+    latest: dict[str, AddonInfo] = {}
+    for info in infos:
+        current = latest.get(info.addon_id)
+        if current is None or version_key(info.version) > version_key(current.version):
+            latest[info.addon_id] = info
     root = ET.Element("addons")
-    for info in sorted(infos, key=lambda item: item.addon_id.lower()):
+    for info in sorted(latest.values(), key=lambda item: item.addon_id.lower()):
         root.append(ET.fromstring(info.addon_xml))
     data = pretty_xml(root)
     (directory / "addons.xml").write_bytes(data)
@@ -360,8 +384,29 @@ def installer_categories(root: Path) -> list[str]:
     )
 
 
+def write_existing_metadata(root: Path) -> None:
+    category_dirs = [root / "repository"]
+    category_dirs.extend(
+        path
+        for parent in (root / "plugins", root / "script")
+        if parent.is_dir()
+        for path in parent.iterdir()
+        if path.is_dir()
+    )
+    for directory in category_dirs:
+        infos = []
+        for zip_path in sorted(visible_zips(directory, root)):
+            try:
+                infos.append(parse_addon_zip(zip_path))
+            except SystemExit:
+                print(f"WARN: metadata skipped for invalid ZIP: {zip_path.relative_to(root)}")
+        if infos:
+            write_metadata(directory, infos)
+
+
 def build(root: Path, base_url: str, version: str, apply: bool, backup: Path, site_only: bool = False, installer_only: bool = False) -> None:
     if installer_only:
+        write_existing_metadata(root)
         categories = installer_categories(root)
         if not categories:
             raise RuntimeError("no repository metadata categories found")

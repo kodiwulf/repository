@@ -177,10 +177,14 @@ function boot() {
 
   window.jQuery?.(() => {
     window.jQuery(".hero-banner").on("mousemove", function (event) {
-      const x = (event.offsetX / this.clientWidth - .5) * 8;
-      const y = (event.offsetY / this.clientHeight - .5) * 8;
+      const bounds = this.getBoundingClientRect();
+      const x = ((event.clientX - bounds.left) / bounds.width - .5) * 6;
+      const y = ((event.clientY - bounds.top) / bounds.height - .5) * 3;
       this.style.setProperty("--parallax-x", `${x}px`);
       this.style.setProperty("--parallax-y", `${y}px`);
+    }).on("mouseleave", function () {
+      this.style.setProperty("--parallax-x", "0px");
+      this.style.setProperty("--parallax-y", "0px");
     });
   });
 
