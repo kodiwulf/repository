@@ -10,7 +10,7 @@
       "name": "repository",
       "href": "repository/",
       "kind": "Repository",
-      "zip_count": 289
+      "zip_count": 287
     }
   ],
   "menu": [
@@ -44,7 +44,7 @@
       "href": "repository/",
       "kind": "Repository",
       "depth": 0,
-      "zip_count": 289
+      "zip_count": 287
     },
     {
       "name": "assets",
@@ -1149,14 +1149,6 @@
       "kind": "Unterordner",
       "depth": 1,
       "zip_count": 1
-    },
-    {
-      "name": "repository.kodiwulf",
-      "path": "repository/repository.kodiwulf",
-      "href": "repository/repository.kodiwulf/",
-      "kind": "Unterordner",
-      "depth": 1,
-      "zip_count": 2
     },
     {
       "name": "repository.kpl-addons",
@@ -2327,5 +2319,5 @@
       "zip_count": 1
     }
   ],
-  "total_zips": 305
+  "total_zips": 303
 }

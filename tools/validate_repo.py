@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TECHNICAL_ROOTS = {".github", "Repository", "_data", "_layouts", "_site", "assets", "node_modules", "tools"}
 LEGACY_MIRROR_BRANCHES = {("repository", "plugins"), ("repository", "repository"), ("repository", "script")}
 NAVIGATION_ROOTS = {"plugins", "repository"}
-INSTALLER_NAME = "repository.kodiwulf-1.0.0.zip"
+INSTALLER_NAME = "repository.kodiwulf-1.0.1.zip"
 
 
 def fail(message: str) -> None:
@@ -75,7 +75,7 @@ def main() -> None:
         if archive.read("repository.kodiwulf/fanart.png") != (ROOT / "bg.png").read_bytes():
             fail("installer fanart.png does not match the selected Kodi banner")
         addon_xml = archive.read("repository.kodiwulf/addon.xml").decode("utf-8")
-        for required in ('version="1.0.0"', "<icon>icon.png</icon>", "<fanart>fanart.png</fanart>"):
+        for required in ('version="1.0.1"', "<icon>icon.png</icon>", "<fanart>fanart.png</fanart>"):
             if required not in addon_xml:
                 fail(f"installer metadata is missing: {required}")
         for category in ("plugins/program", "plugins/video", "repository", "script/module"):
@@ -93,6 +93,13 @@ def main() -> None:
     for href in (*(quote(path.name, safe="._-~") + "/" for path in public_roots), quote(root_zips[0].name, safe="/._-~")):
         if f'href="{href}"' not in index:
             fail(f"missing static Kodi root link: {href}")
+    static_nav = re.search(r'<nav class="kodi-static"[^>]*>(.*?)</nav>', index, re.DOTALL)
+    if not static_nav:
+        fail("static Kodi root navigation is missing")
+    static_hrefs = set(re.findall(r'href="([^"]+)"', static_nav.group(1)))
+    expected_hrefs = {"plugins/", "repository/", INSTALLER_NAME}
+    if static_hrefs != expected_hrefs:
+        fail(f"unexpected Kodi root entries: {sorted(static_hrefs ^ expected_hrefs)}")
     data_names = {item["name"] for item in tree.get("roots", [])}
     if data_names != {path.name for path in public_roots}:
         fail("Jekyll root navigation does not match public root directories")
@@ -104,6 +111,12 @@ def main() -> None:
     for font in ("DampfPlatz.ttf", "DampfPlatzs.ttf", "DampfPlatzsh.ttf"):
         if not (ROOT / "assets" / "fonts" / "dampfplatz" / font).is_file():
             fail(f"Dampfplatz font is missing: {font}")
+    for legacy in ("plugins", "repository", "script"):
+        if (ROOT / "repository" / legacy).exists():
+            fail(f"obsolete Kodi mirror still exists: repository/{legacy}")
+    obsolete_installers = sorted((ROOT / "repository").glob("repository.kodiwulf-*.zip"))
+    if obsolete_installers:
+        fail(f"obsolete nested KodiWulf installer exists: {obsolete_installers[0].relative_to(ROOT)}")
     for item in json.loads(browser_data.removeprefix("window.KODIWULF_FILES=").split(";", 1)[0]):
         if "size" not in item or "size_label" not in item:
             fail(f"ZIP size metadata is missing: {item.get('path', '?')}")
@@ -121,6 +134,12 @@ def main() -> None:
         addon_ids = [addon.get("id") for addon in metadata]
         if len(addon_ids) != len(set(addon_ids)):
             fail(f"duplicate add-on ID in metadata: {directory.relative_to(ROOT)}")
+        for addon in metadata:
+            addon_id = addon.get("id")
+            version = addon.get("version")
+            package = directory / str(addon_id) / f"{addon_id}-{version}.zip"
+            if not package.is_file():
+                fail(f"advertised Kodi package is missing: {package.relative_to(ROOT)}")
         for addon_dir in (path for path in directory.iterdir() if path.is_dir()):
             direct_zips = sorted(addon_dir.glob("*.zip"))
             if not direct_zips:

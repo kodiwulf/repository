@@ -19,17 +19,38 @@ from kodiwulf_build_repo_core import AddonInfo, parse_addon_zip, pretty_xml
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BASE_URL = "https://kodiwulf.github.io/repository/"
-DEFAULT_REPO_VERSION = "1.0.0"
+DEFAULT_REPO_VERSION = "1.0.1"
 NAVIGATION_ROOTS = {"plugins", "repository"}
 SKIP_PARTS = {".git", ".drdebug-backups", "__pycache__"}
 TECHNICAL_ROOTS = {
     ".github", "Repository", "_data", "_layouts", "_site", "assets", "node_modules", "tools"
 }
 LEGACY_MIRROR_BRANCHES = {("repository", "plugins"), ("repository", "repository"), ("repository", "script")}
+LEGACY_MIRROR_NAMES = {"plugins", "repository", "script"}
 
 
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def cleanup_legacy_mirrors(root: Path) -> None:
+    mirror_parent = (root / "repository").resolve()
+    removed_files = 0
+    for name in sorted(LEGACY_MIRROR_NAMES):
+        target = root / "repository" / name
+        if not target.exists():
+            continue
+        resolved = target.resolve()
+        if resolved.parent != mirror_parent or resolved.name not in LEGACY_MIRROR_NAMES:
+            raise RuntimeError(f"unsafe legacy cleanup target: {resolved}")
+        removed_files += sum(1 for path in target.rglob("*") if path.is_file())
+        shutil.rmtree(target)
+    for obsolete_installer in (root / "repository").glob("repository.kodiwulf-*.zip"):
+        if obsolete_installer.parent.resolve() != mirror_parent:
+            raise RuntimeError(f"unsafe obsolete installer target: {obsolete_installer}")
+        obsolete_installer.unlink()
+        removed_files += 1
+    print(f"OK: removed {removed_files} files from legacy repository mirrors")
 
 
 def format_size(size: int) -> str:
@@ -249,7 +270,7 @@ def write_site_root(root: Path) -> None:
         for zip_path in sorted(root.glob("repository.kodiwulf-*.zip"))
     )
     installers = sorted(root.glob("repository.kodiwulf-*.zip"))
-    installer_name = installers[-1].name if installers else "repository.kodiwulf-1.0.0.zip"
+    installer_name = installers[-1].name if installers else f"repository.kodiwulf-{DEFAULT_REPO_VERSION}.zip"
     kodi_links = "\n".join(part for part in (static_links, installer_links) if part)
     root_doc = """---
 layout: null
@@ -273,7 +294,7 @@ layout: null
       <p class="eyebrow">GitHub Pages · Kodi Repository</p>
       <div class="brand-line">
         <h1 class="brand-stage" aria-label="xWulf Repository">
-          <span class="brand-layer brand-shadow" aria-hidden="true">xWulf Repository</span>
+          <span class="brand-layer brand-shadow" aria-hidden="true"><span class="brand-x">x</span>Wulf <span class="brand-r">R</span>epository</span>
           <span class="brand-layer brand-solid"><span class="brand-x">x</span>Wulf <span class="brand-r">R</span>epository</span>
         </h1>
         <div class="terminal-stage" aria-live="polite" aria-label="KodiWulf Features">
@@ -283,7 +304,7 @@ layout: null
       </div>
       <p class="subtitle">ZIP-Browser für Kodi-Plugins und Repository-Pakete. Direkte Downloads, klare Ordnerwege, flüssige Navigation.</p>
       <div class="hero-actions">
-        <a class="btn btn-danger install-button" href="__INSTALLER__"><span>ZIP</span> Repository 1.0.0 installieren</a>
+        <a class="btn btn-danger install-button" href="__INSTALLER__"><span>ZIP</span> Repository __VERSION__ installieren</a>
         <span id="react-summary" class="package-count">Pakete werden geladen …</span>
       </div>
     </div>
@@ -316,6 +337,7 @@ layout: null
 """
     root_doc = root_doc.replace("__KODI_LINKS__", kodi_links)
     root_doc = root_doc.replace("__INSTALLER__", quote(installer_name, safe="/._-~"))
+    root_doc = root_doc.replace("__VERSION__", installer_name.removeprefix("repository.kodiwulf-").removesuffix(".zip"))
     (root / "index.html").write_text(root_doc, encoding="utf-8")
 
 
@@ -530,8 +552,14 @@ def main() -> None:
     parser.add_argument("--apply", action="store_true")
     parser.add_argument("--site-only", action="store_true", help="Only regenerate Jekyll/frontend navigation without moving ZIPs")
     parser.add_argument("--installer-only", action="store_true", help="Only rebuild the root repository installer ZIP")
+    parser.add_argument("--cleanup-legacy", action="store_true", help="Remove obsolete repository/{plugins,repository,script} mirror trees")
     args = parser.parse_args()
-    build(Path(args.root).resolve(), args.base_url, args.repo_version, args.apply, Path(args.backup).resolve(), args.site_only, args.installer_only)
+    root = Path(args.root).resolve()
+    if args.cleanup_legacy:
+        cleanup_legacy_mirrors(root)
+        if not (args.apply or args.site_only or args.installer_only):
+            return
+    build(root, args.base_url, args.repo_version, args.apply, Path(args.backup).resolve(), args.site_only, args.installer_only)
 
 
 if __name__ == "__main__":
