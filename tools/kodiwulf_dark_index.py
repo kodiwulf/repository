@@ -39,7 +39,7 @@ CATEGORY_HINT = {
     "SONSTIGE": "ZIP-Dateien außerhalb der erwarteten ZIPs-Struktur.",
 }
 
-PUBLIC_BASE_URL = "https://n-e-o-w-u-l-f.github.io/kodiwulf-repo"
+PUBLIC_BASE_URL = "https://kodiwulf.github.io/repository"
 
 
 def esc(value: object) -> str:
@@ -154,17 +154,26 @@ def category_for_zip(repo_root: Path, zip_path: Path) -> str:
 
 
 def collect_zip_items(repo_root: Path) -> list[dict[str, object]]:
-    """Sammelt alle ZIPs rekursiv unter ZIPs/."""
-    zip_root = repo_root / "ZIPs"
+    """Sammelt die einmalig abgelegten ZIPs aus der Kodi-Ordnerstruktur."""
     items: list[dict[str, object]] = []
 
-    if not zip_root.is_dir():
-        return items
-
-    for zip_path in sorted(zip_root.rglob("*.zip")):
+    for zip_path in sorted(repo_root.rglob("*.zip")):
+        if ".git" in zip_path.relative_to(repo_root).parts:
+            continue
         rel = zip_path.relative_to(repo_root).as_posix()
-        category = category_for_zip(repo_root, zip_path)
         meta = read_zip_meta(zip_path)
+        if len(zip_path.relative_to(repo_root).parts) == 1:
+            category = "REPOSITORY"
+        elif rel.startswith("repository/"):
+            category = "REPOSITORY"
+        elif rel.startswith("plugins/video/"):
+            category = "VIDEO"
+        elif rel.startswith("plugins/") or rel.startswith("script/"):
+            category = "PROGRAMM"
+        else:
+            continue
+        addon_id = str(meta.get("addon_id", ""))
+        points = meta.get("points", [])
         items.append({
             "path": zip_path,
             "rel": rel,
@@ -191,14 +200,14 @@ def collect_zip_items(repo_root: Path) -> list[dict[str, object]]:
 def root_listing_rows(repo_root: Path, items: list[dict[str, object]]) -> str:
     """Rendert die obere Directory-Listing-Tabelle."""
     rows: list[str] = []
+    root_zips = sorted(repo_root.glob("repository.kodiwulf-*.zip"))
     known_paths = [
-        repo_root / "ZIPs",
-        repo_root / "ZIPs" / "REPOSITORY",
-        repo_root / "ZIPs" / "VIDEO",
-        repo_root / "ZIPs" / "PROGRAMM",
+        *root_zips,
+        repo_root / "repository",
+        repo_root / "plugins",
+        repo_root / "script",
         repo_root / "addons.xml",
         repo_root / "addons.xml.md5",
-        repo_root / "repository.kodiwulf",
         repo_root / "bg.png",
         repo_root / "README.md",
         repo_root / "CHANGES.md",
@@ -265,7 +274,7 @@ def addon_rows(items: list[dict[str, object]]) -> str:
         )
 
     if not rows:
-        rows.append('<tr><td class="type warn">WARN</td><td>Keine ZIPs in ZIPs/ gefunden</td><td>-</td><td>-</td><td>-</td></tr>')
+        rows.append('<tr><td class="type warn">WARN</td><td>Keine klassifizierten ZIPs gefunden</td><td>-</td><td>-</td><td>-</td></tr>')
 
     return "\n".join(rows)
 
@@ -336,10 +345,14 @@ def build_document(repo_root: Path, items: list[dict[str, object]]) -> str:
         counts[str(item["category"])] = counts.get(str(item["category"]), 0) + 1
 
     bg_status = "bg.png background active" if (repo_root / "bg.png").exists() else "bg.png nicht gefunden"
-    repo_addon_link = "repository.kodiwulf/" if (repo_root / "repository.kodiwulf").is_dir() else "ZIPs/REPOSITORY/"
+    root_repo_zips = sorted(repo_root.glob("repository.kodiwulf-*.zip"))
+    repo_addon_link = root_repo_zips[-1].name if root_repo_zips else "repository/"
     generated_at = "deterministic build"
 
-    return f'''<!doctype html>
+    return f'''---
+layout: null
+---
+<!doctype html>
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -573,13 +586,12 @@ footer {{
     <h1><span class="x">x</span>Wulf Repository</h1>
     <p class="subtitle">
       Dunkler statischer Repository-Index nach Directory-Listing-Vorbild.
-      Diese Seite verlinkt die aktuelle ZIP-Struktur aus <strong>ZIPs/REPOSITORY</strong>,
-      <strong>ZIPs/VIDEO</strong> und <strong>ZIPs/PROGRAMM</strong>.
+      Diese Seite übernimmt die von <code>tools/build.py</code> erzeugte Kodi-Ordnerstruktur.
     </p>
     <nav class="nav" aria-label="Repository Navigation">
-      <a href="#repository">Repository-ZIPs</a>
-      <a href="#video">Video-Add-ons</a>
-      <a href="#programm">Programm-Add-ons</a>
+      <a href="repository/">Repository-ZIPs</a>
+      <a href="plugins/">Plugins</a>
+      <a href="script/">Scripts</a>
       <a href="addons.xml">addons.xml</a>
       <a href="addons.xml.md5">addons.xml.md5</a>
       <a href="{esc(repo_addon_link)}">Repository Add-on</a>
@@ -587,17 +599,17 @@ footer {{
   </header>
 
   <section class="grid" aria-label="Repository Übersicht">
-    <article class="card"><h2>ZIPs gesamt</h2><p><strong>{len(items)}</strong>aus ZIPs/ rekursiv gelesen</p></article>
-    <article class="card"><h2>Repository</h2><p><strong>{counts.get("REPOSITORY", 0)}</strong>ZIPs/REPOSITORY</p></article>
-    <article class="card"><h2>Video</h2><p><strong>{counts.get("VIDEO", 0)}</strong>ZIPs/VIDEO</p></article>
-    <article class="card"><h2>Programm</h2><p><strong>{counts.get("PROGRAMM", 0)}</strong>ZIPs/PROGRAMM</p></article>
+    <article class="card"><h2>ZIPs gesamt</h2><p><strong>{len(items)}</strong>direkt im Root verlinkt</p></article>
+    <article class="card"><h2>Repository</h2><p><strong>{counts.get("REPOSITORY", 0)}</strong>Repository-ZIPs</p></article>
+    <article class="card"><h2>Video</h2><p><strong>{counts.get("VIDEO", 0)}</strong>Video-ZIPs</p></article>
+    <article class="card"><h2>Programm</h2><p><strong>{counts.get("PROGRAMM", 0)}</strong>Programm-ZIPs</p></article>
   </section>
 
   <section class="grid">
     <article class="card"><h2>Repository XML</h2><p><a href="addons.xml">addons.xml</a></p></article>
     <article class="card"><h2>Checksum</h2><p><a href="addons.xml.md5">addons.xml.md5</a></p></article>
     <article class="card"><h2>Kodi Repository Add-on</h2><p><a href="{esc(repo_addon_link)}">{esc(repo_addon_link)}</a></p></article>
-    <article class="card"><h2>ZIP Root</h2><p><a href="ZIPs/">ZIPs/</a></p></article>
+    <article class="card"><h2>Ordnerstruktur</h2><p><a href="plugins/">Plugins durchsuchen</a></p></article>
   </section>
 
   <section class="panel">

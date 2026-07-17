@@ -157,14 +157,14 @@ def write_folder_index(root: Path, folder_name: str, title: str) -> None:
 
 
 def write_folder_indexes(root: Path) -> None:
-    write_folder_index(root, "Repository", "KodiWulf Repository ZIPs")
-    write_folder_index(root, "Videos", "KodiWulf Video Add-ons")
-    write_folder_index(root, "Program", "KodiWulf Program Add-ons")
+    # Public ZIPs live directly beside index.html. Kodi and browsers therefore
+    # use the same repository root; no category directory indexes are needed.
+    return
 
 
 def main() -> int:
     here = Path(__file__).resolve().parent
-    core = here / "kodiwulf_build_repo_core.py"
+    core = here / "build.py"
 
     if not core.exists():
         print(f"ERROR: Core generator fehlt: {core}", file=sys.stderr)
@@ -174,11 +174,6 @@ def main() -> int:
     rc = subprocess.call([sys.executable, str(core), *args])
     if rc != 0:
         return rc
-
-    if has_apply(args):
-        root = parse_root(args)
-        normalize_public_index(root / "index.html")
-        write_folder_indexes(root)
 
     return 0
 

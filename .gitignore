@@ -10,9 +10,8 @@ dist/
 Thumbs.db
 .idea/
 .vscode/
-# Build- und Test-Artefakte
-zips/
-tools/
+# Build-/Test-Artefakte
+incoming/
 Build/
 BUILD/
 test/
@@ -25,8 +24,9 @@ __pycache__/
 .ruff_cache/
 # Betriebssystem-Dateien
 .drdebug-backups/
-ZIPs/
 tools/*.bak-*
 .gitignore.bak-*
+
+# Alle Buildwerkzeuge werden versioniert.
 !tools/
-!tools/kodiwulf_build_repo.py
+!tools/*.py

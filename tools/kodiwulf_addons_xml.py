@@ -81,27 +81,9 @@ def source_zip_paths(root: Path) -> list[Path]:
     """Ermittelt alle ZIPs, die in addons.xml aufgenommen werden sollen."""
     paths: list[Path] = []
 
-    input_dirs = [
-        root / "ZIPs" / "PROGRAMM",
-        root / "ZIPs" / "REPOSITORY",
-        root / "ZIPs" / "VIDEO",
-    ]
-
-    for input_dir in input_dirs:
-        if input_dir.is_dir():
-            paths.extend(sorted(input_dir.glob("*.zip")))
-
-    # Die eigene generierte Repository-ZIP liegt absichtlich außerhalb von ZIPs/.
-    # Sie muss trotzdem in addons.xml stehen.
-    canonical_repo_dir = root / "repository.kodiwulf"
-    if canonical_repo_dir.is_dir():
-        paths.extend(sorted(canonical_repo_dir.glob("repository.kodiwulf-*.zip")))
-
-    # Fallback für Install-from-ZIP-Kopie, falls canonical fehlt.
-    public_repo_dir = root / "Repository"
-    if not any(p.name.startswith("repository.kodiwulf-") for p in paths):
-        if public_repo_dir.is_dir():
-            paths.extend(sorted(public_repo_dir.glob("repository.kodiwulf-*.zip")))
+    zip_root = root / "zips"
+    if zip_root.is_dir():
+        paths.extend(sorted(zip_root.rglob("*.zip")))
 
     # Dedupe nach Add-on-ID + Version. Canonical gewinnt vor Public-Kopie.
     by_identity: dict[tuple[str, str], Path] = {}

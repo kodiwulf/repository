@@ -8,18 +8,28 @@ KodiWulf is a static Kodi 21 Omega repository served through GitHub Pages.
 
 ## Public URL
 
-    https://n-e-o-w-u-l-f.github.io/kodiwulf-repo/
+    https://kodiwulf.github.io/repository/
 
 ## Install from ZIP
 
 Use this ZIP in Kodi:
 
-    https://n-e-o-w-u-l-f.github.io/kodiwulf-repo/plugin/repository/repository.kodiwulf-0.1.0.zip
+Add this file source in Kodi:
+
+    https://kodiwulf.github.io/repository/
+
+Then install:
+
+    repository.kodiwulf-0.1.0.zip
+
+The same root URL serves the Jekyll website and Kodi's folder browser. The root
+page uses React for ZIP-only navigation, Anime.js for restrained transitions,
+and one shared dark console theme for all generated directory pages.
 
 After installation, Kodi reads:
 
-    https://n-e-o-w-u-l-f.github.io/kodiwulf-repo/addons.xml
-    https://n-e-o-w-u-l-f.github.io/kodiwulf-repo/addons.xml.md5
+    https://kodiwulf.github.io/repository/addons.xml
+    https://kodiwulf.github.io/repository/addons.xml.md5
 
 ## Current repository state
 
@@ -27,27 +37,26 @@ After installation, Kodi reads:
     Kodi target: Kodi 21 Omega
     Add-ons in addons.xml: 18
 
-## Public folders
+## Published structure
 
-    plugin/program/ Browser-friendly program add-on ZIPs
-    plugin/repository/ Browser-friendly repository ZIPs
-    plugin/video/ Browser-friendly video add-on ZIPs
-    <addon.id>/    Canonical Kodi repository folders
+    repository.kodiwulf-*.zip  Only ZIP allowed in the root
+    repository/<addon.id>/     Repository ZIPs
+    plugins/<type>/<addon.id>/ Plugin ZIPs, for example plugins/audio/
+    script/<type>/<addon.id>/  Script ZIPs, for example script/module/
+    incoming/*.zip             Optional temporary import inbox
     addons.xml     Kodi repository metadata
     addons.xml.md5 Kodi repository checksum
     index.html     GitHub Pages landing page
 
 ## Local source ZIP layout
 
-Source ZIPs are local build inputs and are ignored by Git:
-
-    ZIPs/VIDEO/
-    ZIPs/PROGRAMM/
-    ZIPs/REPOSITORY/
+New ZIPs can be placed temporarily in `incoming/` (or anywhere outside the
+published category folders). `tools/build.py` reads `addon.xml`, moves each ZIP
+to its canonical category, updates Kodi metadata, and removes the empty inbox.
 
 ## Rebuild
 
-    python3 tools/kodiwulf_build_repo.py --base-url "https://n-e-o-w-u-l-f.github.io/kodiwulf-repo/" --apply
+    python tools/build.py --apply
 
 The active generator also runs:
 

@@ -1,4 +1,4 @@
-name: Build Kodi repository index
+name: Validate Kodi repository
 
 on:
   push:
@@ -6,20 +6,17 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build repository index
-        run: python3 tools/build_repo.py
+      - name: Compile build tools
+        run: python3 -m py_compile tools/*.py
 
-      - name: Commit generated files
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore(repo): rebuild Kodi repository index"
-          file_pattern: "addons.xml addons.xml.md5 repository.*/*.zip"
+      - name: Validate published repository
+        run: python3 tools/validate_repo.py

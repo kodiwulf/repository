@@ -165,7 +165,7 @@ def pretty_xml(root: ET.Element) -> bytes:
 def make_repository_addon_xml(repo_id: str, repo_name: str, repo_version: str, provider: str, base_url: str) -> bytes:
     info_url = base_url + "addons.xml"
     checksum_url = base_url + "addons.xml.md5"
-    datadir_url = base_url
+    datadir_url = base_url + "zips/"
 
     xml = f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="{html.escape(repo_id)}" name="{html.escape(repo_name)}" version="{html.escape(repo_version)}" provider-name="{html.escape(provider)}">
@@ -188,9 +188,7 @@ def make_repository_addon_xml(repo_id: str, repo_name: str, repo_version: str, p
 
 
 def create_repository_zip(root: Path, repo_id: str, repo_version: str, addon_xml: bytes) -> Path:
-    repo_dir = root / repo_id
-    repo_dir.mkdir(parents=True, exist_ok=True)
-    zip_path = repo_dir / f"{repo_id}-{repo_version}.zip"
+    zip_path = root / f"{repo_id}-{repo_version}.zip"
 
     with tempfile.TemporaryDirectory() as td:
         stage = Path(td) / repo_id
@@ -233,23 +231,22 @@ def safe_copy2(src: Path, dst: Path) -> None:
 
 
 def copy_addon_zip(root: Path, info: AddonInfo) -> BuiltAddon:
-    id_dir = root / info.addon_id
+    if info.addon_id == "repository.kodiwulf":
+        canonical = root / f"{info.addon_id}-{info.version}.zip"
+        safe_copy2(info.zip_path, canonical)
+        return BuiltAddon(info=info, canonical_rel=canonical.name, category_rel=canonical.name, category="Repository")
+
+    id_dir = root / "zips" / info.addon_id
     id_dir.mkdir(parents=True, exist_ok=True)
     canonical = id_dir / f"{info.addon_id}-{info.version}.zip"
     safe_copy2(info.zip_path, canonical)
-    write_md5_sidecar(canonical)
 
     category = category_for(info)
-    category_dir = root / category
-    category_dir.mkdir(parents=True, exist_ok=True)
-    categorized = category_dir / canonical.name
-    safe_copy2(info.zip_path, categorized)
-    write_md5_sidecar(categorized)
 
     return BuiltAddon(
         info=info,
         canonical_rel=canonical.relative_to(root).as_posix(),
-        category_rel=categorized.relative_to(root).as_posix(),
+        category_rel=canonical.relative_to(root).as_posix(),
         category=category,
     )
 
@@ -308,15 +305,9 @@ def render_managed_index_block(built_addons: list[BuiltAddon], include_other: bo
     other_addons = [x for x in built_addons if x.category == "Other"]
 
     root_rows = [
-        render_download_row("Repository/", "Repository/", "Repository-ZIPs für Kodi „Install from ZIP“"),
-        render_download_row("Videos/", "Videos/", "Video-Add-ons für Kodi „Install from ZIP“"),
-    ]
-    if include_other:
-        root_rows.append(render_download_row("Other/", "Other/", "Weitere Add-ons"))
-    root_rows.extend([
         render_download_row("addons.xml", "addons.xml", "Kodi Repository-Metadaten"),
         render_download_row("addons.xml.md5", "addons.xml.md5", "Checksumme für Kodi"),
-    ])
+    ]
 
     repo_rows = "\n".join(render_addon_row(x, use_category=True) for x in repo_addons)
     video_rows = "\n".join(render_addon_row(x, use_category=True) for x in video_addons)
@@ -335,7 +326,7 @@ def render_managed_index_block(built_addons: list[BuiltAddon], include_other: bo
     <h2>Kodi Installationsstruktur</h2>
     <p>
       Diese Links sind so aufgebaut, dass Kodi über <strong>Install from ZIP</strong>
-      die Ordner <code>Repository/</code> und <code>Videos/</code> sieht.
+      alle installierbaren ZIP-Dateien direkt im Repository-Root sieht.
       Die installierte Repository-ZIP verwendet zusätzlich <code>addons.xml</code>,
       <code>addons.xml.md5</code> und die kanonischen Add-on-Ordner.
     </p>
@@ -493,22 +484,7 @@ def discover_addons(root: Path, source_dir: Path, repo_info: AddonInfo) -> dict[
     if not source_dir.exists():
         return discovered
 
-    # KodiWulf: ZIP-Quellen liegen sortiert in festen Unterordnern.
-    # VIDEO, PROGRAMM und REPOSITORY sind Input-Ordner, nicht die finale Kodi-Kategorie.
-    scan_dirs = [
-        source_dir / "VIDEO",
-        source_dir / "PROGRAMM",
-        source_dir / "REPOSITORY",
-    ]
-
-    # Fallback: alte flache Struktur ZIPs/*.zip weiter unterstützen.
-    if not any(scan_dir.is_dir() for scan_dir in scan_dirs):
-        scan_dirs = [source_dir]
-
-    zip_paths = []
-    for scan_dir in scan_dirs:
-        if scan_dir.is_dir():
-            zip_paths.extend(sorted(scan_dir.glob("*.zip")))
+    zip_paths = sorted(source_dir.rglob("*.zip"))
 
     for zip_path in sorted(zip_paths):
         info = parse_addon_zip(zip_path)
@@ -527,7 +503,7 @@ def discover_addons(root: Path, source_dir: Path, repo_info: AddonInfo) -> dict[
 
 def build(args: argparse.Namespace) -> None:
     root = Path(args.root).expanduser().resolve()
-    source_dir = root / "ZIPs"
+    source_dir = root / "zips"
     base_url = normalize_base_url(args.base_url)
 
     if not root.exists():
@@ -543,13 +519,10 @@ def build(args: argparse.Namespace) -> None:
 
     if args.apply:
         source_dir.mkdir(parents=True, exist_ok=True)
-        (root / "Repository").mkdir(exist_ok=True)
-        (root / "Videos").mkdir(exist_ok=True)
         repo_zip = create_repository_zip(root, args.repo_id, args.repo_version, repo_xml)
-        write_md5_sidecar(repo_zip)
     else:
         # Dry-run parses ZIPs but does not create the generated repository ZIP.
-        repo_zip = root / args.repo_id / f"{args.repo_id}-{args.repo_version}.zip"
+        repo_zip = root / f"{args.repo_id}-{args.repo_version}.zip"
 
     repo_info = AddonInfo(
         addon_id=args.repo_id,
@@ -575,11 +548,9 @@ def build(args: argparse.Namespace) -> None:
         print("Would write/rebuild:")
         print("  addons.xml")
         print("  addons.xml.md5")
-        print("  Repository/")
-        print("  Videos/")
-        if any(category_for(info) == "Other" for info in ordered_infos):
-            print("  Other/")
-        print("  <addon.id>/<addon.id>-<version>.zip")
+        print(f"  {repo_zip.name}")
+        print("  repository.kodiwulf-<version>.zip in repository root")
+        print("  zips/<addon.id>/<addon.id>-<version>.zip")
         print("  root index.html managed block only")
         print()
         print("Discovered add-ons:")
@@ -625,17 +596,6 @@ def build(args: argparse.Namespace) -> None:
         print(f"WARN: dark index update failed: {exc}")
 
     if args.write_directory_indexes:
-        for category in ("Repository", "Videos", "Other"):
-            category_dir = root / category
-            if not category_dir.exists():
-                continue
-            entries = [
-                (p.name, p.name)
-                for p in sorted(category_dir.glob("*"))
-                if p.is_file() and p.name != "index.html"
-            ]
-            write_simple_index(category_dir / "index.html", f"Kodiwulf {category}", entries)
-
         for built in sorted(copied, key=lambda x: x.info.addon_id):
             id_dir = root / built.info.addon_id
             entries = [
@@ -651,7 +611,7 @@ def build(args: argparse.Namespace) -> None:
     print(f"Index action:        {index_action}")
     if backup:
         print(f"Index backup:        {backup}")
-    print(f"Repository ZIP:      {root / 'Repository' / repo_zip.name}")
+    print(f"Root install ZIP:    {root / repo_zip.name}")
     print(f"Canonical repo ZIP:  {repo_zip}")
     print()
     print("Discovered add-ons:")
@@ -661,8 +621,12 @@ def build(args: argparse.Namespace) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--root", default="~/Projekte/kodiwulf-repo")
-    parser.add_argument("--base-url", default="https://n-e-o-w-u-l-f.github.io/kodiwulf-repo/")
+    parser.add_argument(
+        "--root",
+        default=str(Path(__file__).resolve().parents[1]),
+        help="repository root (default: directory containing tools/)",
+    )
+    parser.add_argument("--base-url", default="https://kodiwulf.github.io/repository/")
     parser.add_argument("--repo-id", default="repository.kodiwulf")
     parser.add_argument("--repo-name", default="Kodiwulf")
     parser.add_argument("--repo-version", default="0.1.0")
