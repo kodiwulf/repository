@@ -18,7 +18,7 @@ from kodiwulf_build_repo_core import AddonInfo, parse_addon_zip, pretty_xml
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_BASE_URL = "https://kodiwulf.github.io/repository/"
+DEFAULT_BASE_URL = "https://kodi-wulf.github.io/repository/"
 DEFAULT_REPO_VERSION = "1.0.1"
 NAVIGATION_ROOTS = {"plugins", "repository"}
 SKIP_PARTS = {".git", ".drdebug-backups", "__pycache__"}

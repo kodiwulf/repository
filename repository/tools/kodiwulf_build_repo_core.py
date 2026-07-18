@@ -626,7 +626,7 @@ def main() -> None:
         default=str(Path(__file__).resolve().parents[1]),
         help="repository root (default: directory containing tools/)",
     )
-    parser.add_argument("--base-url", default="https://kodiwulf.github.io/repository/")
+    parser.add_argument("--base-url", default="https://kodi-wulf.github.io/repository/")
     parser.add_argument("--repo-id", default="repository.kodiwulf")
     parser.add_argument("--repo-name", default="Kodiwulf")
     parser.add_argument("--repo-version", default="0.1.0")

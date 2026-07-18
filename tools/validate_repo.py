@@ -79,7 +79,7 @@ def main() -> None:
             if required not in addon_xml:
                 fail(f"installer metadata is missing: {required}")
         for category in ("plugins/program", "plugins/video", "repository", "script/module"):
-            expected_url = f"https://kodiwulf.github.io/repository/{category}/addons.xml"
+            expected_url = f"https://kodi-wulf.github.io/repository/{category}/addons.xml"
             if expected_url not in addon_xml:
                 fail(f"installer does not expose category: {category}")
 
