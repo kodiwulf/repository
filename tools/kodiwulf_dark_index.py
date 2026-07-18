@@ -39,7 +39,7 @@ CATEGORY_HINT = {
     "SONSTIGE": "ZIP-Dateien außerhalb der erwarteten ZIPs-Struktur.",
 }
 
-PUBLIC_BASE_URL = "https://kodiwulf.github.io/repository"
+PUBLIC_BASE_URL = "https://kodi-wulf.github.io/repository"
 
 
 def esc(value: object) -> str:

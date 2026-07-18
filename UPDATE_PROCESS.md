@@ -35,7 +35,7 @@ Expected repository metadata:
 
 ## 5. Online checks
 
-    curl -L -I "https://kodiwulf.github.io/repository/"
-    curl -L -I "https://kodiwulf.github.io/repository/addons.xml"
-    curl -L -I "https://kodiwulf.github.io/repository/addons.xml.md5"
-    curl -L -I "https://kodiwulf.github.io/repository/repository.kodiwulf-0.1.0.zip"
+    curl -L -I "https://kodi-wulf.github.io/repository/"
+    curl -L -I "https://kodi-wulf.github.io/repository/addons.xml"
+    curl -L -I "https://kodi-wulf.github.io/repository/addons.xml.md5"
+    curl -L -I "https://kodi-wulf.github.io/repository/repository.kodiwulf-0.1.0.zip"

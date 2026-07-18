@@ -1,5 +1,5 @@
 title: KodiWulf Repository
-url: https://kodiwulf.github.io
+url: https://kodi-wulf.github.io
 baseurl: /repository
 exclude:
   - tools

@@ -8,7 +8,7 @@ KodiWulf is a static Kodi 21 Omega repository served through GitHub Pages.
 
 ## Public URL
 
-    https://kodiwulf.github.io/repository/
+    https://kodi-wulf.github.io/repository/
 
 ## Install from ZIP
 
@@ -16,7 +16,7 @@ Use this ZIP in Kodi:
 
 Add this file source in Kodi:
 
-    https://kodiwulf.github.io/repository/
+    https://kodi-wulf.github.io/repository/
 
 Then install:
 
@@ -28,8 +28,8 @@ and one shared dark console theme for all generated directory pages.
 
 After installation, Kodi reads:
 
-    https://kodiwulf.github.io/repository/addons.xml
-    https://kodiwulf.github.io/repository/addons.xml.md5
+    https://kodi-wulf.github.io/repository/addons.xml
+    https://kodi-wulf.github.io/repository/addons.xml.md5
 
 ## Current repository state
 
