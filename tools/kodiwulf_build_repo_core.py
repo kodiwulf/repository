@@ -81,6 +81,83 @@ def md5_bytes(data: bytes) -> str:
     return hashlib.md5(data).hexdigest()
 
 
+def normalize_package_root(zip_path: Path, addon_id: str) -> bool:
+    """Ensure Kodi sees exactly ``<addon-id>/addon.xml`` inside a package."""
+    with zipfile.ZipFile(zip_path) as archive:
+        members = archive.infolist()
+        addon_xml_members = [
+            member
+            for member in members
+            if member.filename.replace("\\", "/").rstrip("/").endswith("/addon.xml")
+            or member.filename.replace("\\", "/") == "addon.xml"
+        ]
+        addon_xml_members.sort(
+            key=lambda member: (
+                member.filename.count("/") + member.filename.count("\\"),
+                member.filename,
+            )
+        )
+        if not addon_xml_members:
+            raise RuntimeError(f"no addon.xml found in {zip_path}")
+
+        addon_xml_name = addon_xml_members[0].filename.replace("\\", "/")
+        source_root = addon_xml_name.rsplit("/", 1)[0] if "/" in addon_xml_name else ""
+        source_prefix = source_root.rstrip("/") + "/" if source_root else ""
+        normalized_names = [member.filename.replace("\\", "/") for member in members]
+        already_normalized = source_root == addon_id and all(
+            name == f"{addon_id}/" or name.startswith(f"{addon_id}/")
+            for name in normalized_names
+        )
+        if already_normalized:
+            return False
+
+        payloads: list[tuple[zipfile.ZipInfo, str, bytes]] = []
+        targets: set[str] = set()
+        for member, normalized_name in zip(members, normalized_names):
+            if member.is_dir():
+                continue
+            if source_prefix:
+                if not normalized_name.startswith(source_prefix):
+                    continue
+                relative_name = normalized_name[len(source_prefix):]
+            else:
+                relative_name = normalized_name
+            relative_name = relative_name.lstrip("/")
+            parts = Path(relative_name).parts
+            if not relative_name or ".." in parts:
+                raise RuntimeError(f"unsafe ZIP member in {zip_path}: {member.filename}")
+            target_name = f"{addon_id}/{relative_name}"
+            if target_name in targets:
+                raise RuntimeError(f"duplicate normalized ZIP member in {zip_path}: {target_name}")
+            targets.add(target_name)
+            payloads.append((member, target_name, archive.read(member)))
+
+    expected_addon_xml = f"{addon_id}/addon.xml"
+    if expected_addon_xml not in targets:
+        raise RuntimeError(f"normalization lost {expected_addon_xml} in {zip_path}")
+
+    temporary: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            prefix=f".{zip_path.stem}-", suffix=".zip", dir=zip_path.parent, delete=False
+        ) as handle:
+            temporary = Path(handle.name)
+        with zipfile.ZipFile(temporary, "w", zipfile.ZIP_DEFLATED) as destination:
+            for original, target_name, data in payloads:
+                target = zipfile.ZipInfo(target_name, date_time=original.date_time)
+                target.compress_type = zipfile.ZIP_DEFLATED
+                target.comment = original.comment
+                target.create_system = original.create_system
+                target.external_attr = original.external_attr
+                target.internal_attr = original.internal_attr
+                destination.writestr(target, data)
+        temporary.replace(zip_path)
+    finally:
+        if temporary is not None and temporary.exists():
+            temporary.unlink()
+    return True
+
+
 def normalize_base_url(base_url: str) -> str:
     base_url = base_url.strip()
     if not base_url:
@@ -241,12 +318,14 @@ def copy_addon_zip(root: Path, info: AddonInfo) -> BuiltAddon:
     if info.addon_id == "repository.kodi-wulf":
         canonical = root / f"{info.addon_id}-v{info.version}.zip"
         safe_copy2(info.zip_path, canonical)
+        normalize_package_root(canonical, info.addon_id)
         return BuiltAddon(info=info, canonical_rel=canonical.name, category_rel=canonical.name, category="Repository")
 
     id_dir = root / "zips" / info.addon_id
     id_dir.mkdir(parents=True, exist_ok=True)
     canonical = id_dir / f"{info.addon_id}-{info.version}.zip"
     safe_copy2(info.zip_path, canonical)
+    normalize_package_root(canonical, info.addon_id)
 
     category = category_for(info)
 

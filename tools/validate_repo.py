@@ -177,6 +177,30 @@ def main() -> None:
             package = directory / str(addon_id) / f"{addon_id}-{version}.zip"
             if not package.is_file():
                 fail(f"advertised Kodi package is missing: {package.relative_to(ROOT)}")
+            try:
+                with zipfile.ZipFile(package) as archive:
+                    expected_member = f"{addon_id}/addon.xml"
+                    if expected_member not in archive.namelist():
+                        fail(
+                            "advertised Kodi package has the wrong internal root: "
+                            f"{package.relative_to(ROOT)} (expected {expected_member})"
+                        )
+                    unexpected_members = [
+                        member
+                        for member in archive.namelist()
+                        if member.replace("\\", "/").lstrip("/")
+                        and not member.replace("\\", "/").lstrip("/").startswith(f"{addon_id}/")
+                    ]
+                    if unexpected_members:
+                        fail(
+                            "advertised Kodi package contains files outside its add-on root: "
+                            f"{package.relative_to(ROOT)} ({unexpected_members[0]})"
+                        )
+                    internal_addon = ET.fromstring(archive.read(expected_member))
+            except (zipfile.BadZipFile, ET.ParseError) as error:
+                fail(f"advertised Kodi package is invalid: {package.relative_to(ROOT)}: {error}")
+            if internal_addon.get("id") != addon_id or internal_addon.get("version") != version:
+                fail(f"advertised Kodi package metadata differs from its catalog: {package.relative_to(ROOT)}")
         for addon_dir in (path for path in directory.iterdir() if path.is_dir()):
             direct_zips = sorted(addon_dir.glob("*.zip"))
             if not direct_zips:
