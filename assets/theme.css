@@ -80,15 +80,15 @@ main { width: min(1240px, calc(100% - 28px)); margin: 0 auto; padding: 28px 0 50
   letter-spacing: .005em;
   white-space: nowrap;
 }
-.brand-layer { position: absolute; inset: 0; display: block; width: 100%; height: 100%; font-kerning: none; font-variant-ligatures: none; font-weight: 400; white-space: nowrap; }
+.brand-layer { position: absolute; inset: 0; display: block; width: 100%; height: 100%; font-kerning: none; font-synthesis: none; font-variant-ligatures: none; font-weight: 400; letter-spacing: inherit; line-height: inherit; transform: none; transform-origin: 0 0; white-space: nowrap; }
 .brand-shadow { z-index: 2; color: #030303; font-family: "Dampfplatz", serif; text-shadow: 0 5px 16px rgba(0, 0, 0, .95); pointer-events: none; }
-.brand-solid { z-index: 1; color: #fff; font-family: "Dampfplatz Shadow", serif; text-shadow: 0 0 30px rgba(255, 255, 255, .16); will-change: transform; }
+.brand-solid { z-index: 1; color: #fff; font-family: "Dampfplatz Solid", serif; text-shadow: 0 0 30px rgba(255, 255, 255, .16); }
 .brand-x, .brand-r { color: var(--red-hot); text-shadow: 0 0 28px rgba(255, 36, 49, .48); }
 .brand-shadow .brand-x, .brand-shadow .brand-r { color: #030303; text-shadow: 0 5px 16px rgba(0, 0, 0, .95); }
 
 .terminal-stage { position: relative; flex: 1 1 240px; min-width: min(100%, 240px); height: clamp(32px, 4vw, 44px); margin-bottom: .35em; font-size: clamp(24px, 2.8vw, 36px); line-height: 1; white-space: nowrap; }
-.terminal-layer { position: absolute; inset: 0; display: block; width: 100%; height: 100%; color: #fff; white-space: nowrap; }
-.terminal-shadow { z-index: 2; color: #030303; font-family: "Dampfplatz Shadow", serif; pointer-events: none; }
+.terminal-layer { position: absolute; inset: 0; display: block; width: 100%; height: 100%; color: #fff; font-kerning: none; font-synthesis: none; font-variant-ligatures: none; font-weight: 400; letter-spacing: inherit; line-height: inherit; transform: none; transform-origin: 0 0; white-space: nowrap; }
+.terminal-shadow { z-index: 2; color: #030303; font-family: "Dampfplatz", serif; text-shadow: 0 3px 10px rgba(0, 0, 0, .95); pointer-events: none; }
 .terminal-solid { z-index: 1; font-family: "Dampfplatz Solid", serif; }
 .terminal-layer i { color: var(--red-hot); font-style: normal; animation: cursor-blink .78s steps(1, end) infinite; }
 @keyframes cursor-blink { 0%, 46% { opacity: 1; } 47%, 100% { opacity: 0; } }

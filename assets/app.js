@@ -167,29 +167,6 @@ async function typeTerminal() {
   }
 }
 
-function textBounds(element) {
-  const range = document.createRange();
-  range.selectNodeContents(element);
-  const bounds = range.getBoundingClientRect();
-  range.detach();
-  return bounds;
-}
-
-function alignBrandLayers() {
-  const upper = document.querySelector(".brand-shadow");
-  const lower = document.querySelector(".brand-solid");
-  if (!upper || !lower) return;
-  lower.style.transform = "none";
-  const upperBounds = textBounds(upper);
-  const lowerBounds = textBounds(lower);
-  if (!upperBounds.width || !lowerBounds.width) return;
-  const offsetX = upperBounds.left - lowerBounds.left;
-  const offsetY = upperBounds.top - lowerBounds.top;
-  const scaleX = upperBounds.width / lowerBounds.width;
-  lower.style.transformOrigin = "0 0";
-  lower.style.transform = `translate(${offsetX}px, ${offsetY}px) scaleX(${scaleX})`;
-}
-
 function boot() {
   const summary = document.getElementById("react-summary");
   if (summary) createRoot(summary).render(h("span", null, `${packageFiles.length} ZIP-Dateien online`));
@@ -214,9 +191,8 @@ function boot() {
   });
 
   window.anime?.({ targets: ".animate-target", opacity: [0, 1], translateY: [24, 0], delay: window.anime.stagger(120), duration: 760, easing: "easeOutCubic" });
-  document.fonts.ready.then(() => requestAnimationFrame(alignBrandLayers));
-  window.addEventListener("resize", alignBrandLayers, { passive: true });
-  typeTerminal();
+  const fontsReady = document.fonts?.ready ?? Promise.resolve();
+  fontsReady.then(typeTerminal);
 }
 
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
