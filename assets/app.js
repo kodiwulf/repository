@@ -104,7 +104,7 @@ function RepositoryBrowser() {
   }, [drawerOpen]);
 
   const root = path === "";
-  const title = root ? "Zwei Bereiche. Direkte ZIPs." : path === "repository" ? "repository/" : `${path}/`;
+  const title = root ? "Drei Bereiche. Direkte ZIPs." : path === "repository" ? "repository/" : `${path}/`;
 
   return h(React.Fragment, null,
     h("div", { className: "browser-toolbar" },
@@ -120,7 +120,9 @@ function RepositoryBrowser() {
         h("button", { className: `folder-card${drawerOpen ? " active" : ""}`, onClick: () => setDrawerOpen((open) => !open), "aria-expanded": drawerOpen, "aria-controls": "plugin-drawer" },
           h(FolderIcon), h("span", { className: "folder-copy" }, h("strong", null, "plugins/"), h("small", null, `${sections.length} Unterordner`)), h(Hamburger, { open: drawerOpen })),
         h("button", { className: "folder-card", onClick: () => navigate("repository") },
-          h(FolderIcon), h("span", { className: "folder-copy" }, h("strong", null, "repository/"), h("small", null, `${directFiles("repository").length} ZIP-Dateien`)), h("span", { className: "folder-arrow" }, "→"))
+          h(FolderIcon), h("span", { className: "folder-copy" }, h("strong", null, "repository/"), h("small", null, `${directFiles("repository").length} ZIP-Dateien`)), h("span", { className: "folder-arrow" }, "→")),
+        h("button", { className: "folder-card", onClick: () => navigate("script") },
+          h(FolderIcon), h("span", { className: "folder-copy" }, h("strong", null, "script/"), h("small", null, `${directFiles("script").length} ZIP-Dateien`)), h("span", { className: "folder-arrow" }, "→"))
       ),
       drawerOpen && h("nav", { id: "plugin-drawer", className: "plugin-drawer", "aria-label": "Plugin-Unterordner" },
         h("div", { className: "drawer-head" }, h(Hamburger, { open: true }), h("span", null, "plugins/")),
@@ -142,7 +144,7 @@ async function typeTerminal() {
   const shadow = document.querySelector("[data-terminal-shadow]");
   if (!solid || !shadow) return;
   const phrases = [
-    "plugin.video.xwulf",
+    "repository.kodi-wulf",
     "plugin.video.youtube",
     "program add-ons",
     "direct ZIP downloads",

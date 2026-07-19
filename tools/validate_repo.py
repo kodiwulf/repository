@@ -14,8 +14,12 @@ from urllib.parse import quote
 ROOT = Path(__file__).resolve().parents[1]
 TECHNICAL_ROOTS = {".github", "Repository", "_data", "_layouts", "_site", "assets", "node_modules", "tools"}
 LEGACY_MIRROR_BRANCHES = {("repository", "plugins"), ("repository", "repository"), ("repository", "script")}
-NAVIGATION_ROOTS = {"plugins", "repository"}
-INSTALLER_NAME = "repository.kodiwulf-1.0.1.zip"
+NAVIGATION_ROOTS = {"plugins", "repository", "script"}
+REPO_ID = "repository.kodi-wulf"
+REPO_NAME = "Kodi-Wulf"
+REPO_VERSION = "1.33.7a"
+INSTALLER_NAME = f"{REPO_ID}-v{REPO_VERSION}.zip"
+BASE_URL = "https://kodi-wulf.github.io/repository/"
 
 
 def fail(message: str) -> None:
@@ -25,7 +29,9 @@ def fail(message: str) -> None:
 
 def is_visible(path: Path) -> bool:
     relative = path.relative_to(ROOT)
-    if path.suffix.lower() == ".zip" and len(relative.parts) == 2 and relative.parts[0] == "repository" and path.name.startswith("repository.kodiwulf-"):
+    if path.suffix.lower() == ".zip" and len(relative.parts) == 2 and relative.parts[0] == "repository" and (
+        path.name.startswith(f"{REPO_ID}-v") or path.name.startswith("repository.kodiwulf-")
+    ):
         return False
     if relative.parts and relative.parts[0] == "Repository":
         return False
@@ -33,6 +39,19 @@ def is_visible(path: Path) -> bool:
 
 
 def main() -> None:
+    removed_addon_marker = "x" + "wulf"
+    searchable_suffixes = {".html", ".js", ".json", ".md", ".py", ".xml", ".yml", ".yaml"}
+    for path in ROOT.rglob("*"):
+        relative = path.relative_to(ROOT)
+        if ".git" in relative.parts:
+            continue
+        if removed_addon_marker in path.name.lower():
+            fail(f"removed add-on path still exists: {relative}")
+        if path.is_file() and path.suffix.lower() in searchable_suffixes:
+            text = path.read_text(encoding="utf-8", errors="ignore")
+            if removed_addon_marker in text.lower():
+                fail(f"removed add-on reference still exists: {relative}")
+
     if (ROOT / ".nojekyll").exists():
         fail(".nojekyll must not exist because Jekyll rendering is enabled")
     if not (ROOT / "_config.yml").is_file():
@@ -63,19 +82,25 @@ def main() -> None:
     with zipfile.ZipFile(root_zips[0]) as archive:
         names = set(archive.namelist())
         required_members = {
-            "repository.kodiwulf/addon.xml",
-            "repository.kodiwulf/icon.png",
-            "repository.kodiwulf/fanart.png",
+            f"{REPO_ID}/addon.xml",
+            f"{REPO_ID}/icon.png",
+            f"{REPO_ID}/fanart.png",
         }
         missing = required_members - names
         if missing:
             fail(f"installer artwork or metadata is missing: {sorted(missing)[0]}")
-        if archive.read("repository.kodiwulf/icon.png") != (ROOT / "icon.png").read_bytes():
+        if archive.read(f"{REPO_ID}/icon.png") != (ROOT / "icon.png").read_bytes():
             fail("installer icon.png does not match the selected Kodi icon")
-        if archive.read("repository.kodiwulf/fanart.png") != (ROOT / "bg.png").read_bytes():
+        if archive.read(f"{REPO_ID}/fanart.png") != (ROOT / "bg.png").read_bytes():
             fail("installer fanart.png does not match the selected Kodi banner")
-        addon_xml = archive.read("repository.kodiwulf/addon.xml").decode("utf-8")
-        for required in ('version="1.0.1"', "<icon>icon.png</icon>", "<fanart>fanart.png</fanart>"):
+        addon_xml = archive.read(f"{REPO_ID}/addon.xml").decode("utf-8")
+        for required in (
+            f'id="{REPO_ID}"',
+            f'name="{REPO_NAME}"',
+            f'version="{REPO_VERSION}"',
+            "<icon>icon.png</icon>",
+            "<fanart>fanart.png</fanart>",
+        ):
             if required not in addon_xml:
                 fail(f"installer metadata is missing: {required}")
         for category in ("plugins/program", "plugins/video", "repository", "script/module"):
@@ -90,6 +115,15 @@ def main() -> None:
     for required in ("bootstrap@5.3.8", "jquery-3.7.1.min.js", "vue@3", "anime.min.js", "d3@7", "assets/app.js", "assets/svelte-status.js"):
         if required not in index:
             fail(f"missing frontend resource: {required}")
+    if "how-to-use.html" not in index:
+        fail("How-To-Use menu link is missing from the root page")
+    how_to = ROOT / "how-to-use.html"
+    if not how_to.is_file():
+        fail("How-To-Use page is missing")
+    how_to_text = how_to.read_text(encoding="utf-8")
+    for required in (BASE_URL, INSTALLER_NAME, "Dateimanager", "Aus ZIP-Datei installieren"):
+        if required not in how_to_text:
+            fail(f"How-To-Use page is missing: {required}")
     for href in (*(quote(path.name, safe="._-~") + "/" for path in public_roots), quote(root_zips[0].name, safe="/._-~")):
         if f'href="{href}"' not in index:
             fail(f"missing static Kodi root link: {href}")
@@ -97,7 +131,7 @@ def main() -> None:
     if not static_nav:
         fail("static Kodi root navigation is missing")
     static_hrefs = set(re.findall(r'href="([^"]+)"', static_nav.group(1)))
-    expected_hrefs = {"plugins/", "repository/", INSTALLER_NAME}
+    expected_hrefs = {"plugins/", "repository/", "script/", INSTALLER_NAME}
     if static_hrefs != expected_hrefs:
         fail(f"unexpected Kodi root entries: {sorted(static_hrefs ^ expected_hrefs)}")
     data_names = {item["name"] for item in tree.get("roots", [])}
@@ -114,9 +148,12 @@ def main() -> None:
     for legacy in ("plugins", "repository", "script"):
         if (ROOT / "repository" / legacy).exists():
             fail(f"obsolete Kodi mirror still exists: repository/{legacy}")
-    obsolete_installers = sorted((ROOT / "repository").glob("repository.kodiwulf-*.zip"))
+    obsolete_installers = sorted({
+        *list((ROOT / "repository").glob("repository.kodiwulf-*.zip")),
+        *list((ROOT / "repository").glob(f"{REPO_ID}-v*.zip")),
+    })
     if obsolete_installers:
-        fail(f"obsolete nested KodiWulf installer exists: {obsolete_installers[0].relative_to(ROOT)}")
+        fail(f"obsolete nested Kodi-Wulf installer exists: {obsolete_installers[0].relative_to(ROOT)}")
     for item in json.loads(browser_data.removeprefix("window.KODIWULF_FILES=").split(";", 1)[0]):
         if "size" not in item or "size_label" not in item:
             fail(f"ZIP size metadata is missing: {item.get('path', '?')}")
@@ -163,6 +200,9 @@ def main() -> None:
     hashes = [hashlib.sha256(path.read_bytes()).hexdigest() for path in classified]
     if len(hashes) != len(set(hashes)):
         fail("duplicate ZIP content exists in the public category structure")
+    pending_imports = sorted((ROOT / "zips").rglob("*.zip")) if (ROOT / "zips").is_dir() else []
+    if pending_imports:
+        fail(f"unprocessed ZIP remains in zips/: {pending_imports[0].relative_to(ROOT)}")
     plugins_index = (ROOT / "plugins" / "index.html").read_text(encoding="utf-8")
     for child in sorted(path for path in (ROOT / "plugins").iterdir() if path.is_dir()):
         if f'href="{quote(child.name, safe="._-~")}/"' not in plugins_index:

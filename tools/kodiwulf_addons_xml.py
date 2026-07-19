@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
 """
-KodiWulf addons.xml builder.
+Kodi-Wulf addons.xml builder.
 
 Erzeugt addons.xml und addons.xml.md5 idempotent aus:
   - ZIPs/VIDEO/*.zip
   - ZIPs/PROGRAMM/*.zip
   - ZIPs/REPOSITORY/*.zip
-  - repository.kodiwulf/repository.kodiwulf-*.zip
+  - zips/**/*.zip
 
 Wichtig:
-Die generierte repository.kodiwulf-ZIP muss zusätzlich aufgenommen werden,
-weil sie nicht in ZIPs/ liegt, aber für Kodi-Repository-Updates in addons.xml
-stehen soll.
+Die installierbare Repository-ZIP wird separat durch tools/build.py erzeugt.
 """
 
 from __future__ import annotations

@@ -21,7 +21,6 @@ GitHub Pages:
 
 - [plugin.program.theredwizard/](plugin.program.theredwizard/)
 - [plugin.video.vavooto/](plugin.video.vavooto/)
-- [plugin.video.xwulf/](plugin.video.xwulf/)
 - [plugin.video.youtube/](plugin.video.youtube/)
 - [repository.Magnetic/](repository.Magnetic/)
 - [repository.Rising.Tides/](repository.Rising.Tides/)

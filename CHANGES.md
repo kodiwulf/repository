@@ -2,6 +2,13 @@
 # CHANGES
 # # # # # # # # # #
 
+## 1.33.7a - 2026-07-19
+
+- Renamed the generated repository add-on to `repository.kodi-wulf` / `Kodi-Wulf`.
+- Added `icon.png` and `fanart.png` to the installable repository ZIP.
+- Added the German How-To-Use page for Kodi's file manager workflow.
+- Imported and classified all ZIP packages from the local `zips/` inbox.
+
 ## 0.1.1 - 2026-06-20
 
 - Stabilized generated addons.xml whitespace and MD5 output.

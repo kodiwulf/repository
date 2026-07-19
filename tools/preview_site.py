@@ -48,7 +48,7 @@ def main() -> None:
     parser.add_argument("--port", type=int, default=8767)
     args = parser.parse_args()
     handler = lambda *items, **kwargs: PreviewHandler(*items, directory=str(ROOT), **kwargs)
-    print(f"KodiWulf preview: http://127.0.0.1:{args.port}/")
+    print(f"Kodi-Wulf preview: http://127.0.0.1:{args.port}/")
     ThreadingHTTPServer(("127.0.0.1", args.port), handler).serve_forever()
 
 

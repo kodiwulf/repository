@@ -1,12 +1,12 @@
 # # # # # # # # # # # # # # #
-# KodiWulf Update Process
+# Kodi-Wulf Update Process
 # # # # # # # # # # # # # # #
 
 ## 1. Place source ZIPs locally
 
 Source ZIPs are local build inputs and should not be committed.
 
-    incoming/
+    zips/
 
 The folder is temporary and may be absent while it is empty.
 
@@ -23,14 +23,13 @@ Run:
 
 Expected repository metadata:
 
-    Add-ons: 18
-    repository.kodiwulf 0.1.0: present
+    repository.kodi-wulf 1.33.7a: present
     addons.xml.md5: matches addons.xml
 
 ## 4. Commit and push
 
     git add -A -- .
-    git commit -m "fix(repo): update KodiWulf docs"
+    git commit -m "feat(repo): update Kodi-Wulf packages"
     git push origin main
 
 ## 5. Online checks
@@ -38,4 +37,4 @@ Expected repository metadata:
     curl -L -I "https://kodi-wulf.github.io/repository/"
     curl -L -I "https://kodi-wulf.github.io/repository/addons.xml"
     curl -L -I "https://kodi-wulf.github.io/repository/addons.xml.md5"
-    curl -L -I "https://kodi-wulf.github.io/repository/repository.kodiwulf-0.1.0.zip"
+    curl -L -I "https://kodi-wulf.github.io/repository/repository.kodi-wulf-v1.33.7a.zip"
