@@ -1,62 +1,473 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-  <addon id="plugin.program.theredwizard" name="[COLOR red]The Red Wizard[/COLOR]" version="4.3.0" provider-name="Slam, Sarge, Funsterbe, BYB, Zaxxon709, [COLOR red]The Red Wizard[/COLOR]">
-    
-	
+  <addon id="plugin.program.kodi.chat.widget" name="Kodi Chat Widget" version="1.0.0" provider-name="PlayForFun">
+
+
     <requires>
-      
-		
-      <import addon="xbmc.python" version="3.0.1"/>
-      
-	
+
+
+      <import addon="xbmc.python" version="3.0.0"/>
+
+
     </requires>
-    
-	
+
+
+
     <extension point="xbmc.python.pluginsource" library="addon.py">
-      
-		
-      <provides>executable</provides>
-      
-	
+
+
+      <provides>image video audio executable</provides>
+
+
     </extension>
-    
-	
-    <extension point="xbmc.service" library="service.py"/>
-    
-	
+
+
+
     <extension point="xbmc.addon.metadata">
-      
-		
-      <summary lang="en_GB">[COLOR red]The Red Wizard for Kodi 21 Omega and Kodi 22 Piers[/COLOR]</summary>
-      
-		
-      <description lang="en_GB">[COLOR red]The Red Wizard for installing, updating and maintaining The Red Wizard Kodi 21 Omega and Kodi 22 Piers builds[/COLOR]</description>
-      
-		
-      <disclaimer lang="en_GB">[COLOR red]The author of this add-on does not host any content and has no affiliation with the content providers[/COLOR]</disclaimer>
-      
-		
-      <language>en</language>
-      
-		
+
+
+      <summary lang="de">Kodi Chat Widget – Nachrichten auf dem Homescreen</summary>
+
+
+      <description lang="de">Zeigt die letzten Chat-Nachrichten als Widget auf dem Kodi-Homescreen. Nur lesen – zum Schreiben das Kodi Chat Addon öffnen.</description>
+
+
+      <assets>
+
+
+        <icon>icon.png</icon>
+
+
+      </assets>
+
+
       <platform>all</platform>
-      
-		
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="plugin.program.kodiroll" name="Kodiroll Wizard" version="2.6" provider-name="PlayForFun">
+
+
+    <requires>
+
+
+      <import addon="xbmc.python" version="3.0.0"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+
+
+      <provides>executable</provides>
+
+
+    </extension>
+
+
+    <extension point="xbmc.service" library="service.py"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <summary lang="en_GB"/>
+
+
+      <description lang="en_GB"/>
+
+
+      <disclaimer lang="en_GB"/>
+
+
+      <language>en</language>
+
+
+      <platform>all</platform>
+
+
       <license>GPL-2.0-or-later</license>
-      
-		
+
+
+      <forum/>
+
+
+      <website/>
+
+
+      <email/>
+
+
+      <source/>
+
+
+      <news/>
+
+
+      <assets>
+
+
+        <icon>resources/icon.png</icon>
+
+
+        <fanart>resources/fanart.jpg</fanart>
+
+
+        <banner/>
+
+
+        <clearlogo/>
+
+
+        <screenshot/>
+
+
+      </assets>
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="plugin.program.lazymaintenance" name="Lazy Maintenance" version="4.5" provider-name="Akisame">
+
+
+    <requires>
+
+
+      <import addon="xbmc.python" version="3.0.0"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+
+
+      <provides>executable</provides>
+
+
+    </extension>
+
+
+    <extension point="xbmc.service" library="service.py" start="startup"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <summary lang="en_GB">Simple maintenance tools for Kodi.</summary>
+
+
+      <description lang="en_GB">Simple maintenance tools for Kodi.</description>
+
+
+      <platform>all</platform>
+
+
+      <assets>
+
+
+        <icon>icon.jpg</icon>
+
+
+        <fanart>fanart.jpg</fanart>
+
+
+      </assets>
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="plugin.program.robinhood" name="[B][COLOR chartreuse]RobinHood [B][COLOR white] Wizard[/B][/COLOR]" version="0.2.7.7" provider-name="Robin Hood">
+
+
+    <requires>
+
+
+      <import addon="xbmc.python" version="3.0.0"/>
+
+
+      <import addon="script.module.six"/>
+
+
+      <import addon="script.module.kodi-six"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.pluginsource" library="default.py">
+
+
+      <provides>executable</provides>
+
+
+    </extension>
+
+
+    <extension point="xbmc.service" library="startup.py" start="startup"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <summary lang="en">Robin Hood 19 Matrix GUI Wizard</summary>
+
+
+      <description lang="en">In this wizard you will find the latest Matrix GUI Wizard and Tools. Thanks whufclee at Robin Hood, GUYS at TI, Brackets for the app installer!! RomanVM for the PyXBMCt libs. Fire TV Guru for the PyXBMCt layout  Also a very special Thanks to Surfacingx for the base code used in this add-on.</description>
+
+
+      <platform>all</platform>
+
+
+      <assets>
+
+
+        <icon>icon.png</icon>
+
+
+        <fanart>fanart.jpg</fanart>
+
+
+        <banner/>
+
+
+        <clearlogo/>
+
+
+        <screenshot/>
+
+
+      </assets>
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="plugin.program.sfvip19wizard" name="[B][COLOR red]SF 19[B][COLOR blue]VIP[B][COLOR with] WIZARD[/B][/COLOR]" version="1.0.6" provider-name="SFVIP, RH">
+
+
+    <requires>
+
+
+      <import addon="xbmc.python" version="3.0.0"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+
+
+      <provides>executable</provides>
+
+
+    </extension>
+
+
+    <extension point="xbmc.service" library="service.py"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <summary lang="en_GB">SFVIP 19 Wizard is a lightweight template for installing builds on Kodi 19 Matrix. Has some code from Aftermath Wizard by Surfacingx. Skin Switch by OpenELEQ. Base code by RH. Credits to them and all others who contributed. Please report any bugs to @SFVIP on Forum.</summary>
+
+
+      <description lang="en_GB">Kodi 19 Wizard</description>
+
+
+      <disclaimer lang="en_GB">This Addon contains no content</disclaimer>
+
+
+      <language>en</language>
+
+
+      <platform>all</platform>
+
+
+      <license>GPL-2.0-or-later</license>
+
+
+      <forum/>
+
+
+      <website/>
+
+
+      <email/>
+
+
+      <source/>
+
+
+      <news>1.0.5 - Bugfixes. 1.0.3 - Added download progress to build install. 1.0.2 - Added option to encode the buildfile variable to a base64 string. 1.0.1 - Added the option to use json for build file. 1.0.0 - Basic clean up. Ready for official release. 0.0.9 - Added Save Menu, 0.0.8 - Bug fixes, 0.0.7 - Added Advanced Settings presets to Maintenance. 0.0.6 - Added Clear Packages, the first of the Maintenance section.
+0.0.5 - Bug fixes
+0.0.4 - Added enabling of disabled addons on build first run. Added update repos on build first run.
+0.0.3 - Added prompt notifying when new version of installed build is available.
+0.0.2 - Initial Release
+		</news>
+
+
+      <assets>
+
+
+        <icon>resources/icon.png</icon>
+
+
+        <fanart>resources/fanart.jpg</fanart>
+
+
+        <banner/>
+
+
+        <clearlogo/>
+
+
+        <screenshot/>
+
+
+      </assets>
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="plugin.program.simple.favourites" version="0.1.17" name="Simple Favourites" provider-name="primaeval">
+
+
+    <requires>
+
+
+      <import addon="xbmc.python" version="3.0.0"/>
+
+
+      <import addon="script.module.xbmcswift2"/>
+
+
+      <import addon="script.module.requests"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.pluginsource" library="main.py">
+
+
+      <provides>executable</provides>
+
+
+    </extension>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <summary lang="en">Simple Favourites</summary>
+
+
+      <description lang="en"/>
+
+
+      <disclaimer lang="en">.</disclaimer>
+
+
+    </extension>
+
+
+    <extension point="kodi.context.item">
+
+
+      <menu id="kodi.core.main">
+
+
+
+        <item library="add_item_context.py">
+
+
+          <label>Add to simple favorites</label>
+
+
+          <visible>true</visible>
+
+
+        </item>
+
+
+
+      </menu>
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="plugin.program.theredwizard" name="[COLOR red]The Red Wizard[/COLOR]" version="4.3.0" provider-name="Slam, Sarge, Funsterbe, BYB, Zaxxon709, [COLOR red]The Red Wizard[/COLOR]">
+
+
+    <requires>
+
+
+      <import addon="xbmc.python" version="3.0.1"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+
+
+      <provides>executable</provides>
+
+
+    </extension>
+
+
+    <extension point="xbmc.service" library="service.py"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <summary lang="en_GB">[COLOR red]The Red Wizard for Kodi 21 Omega and Kodi 22 Piers[/COLOR]</summary>
+
+
+      <description lang="en_GB">[COLOR red]The Red Wizard for installing, updating and maintaining The Red Wizard Kodi 21 Omega and Kodi 22 Piers builds[/COLOR]</description>
+
+
+      <disclaimer lang="en_GB">[COLOR red]The author of this add-on does not host any content and has no affiliation with the content providers[/COLOR]</disclaimer>
+
+
+      <language>en</language>
+
+
+      <platform>all</platform>
+
+
+      <license>GPL-2.0-or-later</license>
+
+
       <forum>https://t.me/+XiuBf9KvPfw2MzVk</forum>
-      
-		
+
+
       <website>https://redwizard.xyz/</website>
-       
-		
+
+
       <email>info@redwizard.xyz</email>
-      
-		
+
+
       <source>https://github.com/Slamious/plugin.program.simplewizard</source>
-      
-		
+
+
       <news>[COLOR red]2026-05-02
 - Reorganisation and rewrite of menus:
  * (Kodi) Maintenance and (Wizard) Tools separated into separate submenus
@@ -65,52 +476,52 @@
  * Enable/Disable Skin Override Protection made visible (Tools submenu, thanks Zaxxon709)
 - Supports Kodi 21 Omega and Kodi 22 Piers
 - The Red Wizard has a new home! Go to https://redwizard.xyz[/COLOR]</news>
-      
-		
+
+
       <assets>
-        
-				
+
+
         <icon>resources/media/icon.png</icon>
-        
-				
+
+
         <fanart>resources/media/fanart.jpg</fanart>
-        
-				
+
+
         <screenshot>resources/media/screenshot01.jpg</screenshot>
-        
-				
+
+
         <screenshot>resources/media/screenshot02.jpg</screenshot>
-        
-				
+
+
         <screenshot>resources/media/screenshot03.jpg</screenshot>
-        
-				
+
+
         <screenshot>resources/media/screenshot04.jpg</screenshot>
-        
-				
+
+
         <screenshot>resources/media/screenshot05.jpg</screenshot>
-        
-				
+
+
         <screenshot>resources/media/screenshot06.jpg</screenshot>
-        
-				
+
+
         <screenshot>resources/media/screenshot07.jpg</screenshot>
-        
-				
+
+
         <screenshot>resources/media/screenshot08.jpg</screenshot>
-        
-				
+
+
         <screenshot>resources/media/screenshot09.jpg</screenshot>
-        
-				
+
+
         <screenshot>resources/media/screenshot10.jpg</screenshot>
-        
-		
+
+
       </assets>
-      
-	
+
+
     </extension>
-    
+
 
   </addon>
 </addons>

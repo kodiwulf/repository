@@ -2,8 +2,10 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import hashlib
 import html
+import io
 import json
 import re
 import shutil
@@ -19,8 +21,11 @@ from kodiwulf_build_repo_core import AddonInfo, parse_addon_zip, pretty_xml
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BASE_URL = "https://kodi-wulf.github.io/repository/"
-DEFAULT_REPO_VERSION = "1.0.1"
-NAVIGATION_ROOTS = {"plugins", "repository"}
+REPO_ID = "repository.kodi-wulf"
+REPO_NAME = "Kodi-Wulf"
+REPO_PROVIDER = "Kodi-Wulf"
+DEFAULT_REPO_VERSION = "1.33.7a"
+NAVIGATION_ROOTS = {"plugins", "repository", "script"}
 SKIP_PARTS = {".git", ".drdebug-backups", "__pycache__"}
 TECHNICAL_ROOTS = {
     ".github", "Repository", "_data", "_layouts", "_site", "assets", "node_modules", "tools"
@@ -29,8 +34,43 @@ LEGACY_MIRROR_BRANCHES = {("repository", "plugins"), ("repository", "repository"
 LEGACY_MIRROR_NAMES = {"plugins", "repository", "script"}
 
 
+def installer_name(version: str = DEFAULT_REPO_VERSION) -> str:
+    return f"{REPO_ID}-v{version}.zip"
+
+
+def installer_paths(root: Path) -> list[Path]:
+    patterns = (f"{REPO_ID}-v*.zip", "repository.kodiwulf-*.zip")
+    return sorted({path for pattern in patterns for path in root.glob(pattern) if path.is_file()})
+
+
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def archive_import(path: Path, root: Path, backup: Path) -> Path:
+    rel = path.relative_to(root)
+    archived = backup / rel
+    archived.parent.mkdir(parents=True, exist_ok=True)
+    if archived.exists():
+        archived = archived.with_name(archived.stem + "-" + digest(path)[:10] + archived.suffix)
+    shutil.move(str(path), str(archived))
+    return archived
+
+
+def remove_empty_import_tree(root: Path) -> None:
+    import_root = root / "zips"
+    if not import_root.is_dir():
+        return
+    directories = sorted((path for path in import_root.rglob("*") if path.is_dir()), key=lambda path: len(path.parts), reverse=True)
+    for directory in directories:
+        try:
+            directory.rmdir()
+        except OSError:
+            pass
+    try:
+        import_root.rmdir()
+    except OSError:
+        pass
 
 
 def cleanup_legacy_mirrors(root: Path) -> None:
@@ -45,11 +85,12 @@ def cleanup_legacy_mirrors(root: Path) -> None:
             raise RuntimeError(f"unsafe legacy cleanup target: {resolved}")
         removed_files += sum(1 for path in target.rglob("*") if path.is_file())
         shutil.rmtree(target)
-    for obsolete_installer in (root / "repository").glob("repository.kodiwulf-*.zip"):
-        if obsolete_installer.parent.resolve() != mirror_parent:
-            raise RuntimeError(f"unsafe obsolete installer target: {obsolete_installer}")
-        obsolete_installer.unlink()
-        removed_files += 1
+    for pattern in (f"{REPO_ID}-v*.zip", "repository.kodiwulf-*.zip"):
+        for obsolete_installer in (root / "repository").glob(pattern):
+            if obsolete_installer.parent.resolve() != mirror_parent:
+                raise RuntimeError(f"unsafe obsolete installer target: {obsolete_installer}")
+            obsolete_installer.unlink()
+            removed_files += 1
     print(f"OK: removed {removed_files} files from legacy repository mirrors")
 
 
@@ -101,7 +142,7 @@ def candidates(root: Path) -> list[Path]:
             continue
         if len(rel.parts) > 1 and (rel.parts[0], rel.parts[1]) in LEGACY_MIRROR_BRANCHES:
             continue
-        if len(rel.parts) == 1 and path.name.startswith("repository.kodiwulf-"):
+        if len(rel.parts) == 1 and path in installer_paths(root):
             continue
         result.append(path)
     return sorted(result)
@@ -128,7 +169,7 @@ layout: null
 <!doctype html>
 <html lang="de" data-bs-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(title)}</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"><link rel="stylesheet" href="/repository/assets/theme.css"></head>
-<body><main><header class="hero compact"><p class="eyebrow">GitHub Pages Kodi Repository</p><h1><span class="x">x</span>Wulf Repository</h1><p class="subtitle">{html.escape(title)}</p></header><section class="panel"><div class="panel-head"><h2>Index</h2><a class="pill" href="/repository/">root</a></div><div class="table-responsive"><table><thead><tr><th>Typ</th><th>Name</th><th>Art</th></tr></thead><tbody>{rows}</tbody></table></div></section></main></body></html>
+<body><main><nav class="site-menu" aria-label="Hauptmenü"><a class="site-brand" href="/repository/">Kodi-Wulf</a><div><a href="/repository/">Repository</a><a href="/repository/how-to-use.html">How-To-Use</a></div></nav><header class="hero compact"><p class="eyebrow">GitHub Pages Kodi Repository</p><h1>Kodi-Wulf Repository</h1><p class="subtitle">{html.escape(title)}</p></header><section class="panel"><div class="panel-head"><h2>Index</h2><a class="pill" href="/repository/">root</a></div><div class="table-responsive"><table><thead><tr><th>Typ</th><th>Name</th><th>Art</th></tr></thead><tbody>{rows}</tbody></table></div></section></main></body></html>
 """
 
 
@@ -155,7 +196,9 @@ def visible_zips(directory: Path, root: Path) -> list[Path]:
     result = []
     for path in directory.rglob("*.zip"):
         relative = path.relative_to(root)
-        if len(relative.parts) == 2 and relative.parts[0] == "repository" and path.name.startswith("repository.kodiwulf-"):
+        if len(relative.parts) == 2 and relative.parts[0] == "repository" and (
+            path.name.startswith(f"{REPO_ID}-v") or path.name.startswith("repository.kodiwulf-")
+        ):
             continue
         if is_visible_directory(path.parent, root):
             result.append(path)
@@ -195,7 +238,7 @@ def ensure_generic_index(directory: Path, root: Path) -> None:
         (zip_path.name, "ZIP", zip_path.relative_to(directory).as_posix())
         for zip_path in sorted(directory.rglob("*.zip"), key=lambda item: item.name.lower())
     )
-    (directory / "index.html").write_text(index_document(f"KodiWulf / {directory.relative_to(root).as_posix()}", entries), encoding="utf-8")
+    (directory / "index.html").write_text(index_document(f"Kodi-Wulf / {directory.relative_to(root).as_posix()}", entries), encoding="utf-8")
 
 
 def write_browse_indexes(root: Path) -> None:
@@ -217,7 +260,7 @@ def write_browse_indexes(root: Path) -> None:
             key=lambda path: path.name.lower(),
         )
         entries = [(f"{child.name}/", "Ordner", f"{child.name}/") for child in children]
-        (parent / "index.html").write_text(index_document(f"KodiWulf / {parent_name}", entries), encoding="utf-8")
+        (parent / "index.html").write_text(index_document(f"Kodi-Wulf / {parent_name}", entries), encoding="utf-8")
         for child in children:
             ensure_generic_index(child, root)
             for addon_dir in (
@@ -230,7 +273,7 @@ def write_browse_indexes(root: Path) -> None:
 
 def write_site_root(root: Path) -> None:
     items = []
-    for zip_path in sorted(root.glob("repository.kodiwulf-*.zip")):
+    for zip_path in installer_paths(root):
         items.append({"path": zip_path.name, "name": zip_path.name, "url": quote(zip_path.name, safe="/._-~"), "category": "installer", "size": zip_path.stat().st_size, "size_label": format_size(zip_path.stat().st_size)})
     roots = [directory for directory in public_roots(root) if directory.name in NAVIGATION_ROOTS]
     tree_roots = []
@@ -267,10 +310,10 @@ def write_site_root(root: Path) -> None:
     )
     installer_links = "\n".join(
         f'<a href="{quote(zip_path.name, safe="/._-~")}">{html.escape(zip_path.name)}</a>'
-        for zip_path in sorted(root.glob("repository.kodiwulf-*.zip"))
+        for zip_path in installer_paths(root)
     )
-    installers = sorted(root.glob("repository.kodiwulf-*.zip"))
-    installer_name = installers[-1].name if installers else f"repository.kodiwulf-{DEFAULT_REPO_VERSION}.zip"
+    installers = installer_paths(root)
+    current_installer = installers[-1].name if installers else installer_name()
     kodi_links = "\n".join(part for part in (static_links, installer_links) if part)
     root_doc = """---
 layout: null
@@ -281,23 +324,27 @@ layout: null
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>KodiWulf Repository</title>
+  <title>Kodi-Wulf Repository</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="{{ '/assets/theme.css' | relative_url }}">
 </head>
 <body>
 <nav class="kodi-static" aria-label="Kodi ZIP index">__KODI_LINKS__</nav>
 <main>
+  <nav class="site-menu" aria-label="Hauptmenü">
+    <a class="site-brand" href="{{ '/' | relative_url }}">Kodi-Wulf</a>
+    <div><a href="{{ '/' | relative_url }}">Repository</a><a href="{{ '/how-to-use.html' | relative_url }}">How-To-Use</a></div>
+  </nav>
   <header class="hero hero-banner animate-target">
     <div class="hero-scrim"></div>
     <div class="hero-content">
       <p class="eyebrow">GitHub Pages · Kodi Repository</p>
       <div class="brand-line">
-        <h1 class="brand-stage" aria-label="xWulf Repository">
-          <span class="brand-layer brand-shadow" aria-hidden="true"><span class="brand-x">x</span>Wulf <span class="brand-r">R</span>epository</span>
-          <span class="brand-layer brand-solid"><span class="brand-x">x</span>Wulf <span class="brand-r">R</span>epository</span>
+        <h1 class="brand-stage" aria-label="Kodi-Wulf Repository">
+          <span class="brand-layer brand-shadow" aria-hidden="true">Kodi-<span class="brand-x">W</span>ulf <span class="brand-r">R</span>epository</span>
+          <span class="brand-layer brand-solid">Kodi-<span class="brand-x">W</span>ulf <span class="brand-r">R</span>epository</span>
         </h1>
-        <div class="terminal-stage" aria-live="polite" aria-label="KodiWulf Features">
+        <div class="terminal-stage" aria-live="polite" aria-label="Kodi-Wulf Features">
           <span class="terminal-layer terminal-shadow" aria-hidden="true"><span data-terminal-shadow></span><i>_</i></span>
           <span class="terminal-layer terminal-solid"><span data-terminal-solid></span><i>_</i></span>
         </div>
@@ -310,7 +357,7 @@ layout: null
     </div>
   </header>
 
-  <section class="browser-shell animate-target" aria-label="KodiWulf ZIP Browser">
+  <section class="browser-shell animate-target" aria-label="Kodi-Wulf ZIP Browser">
     <div class="browser-heading">
       <div><p class="eyebrow">Install from ZIP</p><h2>Repository Browser</h2></div>
       <div id="vue-runtime" class="runtime-pill">Navigation bereit</div>
@@ -321,7 +368,7 @@ layout: null
   <nav class="jekyll-fallback" aria-label="Jekyll Navigation">
     {% for node in site.data.repository_tree.roots %}<a href="{{ node.href | relative_url }}">{{ node.name }}/</a>{% endfor %}
   </nav>
-  <footer><span id="svelte-status">KodiWulf Repository wird initialisiert …</span></footer>
+  <footer><span id="svelte-status">Kodi-Wulf Repository wird initialisiert …</span></footer>
 </main>
 
 <noscript><p class="noscript">JavaScript erweitert die Website. Kodi und die Jekyll-Ordnerlinks bleiben ohne JavaScript verwendbar.</p></noscript>
@@ -336,9 +383,54 @@ layout: null
 </body></html>
 """
     root_doc = root_doc.replace("__KODI_LINKS__", kodi_links)
-    root_doc = root_doc.replace("__INSTALLER__", quote(installer_name, safe="/._-~"))
-    root_doc = root_doc.replace("__VERSION__", installer_name.removeprefix("repository.kodiwulf-").removesuffix(".zip"))
+    root_doc = root_doc.replace("__INSTALLER__", quote(current_installer, safe="/._-~"))
+    root_doc = root_doc.replace("__VERSION__", current_installer.removeprefix(f"{REPO_ID}-").removesuffix(".zip"))
     (root / "index.html").write_text(root_doc, encoding="utf-8")
+    write_how_to_use(root, current_installer)
+
+
+def write_how_to_use(root: Path, current_installer: str) -> None:
+    document = f"""---
+layout: null
+---
+<!doctype html>
+<html lang="de" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>How-To-Use · Kodi-Wulf Repository</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{{{ '/assets/theme.css' | relative_url }}}}">
+</head>
+<body><main>
+  <nav class="site-menu" aria-label="Hauptmenü">
+    <a class="site-brand" href="{{{{ '/' | relative_url }}}}">Kodi-Wulf</a>
+    <div><a href="{{{{ '/' | relative_url }}}}">Repository</a><a aria-current="page" href="{{{{ '/how-to-use.html' | relative_url }}}}">How-To-Use</a></div>
+  </nav>
+  <article class="howto-shell">
+    <header class="howto-header"><p class="eyebrow">Kodi FileManager</p><h1>Kodi-Wulf installieren</h1><p>Die Quelle einmal im Datei-Manager eintragen, danach die Repository-ZIP installieren.</p></header>
+    <section class="howto-panel"><h2>1. Dateiquelle hinzufügen</h2><ol class="step-list">
+      <li>In Kodi <strong>Einstellungen</strong> öffnen und <strong>Dateimanager</strong> wählen.</li>
+      <li><strong>Quelle hinzufügen</strong> und anschließend <strong>&lt;Keine&gt;</strong> auswählen.</li>
+      <li>Diese Adresse exakt eingeben: <code class="code-value">{html.escape(DEFAULT_BASE_URL)}</code></li>
+      <li>Als Namen <strong>Kodi-Wulf</strong> eintragen und mit <strong>OK</strong> bestätigen.</li>
+    </ol></section>
+    <section class="howto-panel"><h2>2. Repository-ZIP installieren</h2><ol class="step-list">
+      <li>Zu <strong>Add-ons → Aus ZIP-Datei installieren</strong> wechseln.</li>
+      <li>Falls Kodi fragt, die Installation aus unbekannten Quellen in den Systemeinstellungen erlauben.</li>
+      <li>Die Quelle <strong>Kodi-Wulf</strong> öffnen.</li>
+      <li><a class="inline-download" href="{html.escape(quote(current_installer, safe='/._-~'))}">{html.escape(current_installer)}</a> auswählen.</li>
+      <li>Auf die Meldung <strong>„Add-on installiert“</strong> warten.</li>
+    </ol></section>
+    <section class="howto-panel"><h2>3. Add-ons aus Kodi-Wulf installieren</h2><ol class="step-list">
+      <li><strong>Aus Repository installieren</strong> öffnen.</li>
+      <li><strong>Kodi-Wulf</strong> auswählen und das gewünschte Add-on installieren.</li>
+    </ol><p class="notice">Die Quelle muss mit <strong>https://</strong> beginnen und auf <strong>/repository/</strong> enden.</p></section>
+  </article>
+</main></body></html>
+"""
+    (root / "how-to-use.html").write_text(document, encoding="utf-8")
 
 
 def write_metadata(directory: Path, infos: list[AddonInfo]) -> None:
@@ -366,13 +458,13 @@ def make_repo_xml(categories: list[str], base_url: str, version: str) -> bytes:
       <hashes>false</hashes>
     </dir>""")
     return (f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="repository.kodiwulf" name="KodiWulf Repository" version="{html.escape(version)}" provider-name="KodiWulf">
-  <extension point="xbmc.addon.repository" name="KodiWulf Repository">
+<addon id="{REPO_ID}" name="{REPO_NAME}" version="{html.escape(version)}" provider-name="{REPO_PROVIDER}">
+  <extension point="xbmc.addon.repository" name="{REPO_NAME}">
 {chr(10).join(dirs)}
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="de_DE">KodiWulf Add-on Repository</summary>
-    <description lang="de_DE">KodiWulf Repository für direkt installierbare Kodi ZIP-Pakete.</description>
+    <summary lang="de_DE">Kodi-Wulf Add-on-Repository</summary>
+    <description lang="de_DE">Kodi-Wulf Repository für direkt installierbare Kodi ZIP-Pakete.</description>
     <platform>all</platform>
     <assets><icon>icon.png</icon><fanart>fanart.png</fanart></assets>
   </extension>
@@ -381,9 +473,9 @@ def make_repo_xml(categories: list[str], base_url: str, version: str) -> bytes:
 
 
 def write_repo_zip(root: Path, xml: bytes, version: str) -> Path:
-    target = root / f"repository.kodiwulf-{version}.zip"
+    target = root / installer_name(version)
     with tempfile.TemporaryDirectory() as temp:
-        addon_dir = Path(temp) / "repository.kodiwulf"
+        addon_dir = Path(temp) / REPO_ID
         addon_dir.mkdir()
         (addon_dir / "addon.xml").write_bytes(xml)
         if (root / "icon.png").is_file():
@@ -392,7 +484,10 @@ def write_repo_zip(root: Path, xml: bytes, version: str) -> Path:
             shutil.copy2(root / "bg.png", addon_dir / "fanart.png")
         with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as archive:
             for file_path in sorted(addon_dir.iterdir()):
-                archive.write(file_path, f"repository.kodiwulf/{file_path.name}")
+                archive.write(file_path, f"{REPO_ID}/{file_path.name}")
+    for obsolete in installer_paths(root):
+        if obsolete.resolve() != target.resolve():
+            obsolete.unlink()
     return target
 
 
@@ -419,7 +514,8 @@ def write_existing_metadata(root: Path) -> None:
         infos = []
         for zip_path in sorted(visible_zips(directory, root)):
             try:
-                infos.append(parse_addon_zip(zip_path))
+                with contextlib.redirect_stderr(io.StringIO()):
+                    infos.append(parse_addon_zip(zip_path))
             except SystemExit:
                 print(f"WARN: metadata skipped for invalid ZIP: {zip_path.relative_to(root)}")
         if infos:
@@ -444,7 +540,8 @@ def build(root: Path, base_url: str, version: str, apply: bool, backup: Path, si
     invalid: list[tuple[Path, str, str]] = []
     for path in candidates(root):
         try:
-            info = parse_addon_zip(path)
+            with contextlib.redirect_stderr(io.StringIO()):
+                info = parse_addon_zip(path)
         except SystemExit:
             stem = path.stem
             match = re.match(r"((?:plugin|repository|script)\.[A-Za-z0-9._-]+)", stem, re.IGNORECASE)
@@ -482,7 +579,8 @@ def build(root: Path, base_url: str, version: str, apply: bool, backup: Path, si
         destination.parent.mkdir(parents=True, exist_ok=True)
         if source.resolve() != destination.resolve():
             if destination.exists() and digest(destination) != digest(source):
-                raise RuntimeError(f"conflicting destination: {destination}")
+                archived = archive_import(destination, root, backup)
+                print(f"WARN: replaced conflicting package; previous file archived: {archived}")
             if not destination.exists():
                 shutil.move(str(source), str(destination))
         final_paths.add(destination.resolve())
@@ -490,22 +588,22 @@ def build(root: Path, base_url: str, version: str, apply: bool, backup: Path, si
         for duplicate, _ in items:
             if not duplicate.exists() or duplicate.resolve() in final_paths:
                 continue
-            rel = duplicate.relative_to(root)
-            archived = backup / rel
-            archived.parent.mkdir(parents=True, exist_ok=True)
-            if archived.exists():
-                archived = archived.with_name(archived.stem + "-" + digest(duplicate)[:10] + archived.suffix)
-            shutil.move(str(duplicate), str(archived))
+            archive_import(duplicate, root, backup)
 
     for source, group, addon_id in invalid:
         destination = root / group / addon_id / source.name
         destination.parent.mkdir(parents=True, exist_ok=True)
         if source.resolve() != destination.resolve():
             if destination.exists() and digest(destination) != digest(source):
-                raise RuntimeError(f"conflicting invalid ZIP destination: {destination}")
-            if not destination.exists():
+                archived = archive_import(destination, root, backup)
+                print(f"WARN: replaced conflicting unindexed package; previous file archived: {archived}")
+            if destination.exists():
+                archive_import(source, root, backup)
+            else:
                 shutil.move(str(source), str(destination))
         grouped.setdefault(group, [])
+
+    remove_empty_import_tree(root)
 
     for group, infos in grouped.items():
         directory = root / group
@@ -516,14 +614,14 @@ def build(root: Path, base_url: str, version: str, apply: bool, backup: Path, si
         for zip_path in sorted(directory.rglob("*.zip"), key=lambda item: item.name.lower()):
             rel = zip_path.relative_to(directory).as_posix()
             entries.append((zip_path.name, "ZIP", rel))
-        (directory / "index.html").write_text(index_document(f"KodiWulf / {group}", entries), encoding="utf-8")
+        (directory / "index.html").write_text(index_document(f"Kodi-Wulf / {group}", entries), encoding="utf-8")
 
     for parent_name in ("plugins", "script"):
         parent = root / parent_name
         parent.mkdir(exist_ok=True)
         children = sorted(path.name for path in parent.iterdir() if path.is_dir() and not path.name.startswith("."))
         entries = [(f"{child}/", "Ordner", f"{child}/") for child in children]
-        (parent / "index.html").write_text(index_document(f"KodiWulf / {parent_name}", entries), encoding="utf-8")
+        (parent / "index.html").write_text(index_document(f"Kodi-Wulf / {parent_name}", entries), encoding="utf-8")
         for child in children:
             child_dir = parent / child
             if not (child_dir / "index.html").is_file():
@@ -539,6 +637,7 @@ def build(root: Path, base_url: str, version: str, apply: bool, backup: Path, si
             ensure_generic_index(directory, root)
             for child in (item for item in directory.iterdir() if item.is_dir() and not item.name.startswith(".")):
                 ensure_generic_index(child, root)
+    write_browse_indexes(root)
     write_site_root(root)
     print(f"OK: {len(all_infos)} ZIPs classified; installer: {repo_zip.name}")
 

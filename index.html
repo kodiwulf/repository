@@ -7,38 +7,43 @@ layout: null
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>KodiWulf Repository</title>
+  <title>Kodi-Wulf Repository</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="{{ '/assets/theme.css' | relative_url }}">
 </head>
 <body>
 <nav class="kodi-static" aria-label="Kodi ZIP index"><a href="plugins/">plugins/</a>
 <a href="repository/">repository/</a>
-<a href="repository.kodiwulf-1.0.1.zip">repository.kodiwulf-1.0.1.zip</a></nav>
+<a href="script/">script/</a>
+<a href="repository.kodi-wulf-v1.33.7a.zip">repository.kodi-wulf-v1.33.7a.zip</a></nav>
 <main>
+  <nav class="site-menu" aria-label="Hauptmenü">
+    <a class="site-brand" href="{{ '/' | relative_url }}">Kodi-Wulf</a>
+    <div><a href="{{ '/' | relative_url }}">Repository</a><a href="{{ '/how-to-use.html' | relative_url }}">How-To-Use</a></div>
+  </nav>
   <header class="hero hero-banner animate-target">
     <div class="hero-scrim"></div>
     <div class="hero-content">
       <p class="eyebrow">GitHub Pages · Kodi Repository</p>
       <div class="brand-line">
-        <h1 class="brand-stage" aria-label="xWulf Repository">
-          <span class="brand-layer brand-shadow" aria-hidden="true"><span class="brand-x">x</span>Wulf <span class="brand-r">R</span>epository</span>
-          <span class="brand-layer brand-solid"><span class="brand-x">x</span>Wulf <span class="brand-r">R</span>epository</span>
+        <h1 class="brand-stage" aria-label="Kodi-Wulf Repository">
+          <span class="brand-layer brand-shadow" aria-hidden="true">Kodi-<span class="brand-x">W</span>ulf <span class="brand-r">R</span>epository</span>
+          <span class="brand-layer brand-solid">Kodi-<span class="brand-x">W</span>ulf <span class="brand-r">R</span>epository</span>
         </h1>
-        <div class="terminal-stage" aria-live="polite" aria-label="KodiWulf Features">
+        <div class="terminal-stage" aria-live="polite" aria-label="Kodi-Wulf Features">
           <span class="terminal-layer terminal-shadow" aria-hidden="true"><span data-terminal-shadow></span><i>_</i></span>
           <span class="terminal-layer terminal-solid"><span data-terminal-solid></span><i>_</i></span>
         </div>
       </div>
       <p class="subtitle">ZIP-Browser für Kodi-Plugins und Repository-Pakete. Direkte Downloads, klare Ordnerwege, flüssige Navigation.</p>
       <div class="hero-actions">
-        <a class="btn btn-danger install-button" href="repository.kodiwulf-1.0.1.zip"><span>ZIP</span> Repository 1.0.1 installieren</a>
+        <a class="btn btn-danger install-button" href="repository.kodi-wulf-v1.33.7a.zip"><span>ZIP</span> Repository v1.33.7a installieren</a>
         <span id="react-summary" class="package-count">Pakete werden geladen …</span>
       </div>
     </div>
   </header>
 
-  <section class="browser-shell animate-target" aria-label="KodiWulf ZIP Browser">
+  <section class="browser-shell animate-target" aria-label="Kodi-Wulf ZIP Browser">
     <div class="browser-heading">
       <div><p class="eyebrow">Install from ZIP</p><h2>Repository Browser</h2></div>
       <div id="vue-runtime" class="runtime-pill">Navigation bereit</div>
@@ -49,7 +54,7 @@ layout: null
   <nav class="jekyll-fallback" aria-label="Jekyll Navigation">
     {% for node in site.data.repository_tree.roots %}<a href="{{ node.href | relative_url }}">{{ node.name }}/</a>{% endfor %}
   </nav>
-  <footer><span id="svelte-status">KodiWulf Repository wird initialisiert …</span></footer>
+  <footer><span id="svelte-status">Kodi-Wulf Repository wird initialisiert …</span></footer>
 </main>
 
 <noscript><p class="noscript">JavaScript erweitert die Website. Kodi und die Jekyll-Ordnerlinks bleiben ohne JavaScript verwendbar.</p></noscript>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addons>
+  <addon id="plugin.audio.mp3streams" name="[COLOR antiquewhite]MP3 Streams[/COLOR]" version="1.8.1" provider-name="[COLOR blue]Bugatsinho | TBFAM[/COLOR]">
+
+
+    <requires>
+
+
+
+      <import addon="script.module.future"/>
+
+
+      <import addon="script.module.mutagen"/>
+
+
+      <import addon="script.module.requests"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.pluginsource" library="default.py">
+
+
+      <provides>audio</provides>
+
+
+    </extension>
+
+
+    <extension point="xbmc.service" library="playerMP3.py" start="startup"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <platform>all</platform>
+
+
+      <summary>Audio Collection.</summary>
+
+
+      <description>MP3 Audio Stream Collection
+
+Browse, stream or download
+your favourite song, album or artist.
+
+Neuer Ordner "itsche und so"
+unter "Favourites Albums".
+
+See Changelog!
+Python 2 und Python 3
+
+KUDOS:
+- Bugatsinho
+		</description>
+
+
+      <news/>
+
+
+      <assets>
+
+
+        <icon>art/icon.png</icon>
+
+
+        <fanart>art/fanart.jpg</fanart>
+
+
+      </assets>
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="plugin.audio.playforfun.radio" name="PlayForFun Radio" version="1.0.0" provider-name="Rolling">
+
+
+    <requires>
+
+
+      <import addon="xbmc.python" version="3.0.0"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+
+
+      <provides>audio</provides>
+
+
+    </extension>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <platform>all</platform>
+
+
+      <license>GPL-2.0-only</license>
+
+
+      <summary lang="en">Internet Radio Player</summary>
+
+
+      <summary lang="de">Internet Radio Player mit Titelinfo</summary>
+
+
+      <description lang="en">Radio Browser and laut.fm in Kodi. Now Playing info included.</description>
+
+
+      <description lang="de">Radio und laut.fm in Kodi mit Titelinfo.</description>
+
+
+      <news lang="en">v1.0.0 - Verbesserter Player</news>
+
+
+    </extension>
+
+
+  </addon>
+</addons>

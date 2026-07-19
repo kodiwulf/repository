@@ -1,26 +1,27 @@
-![KodiWulf Repository Banner](bg.png)
+![Kodi-Wulf Repository Banner](bg.png)
 
 # # # # # # # # # # # # #
-# KodiWulf Repository
+# Kodi-Wulf Repository
 # # # # # # # # # # # # #
 
-KodiWulf is a static Kodi 21 Omega repository served through GitHub Pages.
+Kodi-Wulf is a static Kodi 21 Omega repository served through GitHub Pages.
 
 ## Public URL
 
     https://kodi-wulf.github.io/repository/
 
-## Install from ZIP
+## Installation mit Kodis Datei-Manager
 
-Use this ZIP in Kodi:
-
-Add this file source in Kodi:
+Diese Dateiquelle in Kodis Datei-Manager hinzufügen:
 
     https://kodi-wulf.github.io/repository/
 
-Then install:
+Danach unter **Add-ons → Aus ZIP-Datei installieren → Kodi-Wulf** installieren:
 
-    repository.kodiwulf-0.1.0.zip
+    repository.kodi-wulf-v1.33.7a.zip
+
+Eine bebilderungsfreundliche Schrittfolge steht auf der Website unter
+[`How-To-Use`](https://kodi-wulf.github.io/repository/how-to-use.html).
 
 The same root URL serves the Jekyll website and Kodi's folder browser. The root
 page uses React for ZIP-only navigation, Anime.js for restrained transitions,
@@ -33,13 +34,14 @@ After installation, Kodi reads:
 
 ## Current repository state
 
-    repository.kodiwulf 0.1.0
+    repository.kodi-wulf 1.33.7a
+    sichtbarer Name: Kodi-Wulf
     Kodi target: Kodi 21 Omega
-    Add-ons in addons.xml: 18
+    Add-ons in addons.xml: werden durch tools/build.py erzeugt
 
 ## Published structure
 
-    repository.kodiwulf-*.zip  Only ZIP allowed in the root
+    repository.kodi-wulf-v*.zip  Only ZIP allowed in the root
     repository/<addon.id>/     Repository ZIPs
     plugins/<type>/<addon.id>/ Plugin ZIPs, for example plugins/audio/
     script/<type>/<addon.id>/  Script ZIPs, for example script/module/
@@ -50,9 +52,10 @@ After installation, Kodi reads:
 
 ## Local source ZIP layout
 
-New ZIPs can be placed temporarily in `incoming/` (or anywhere outside the
-published category folders). `tools/build.py` reads `addon.xml`, moves each ZIP
-to its canonical category, updates Kodi metadata, and removes the empty inbox.
+Neue ZIPs werden in `zips/` abgelegt. `tools/build.py` liest `addon.xml`,
+verschiebt jedes Paket in die kanonische Kategorie, aktualisiert die Kodi-
+Metadaten und entfernt den anschließend leeren Importordner. Inhaltsgleiche
+Dubletten werden außerhalb der veröffentlichten Struktur archiviert.
 
 ## Rebuild
 

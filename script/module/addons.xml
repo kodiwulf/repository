@@ -1,130 +1,671 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-  <addon id="script.module.resolveurl" name="ResolveURL" version="5.1.198" provider-name="gujal">
-    
-    
+  <addon id="resource.language.de_de" version="11.0.105" name="German" provider-name="Team Kodi">
+
+
     <requires>
-      
-        
-        
-      <import addon="script.module.six"/>
-      
-        
-      <import addon="script.module.kodi-six"/>
-      
-        
-      <import addon="script.module.cloudrequest" optional="true"/>
-      
-        
-      <import addon="plugin.video.youtube" optional="true"/>
-      
-        
-      <import addon="script.module.python.twitch" optional="true"/>
-      
-        
-      <import addon="plugin.googledrive" optional="true"/>
-      
-    
+
+
+      <import addon="kodi.resource" version="1.0.0"/>
+
+
     </requires>
-    
-    
-    <extension point="xbmc.python.module" library="lib"/>
-    
-    
-    <extension point="xbmc.python.pluginsource" library="lib/default.py"/>
-    
-    
-    <extension point="xbmc.addon.metadata">
-      
-        
-      <platform>all</platform>
-      
-        
-      <summary lang="en_GB">Resolve common video host URL's to be playable in XBMC/Kodi.</summary>
-      
-        
-      <summary lang="es_ES">Resolver enlaces a videos de sitios populares para poder reproducirlos en XBMC/Kodi.</summary>
-      
-        
-      <summary lang="hr_HR">Prilagodi najčešće URL-ove video izvora kako bi radili u XBMC/Kodiju.</summary>
-      
-        
-      <summary lang="el_GR">Επίλυση συνδέσμων κοινών εξυπηρετητών σε μορφή βίντεο ικανό για αναπαραγωγή στο XBMC/Kodi.</summary>
-      
-        
-      <description lang="en_GB">Resolve common video host URL's to be playable in XBMC/Kodi, simplify addon development of video plugins requiring multi video hosts.</description>
-      
-        
-      <description lang="el_GR">Επίλυση συνδέσμων κοινών εξυπηρετητών σε μορφή βίντεο ικανό για αναπαραγωγή στο XBMC/Kodi, απλοποίηση της ανάπτυξης των προσθέτων που χρησιμοποιούν πολλαπλούς εξυπηρετητές για υλικό βίντεο</description>
-      
-        
-      <description lang="hr_HR">Prilagodi najčešće URL-ove video izvora kako bi radili u XBMC/Kodiju, pojednostavnjuje razvoj priključaka za video dodatke koji zahtjevaju višestruke video izvore.</description>
-      
-        
-      <disclaimer lang="en_GB">This script only resolves video content from legitimate file lockers without prejudice. If this script is being used by 3rd parties to resolve content that you feel infringes upon your Intellectual Property then please take your complaints to the actual website or developer linking to such content and not here. This script in no way searches for any content whatsoever.</disclaimer>
-      
-        
-      <disclaimer lang="el_GR">Το ανωτέρο σενάριο το μόνο που κάνει είναι να επιλύει οπτικοακουστικό περιεχόμενο από νόμιμες πηγές χωρίς προκατάληψη. Εάν το ανωτέρο σενάριο χρησιμοποιηθεί από τρίτους ώστε να επιλύσει περιεχόμενο το οποίο σας προκαλεί αντίδραση ότι παραβιάζει την πνευματική σας ιδιοκτησία παρακαλώ μεταφέρετε τα παραπονά σας στον ιστότοπο τον οποίο βρίσκεται το εν λόγω περιεχόμενο η τον δημιουργό ο οποίος πραγματοποιεί την σύνδεση και όχι εδω. Το σενάριο αυτό ουδεμία περίπτωση πραγματοποιεί αναζήτηση περιεχομένου.</disclaimer>
-      
-        
-      <assets>
-        
-            
-        <icon>icon.png</icon>
-        
-            
-        <fanart>fanart.jpg</fanart>
-        
-        
-      </assets>
-      
-    
+
+
+    <extension point="kodi.resource.language" locale="de_DE">
+
+
+      <charsets>
+
+
+        <gui unicodefont="false">CP1252</gui>
+
+
+        <subtitle>CP1252</subtitle>
+
+
+      </charsets>
+
+
+      <sorttokens>
+
+
+        <token>The</token>
+
+
+        <token>Der</token>
+
+
+        <token>Die</token>
+
+
+        <token>Das</token>
+
+
+      </sorttokens>
+
+
     </extension>
-    
+
+
+    <extension point="kodi.addon.metadata">
+
+
+      <summary lang="en_GB">German language pack</summary>
+
+
+      <description lang="en_GB">German version of all texts used in Kodi.</description>
+
+
+      <platform>all</platform>
+
+
+      <assets>
+
+
+        <icon>icon.png</icon>
+
+
+      </assets>
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="script.module.asyn" name="asyn" version="1.0" provider-name="michaz">
+
+
+    <requires>
+
+
+      <import addon="xbmc.python" version="3.0.0"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.module" library="lib"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <assets>
+
+
+        <icon>resources/icon.png</icon>
+
+
+      </assets>
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="script.module.inputstreamhelper" name="InputStream Helper" version="0.6.1+matrix.1" provider-name="emilsvennesson, dagwieers, mediaminister, horstle">
+
+
+    <requires>
+
+
+
+      <import addon="xbmc.python" version="3.0.0"/>
+
+
+      <import addon="script.module.pysocks" version="1.6.8" optional="true"/>
+
+
+    </requires>
+
+
+
+    <extension point="xbmc.python.script" library="default.py">
+
+
+      <provides>executable</provides>
+
+
+    </extension>
+
+
+    <extension point="xbmc.python.module" library="lib"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <summary lang="de_DE">Kodi InputStream und DRM Wiedergabe einfach gemacht</summary>
+
+
+      <summary lang="el_GR">Βοηθός Inputstream για το Kodi και εύκολη αναπαραγωγή DRM</summary>
+
+
+      <summary lang="en_GB">Kodi InputStream and DRM playback made easy</summary>
+
+
+      <summary lang="es_ES">Kodi InputStream y reproducción DRM echa fácil</summary>
+
+
+      <summary lang="fr_FR">La lecture Kodi InputStream et DRM en toute simplicité</summary>
+
+
+      <summary lang="hr_HR">Kodi InputStream olakšava reprodukciju DRM zaštićenog sadržaja</summary>
+
+
+      <description lang="de_DE">Dieses einfache Kodi-Modul macht das Leben für Addon Entwickler einfacher, die auf InputStream basierte Addons und DRM Wiedergabe angewiesen sind.</description>
+
+
+      <description lang="el_GR">Μία απλή μονάδα για το Kodi η οποία διευκολύνει την ζωή των προγραμματιστών οι οποίοι εξαρτώνται από τα πρόσθετσ InputStream και αναπαραγωγή τύπου DRM.</description>
+
+
+      <description lang="en_GB">A simple Kodi module that makes life easier for add-on developers relying on InputStream based add-ons and DRM playback.</description>
+
+
+      <description lang="es_ES">Un módulo Kodi simple que hace la vida más fácil para los desarrolladores de complementos que dependen de complementos basados en InputStream y reproducción de DRM.</description>
+
+
+      <description lang="fr_FR">Un simple module Kodi qui simplifie la vie des développeurs de modules complémentaires en s’appuyant sur des modules complémentaires basés sur InputStream et sur la lecture de DRM.</description>
+
+
+      <description lang="hr_HR">Jednostavan Kodi modul koji olakšava razvijanje dodataka koji se temelje na InputStream dodatku i reprodukciji DRM zaštićenog sadržaja.</description>
+
+
+      <description lang="ru_RU">Простой модуль для Kodi, который облегчает жизнь разработчикам дополнений, с использованием InputStream дополнений и воспроизведения DRM контента.</description>
+
+
+      <news>
+v0.6.1 (2023-05-30)
+- Performance improvements on Linux ARM
+- This will be the last release for Python 2 i.e. Kodi 18 (Leia) and below. The next release will require Python 3 and Kodi 19 (Matrix) or higher.
+
+v0.6.0 (2023-05-03)
+- Initial support for AARCH64 Linux
+- Initial support for AARCH64 Macs
+- New option to install a specific version on most platforms
+
+v0.5.10 (2022-04-18)
+- Fix automatic submission of release
+- Update German translation
+- Fix update_frequency setting
+- Fix install_from
+- Improve/Fix Widevine extraction from Chrome OS images
+
+v0.5.9 (2022-03-22)
+- Update Croatian translation
+- Replace deprecated LooseVersion
+- Fix http_get decode error
+- Option to install Widevine from specified source
+    </news>
+
+
+      <platform>all</platform>
+
+
+      <license>MIT</license>
+
+
+      <website>https://github.com/emilsvennesson/script.module.inputstreamhelper/wiki</website>
+
+
+      <source>https://github.com/emilsvennesson/script.module.inputstreamhelper</source>
+
+
+      <assets>
+
+
+        <icon>resources/icon.png</icon>
+
+
+      </assets>
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="script.module.jurialmunkey" name="jurialmunkey common" provider-name="jurialmunkey" version="0.2.28">
+
+
+    <requires>
+
+
+      <import addon="xbmc.python" version="3.0.1"/>
+
+
+      <import addon="script.module.requests" version="2.9.1"/>
+
+
+      <import addon="script.module.infotagger" version="0.0.5"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.module" library="resources/modules"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <description lang="en_GB">Common code required by TMDbHelper and other related jurialmunkey add-ons</description>
+
+
+      <license>GPL-3.0-or-later</license>
+
+
+      <website>https://github.com/jurialmunkey/script.module.jurialmunkey</website>
+
+
+      <assets>
+
+
+        <icon>icon.png</icon>
+
+
+      </assets>
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="script.module.kodi-six" name="Kodi Six" version="0.1.3.1" provider-name="Roman V.M.">
+
+
+    <requires>
+
+
+      <import addon="xbmc.python" version="3.0.0"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.module" library="libs"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <summary lang="en_GB">Wrappers around Kodi Python API for seamless Python 2/3 compatibility</summary>
+
+
+      <description lang="en_GB">Wrappers around Kodi Python API that normalize handling of textual and byte strings in Python 2 and 3.</description>
+
+
+      <platform>all</platform>
+
+
+      <license>GPL v.3</license>
+
+
+      <forum>https://forum.kodi.tv/showthread.php?tid=327883</forum>
+
+
+      <source>https://github.com/romanvm/kodi.six</source>
+
+
+      <assets>
+
+
+        <icon>icon.png</icon>
+
+
+      </assets>
+
+
+      <news>0.1.3:
+- Fix non-UTF-8 byte string decoding in Python 2.</news>
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="script.module.musicbrainz" name="Musicbrainz NGS webservice python bindings" version="0.7.0" provider-name="marcelveldt and others">
+
+
+    <requires>
+
+
+      <import addon="xbmc.python" version="3.0.0"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.module" library="lib"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <summary>Python bindings for Musicbrainz' NGS webservice</summary>
+
+
+      <description>Kodi module library for the Python bindings for Musicbrainz' NGS webservice developed by alastair.</description>
+
+
+      <license>GNU GENERAL PUBLIC LICENSE V3</license>
+
+
+      <source>https://github.com/kodi-community-addons/script.module.musicbrainz</source>
+
+
+      <platform>all</platform>
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="script.module.mutagen" name="Mutagen" version="1.47.0" provider-name="Christoph Reiter">
+
+
+    <requires>
+
+
+      <import addon="xbmc.python" version="3.0.0"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.module" library="lib"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <summary lang="en_GB">Library to handle audio metadata.</summary>
+
+
+      <description lang="en_GB">Mutagen is a Python module to handle audio metadata.</description>
+
+
+      <license>GPL-2.0-or-later</license>
+
+
+      <platform>all</platform>
+
+
+      <website>https://mutagen.readthedocs.io/en/latest/</website>
+
+
+      <source>https://github.com/quodlibet/mutagen</source>
+
+
+      <assets>
+
+
+        <icon>resources/icon.png</icon>
+
+
+      </assets>
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="script.module.resolveurl" name="ResolveURL" version="5.1.198" provider-name="gujal">
+
+
+    <requires>
+
+
+
+      <import addon="script.module.six"/>
+
+
+      <import addon="script.module.kodi-six"/>
+
+
+      <import addon="script.module.cloudrequest" optional="true"/>
+
+
+      <import addon="plugin.video.youtube" optional="true"/>
+
+
+      <import addon="script.module.python.twitch" optional="true"/>
+
+
+      <import addon="plugin.googledrive" optional="true"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.module" library="lib"/>
+
+
+    <extension point="xbmc.python.pluginsource" library="lib/default.py"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <platform>all</platform>
+
+
+      <summary lang="en_GB">Resolve common video host URL's to be playable in XBMC/Kodi.</summary>
+
+
+      <summary lang="es_ES">Resolver enlaces a videos de sitios populares para poder reproducirlos en XBMC/Kodi.</summary>
+
+
+      <summary lang="hr_HR">Prilagodi najčešće URL-ove video izvora kako bi radili u XBMC/Kodiju.</summary>
+
+
+      <summary lang="el_GR">Επίλυση συνδέσμων κοινών εξυπηρετητών σε μορφή βίντεο ικανό για αναπαραγωγή στο XBMC/Kodi.</summary>
+
+
+      <description lang="en_GB">Resolve common video host URL's to be playable in XBMC/Kodi, simplify addon development of video plugins requiring multi video hosts.</description>
+
+
+      <description lang="el_GR">Επίλυση συνδέσμων κοινών εξυπηρετητών σε μορφή βίντεο ικανό για αναπαραγωγή στο XBMC/Kodi, απλοποίηση της ανάπτυξης των προσθέτων που χρησιμοποιούν πολλαπλούς εξυπηρετητές για υλικό βίντεο</description>
+
+
+      <description lang="hr_HR">Prilagodi najčešće URL-ove video izvora kako bi radili u XBMC/Kodiju, pojednostavnjuje razvoj priključaka za video dodatke koji zahtjevaju višestruke video izvore.</description>
+
+
+      <disclaimer lang="en_GB">This script only resolves video content from legitimate file lockers without prejudice. If this script is being used by 3rd parties to resolve content that you feel infringes upon your Intellectual Property then please take your complaints to the actual website or developer linking to such content and not here. This script in no way searches for any content whatsoever.</disclaimer>
+
+
+      <disclaimer lang="el_GR">Το ανωτέρο σενάριο το μόνο που κάνει είναι να επιλύει οπτικοακουστικό περιεχόμενο από νόμιμες πηγές χωρίς προκατάληψη. Εάν το ανωτέρο σενάριο χρησιμοποιηθεί από τρίτους ώστε να επιλύσει περιεχόμενο το οποίο σας προκαλεί αντίδραση ότι παραβιάζει την πνευματική σας ιδιοκτησία παρακαλώ μεταφέρετε τα παραπονά σας στον ιστότοπο τον οποίο βρίσκεται το εν λόγω περιεχόμενο η τον δημιουργό ο οποίος πραγματοποιεί την σύνδεση και όχι εδω. Το σενάριο αυτό ουδεμία περίπτωση πραγματοποιεί αναζήτηση περιεχομένου.</disclaimer>
+
+
+      <assets>
+
+
+        <icon>icon.png</icon>
+
+
+        <fanart>fanart.jpg</fanart>
+
+
+      </assets>
+
+
+    </extension>
+
 
   </addon>
   <addon id="script.module.resolveurl.xxx" version="2.1.44" name="Adult Resolver SMR Extension" provider-name="gujal">
-    
-    
+
+
     <requires>
-      
-        
-        
+
+
+
       <import addon="script.module.resolveurl" version="5.1.0"/>
-      
-    
+
+
     </requires>
-    
-    
+
+
     <extension point="xbmc.python.module" library="lib"/>
-    
-    
+
+
     <extension point="xbmc.addon.metadata">
-      
-        
+
+
       <summary lang="en_GB">Resolve adult video host URL's to be playable in XBMC/Kodi.</summary>
-      
-        
+
+
       <description lang="en_GB">Resolve adult video host URL's to be playable in XBMC/Kodi.</description>
-      
-        
+
+
       <platform>all</platform>
-      
-        
+
+
       <assets>
-        
-            
+
+
         <icon>icon.png</icon>
-        
-            
+
+
         <fanart>fanart.jpg</fanart>
-        
-        
+
+
       </assets>
-      
-    
+
+
     </extension>
-    
+
+
+  </addon>
+  <addon id="script.module.xstreamscraper" name="xStream Scraper" provider-name="michaz1988" version="2025.08.14">
+
+
+    <requires>
+
+
+      <import addon="plugin.video.vavooto"/>
+
+
+      <import addon="script.module.requests"/>
+
+
+      <import addon="script.module.six"/>
+
+
+      <import addon="script.module.resolveurl"/>
+
+
+      <import addon="plugin.video.xstream"/>
+
+
+      <import addon="script.module.pyaes"/>
+
+
+      <import addon="script.module.pydevd" optional="true"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.python.pluginsource" library="main.py">
+
+
+      <provides>video</provides>
+
+
+    </extension>
+
+
+    <extension point="xbmc.service" library="service.py" start="startup"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <assets>
+
+
+        <icon>icon.png</icon>
+
+
+        <screenshot>icon.png</screenshot>
+
+
+      </assets>
+
+
+    </extension>
+
+
+  </addon>
+  <addon id="service.takealug.epg-grabber" name="Takealug EPG Grabber" version="2.1.3" provider-name="DeBaschdi">
+
+
+    <requires>
+
+
+      <import addon="xbmc.python" version="3.0.0"/>
+
+
+      <import addon="script.module.requests"/>
+
+
+    </requires>
+
+
+    <extension point="xbmc.service" library="service.py" start="startup"/>
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <platform>all</platform>
+
+
+      <summary>EPG Grabber</summary>
+
+
+      <description lang="en">Grabbs EPG Data from Different IPTV Sources and generate an xmltv Guide</description>
+
+
+      <description lang="de">Grabbt EPG Daten von verschiedenen IPTV Quellen und erstellt eine guide.xml</description>
+
+
+      <source>https://github.com/DeBaschdi/repo/tree/master/service.takealug.epg-grabber/</source>
+
+
+      <forum>https://www.kodinerds.net/index.php/Thread/64901-RELEASE-Takealug-EPG-Grabber/</forum>
+
+
+      <assets>
+
+
+        <icon>icon.png</icon>
+
+
+        <fanart>fanart.jpg</fanart>
+
+
+        <screenshot>fanart.jpg</screenshot>
+
+
+        <screenshot>screenshot3.png</screenshot>
+
+
+        <screenshot>screenshot1.png</screenshot>
+
+
+        <screenshot>screenshot2.png</screenshot>
+
+
+      </assets>
+
+
+      <news lang="en">2.1+ NEW TV-SPIELFILM API</news>
+
+
+    </extension>
+
 
   </addon>
 </addons>

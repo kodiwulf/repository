@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addons>
+  <addon id="script.kodi.chat" name="Kodi Chat" version="1.4.5" provider-name="PlayForFun">
+
+
+    <requires>
+
+
+      <import addon="xbmc.python" version="3.0.0"/>
+
+
+    </requires>
+
+
+
+    <extension point="xbmc.python.script" library="addon.py"/>
+
+
+
+    <extension point="xbmc.addon.metadata">
+
+
+      <summary lang="de">Chat für Kodi – PlayForFun</summary>
+
+
+      <description lang="de">Vollbild-Chat für Kodi. Passwortgeschützt.</description>
+
+
+      <assets>
+
+
+        <icon>icon.png</icon>
+
+
+      </assets>
+
+
+      <platform>all</platform>
+
+
+    </extension>
+
+
+  </addon>
+</addons>
