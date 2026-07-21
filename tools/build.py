@@ -16,7 +16,7 @@ from pathlib import Path
 from urllib.parse import quote
 import xml.etree.ElementTree as ET
 
-from kodiwulf_build_repo_core import AddonInfo, parse_addon_zip, pretty_xml
+from kodiwulf_build_repo_core import AddonInfo, normalize_package_root, parse_addon_zip, pretty_xml
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -583,6 +583,8 @@ def build(root: Path, base_url: str, version: str, apply: bool, backup: Path, si
                 print(f"WARN: replaced conflicting package; previous file archived: {archived}")
             if not destination.exists():
                 shutil.move(str(source), str(destination))
+        if normalize_package_root(destination, info.addon_id):
+            print(f"OK: normalized Kodi ZIP root: {destination.relative_to(root)}")
         final_paths.add(destination.resolve())
         grouped[group].append(info)
         for duplicate, _ in items:
